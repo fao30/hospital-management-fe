@@ -1,0 +1,29 @@
+import { appRouter } from "@/api/root";
+import { createTRPCContext } from "@/api/trpc";
+import { env } from "@/env";
+import { consoleError } from "@/lib/functions";
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import { type NextRequest } from "next/server";
+
+const createContext = async (req: NextRequest) => createTRPCContext({ headers: req.headers });
+
+const handler = (req: NextRequest) =>
+  fetchRequestHandler({
+    endpoint: "/api/trpc",
+    req,
+    router: appRouter,
+    createContext: () => createContext(req),
+    onError:
+      env.NODE_ENV === "development"
+        ? ({ path, error, ctx, input, type }) => {
+            consoleError("tRPC failed");
+            consoleError(`path: api.${path ?? "<no-path>"}.${type}`);
+            consoleError(`input: ${JSON.stringify(input) ?? null}`);
+            consoleError(`code: ${error?.code ?? null}`);
+            consoleError(`message: ${error?.message ?? null}`);
+            consoleError(`session: ${JSON.stringify(ctx?.session?.user) ?? null}`);
+          }
+        : undefined,
+  });
+
+export { handler as GET, handler as POST };
