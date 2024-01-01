@@ -1,3 +1,4 @@
+import AntdProvider from "@/components/AntdProvider";
 import "@/styles/globals.css";
 import { TRPCReactProvider } from "@/trpc/react";
 import { type Lang } from "@/types";
@@ -22,7 +23,9 @@ export default function RootLayout({ children, params }: Props) {
     <html lang={params.lang}>
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider cookies={cookies().toString()}>
-          <main>{children}</main>
+          <AntdProvider>
+            <main>{children}</main>
+          </AntdProvider>
         </TRPCReactProvider>
       </body>
     </html>

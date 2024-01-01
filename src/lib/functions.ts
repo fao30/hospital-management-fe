@@ -91,32 +91,6 @@ export const isFileSizeAllowed = (maxFileSize: FileSize, fileSize: number): bool
   return false;
 };
 
-export const getError = ({
-  error,
-  url,
-  session,
-  plain,
-}: {
-  error: unknown;
-  url: string;
-  session: Session | null;
-  plain?: boolean;
-}) => {
-  const timestamp = `❌ ${getNewDate().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
-  const details = {
-    error: `${timestamp} 👉 ERROR: `,
-    url: `${timestamp} 👉 URL: `,
-    session: `${timestamp} 👉 SESSION: `,
-  };
-  if (plain)
-    return `${details.error}${typeof error === "string" ? error : JSON.stringify(error)}\n${details.url}${url}\n${
-      details.session
-    }${JSON.stringify(session)}`;
-  console.error(details.error, error);
-  console.error(details.url, url);
-  console.error(details.session, session);
-};
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const checkValidation = <T>(zodSchema: z.ZodType<T, any, any>, input: unknown) => {
   const validation = zodSchema.safeParse(input);
@@ -129,8 +103,31 @@ export const checkValidation = <T>(zodSchema: z.ZodType<T, any, any>, input: unk
   return validation.data;
 };
 
-export const consoleError = (error: string) => {
-  console.error(
-    `❌ ${getNewDate().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" })} 👉 ${error}`,
-  );
+const timestampError = `❌ ${getNewDate().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
+
+export const getError = ({
+  error,
+  url,
+  session,
+  plain,
+}: {
+  error: unknown;
+  url: string;
+  session: Session | null;
+  plain?: boolean;
+}) => {
+  const details = {
+    error: `${timestampError} 👉 ERROR: `,
+    url: `${timestampError} 👉 URL: `,
+    session: `${timestampError} 👉 SESSION: `,
+  };
+  if (plain)
+    return `${details.error}${typeof error === "string" ? error : JSON.stringify(error)}\n${details.url}${url}\n${
+      details.session
+    }${JSON.stringify(session)}`;
+  console.error(details.error, error);
+  console.error(details.url, url);
+  console.error(details.session, session);
 };
+
+export const consoleError = (error: string) => console.error(`❌ ${timestampError} 👉 ${error}`);

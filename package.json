@@ -18,6 +18,7 @@
     "@trpc/react-query": "^10.45.0",
     "@trpc/server": "^10.45.0",
     "@types/negotiator": "^0.6.3",
+    "antd": "^5.12.6",
     "clsx": "^2.1.0",
     "negotiator": "^0.6.3",
     "next": "^14.0.4",

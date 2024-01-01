@@ -1,11 +1,12 @@
 "use client";
 
 import { type AppRouter } from "@/api/root";
+import { getUrl, transformer } from "@/trpc/shared";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
+import { ConfigProvider } from "antd";
 import { useState } from "react";
-import { getUrl, transformer } from "./shared";
 
 export const api = createTRPCReact<AppRouter>();
 
@@ -21,12 +22,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode; cookies: s
         }),
         unstable_httpBatchStreamLink({
           url: getUrl(),
-          headers() {
-            return {
-              cookie: props.cookies,
-              "x-trpc-source": "react",
-            };
-          },
+          headers: () => ({ cookie: props.cookies, "x-trpc-source": "react" }),
         }),
       ],
     }),
@@ -35,7 +31,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode; cookies: s
   return (
     <QueryClientProvider client={queryClient}>
       <api.Provider client={trpcClient} queryClient={queryClient}>
-        {props.children}
+        <ConfigProvider>{props.children}</ConfigProvider>
       </api.Provider>
     </QueryClientProvider>
   );

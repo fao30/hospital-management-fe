@@ -1,9 +1,9 @@
 import { type AppRouter } from "@/api/root";
 import { TRPCError, type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import { type TRPC_ERROR_CODE_KEY } from "@trpc/server/rpc";
-import superjson from "superjson";
+import SuperJSON from "superjson";
 
-export const transformer = superjson;
+export const transformer = SuperJSON;
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return "";
