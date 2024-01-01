@@ -2,7 +2,6 @@ import { getServerAuthSession } from "@/api/auth";
 import { env } from "@/env";
 import { getError } from "@/lib/functions";
 import { THROW_TRPC_ERROR } from "@/trpc/shared";
-import { signOut } from "next-auth/react";
 
 type Params = Record<string, string | number>;
 
@@ -24,8 +23,8 @@ export const getData = async ({ endpoint, params, cacheType }: { endpoint: strin
   const url = getUrl(endpoint, params);
   try {
     const res = await fetch(url, { cache: cacheType ?? "no-store", headers });
+    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
     if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    if (res.status === 401 && typeof window !== "undefined") return signOut();
     return res.json() as unknown;
   } catch (error) {
     getError({ error, url, session });
@@ -39,8 +38,8 @@ export const postData = async ({ endpoint, body }: { endpoint: string; body: unk
   const url = getUrl(endpoint);
   try {
     const res = await fetch(url, { method: "POST", headers, body: JSON.stringify(body) });
+    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
     if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    if (res.status === 401 && typeof window !== "undefined") return signOut();
     return res.json() as unknown;
   } catch (error) {
     getError({ error, url, session });
@@ -54,8 +53,8 @@ export const postFormData = async ({ endpoint, formData }: { endpoint: string; f
   const url = getUrl(endpoint);
   try {
     const res = await fetch(url, { method: "POST", headers, body: formData });
+    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
     if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    if (res.status === 401 && typeof window !== "undefined") return signOut();
     return res.json() as unknown;
   } catch (error) {
     getError({ error, url, session });
@@ -69,8 +68,8 @@ export const putData = async ({ endpoint, body }: { endpoint: string; body: unkn
   const url = getUrl(endpoint);
   try {
     const res = await fetch(url, { method: "PUT", headers, body: JSON.stringify(body) });
+    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
     if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    if (res.status === 401 && typeof window !== "undefined") return signOut();
     return res.json() as unknown;
   } catch (error) {
     getError({ error, url, session });
@@ -84,8 +83,8 @@ export const patchData = async ({ endpoint, body }: { endpoint: string; body: un
   const url = getUrl(endpoint);
   try {
     const res = await fetch(url, { method: "PATCH", headers, body: JSON.stringify(body) });
+    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
     if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    if (res.status === 401 && typeof window !== "undefined") return signOut();
     return res.json() as unknown;
   } catch (error) {
     getError({ error, url, session });
@@ -99,8 +98,8 @@ export const deleteData = async ({ endpoint }: { endpoint: string }) => {
   const url = getUrl(endpoint);
   try {
     const res = await fetch(url, { method: "DELETE", headers });
+    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
     if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    if (res.status === 401 && typeof window !== "undefined") return signOut();
     return res.json() as unknown;
   } catch (error) {
     getError({ error, url, session });
