@@ -1,5 +1,4 @@
-import { type AppRouter } from "@/api/root";
-import { TRPCError, type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
+import { TRPCError } from "@trpc/server";
 import { type TRPC_ERROR_CODE_KEY } from "@trpc/server/rpc";
 import SuperJSON from "superjson";
 
@@ -36,6 +35,3 @@ export const ERROR_MESSAGES: Record<TRPC_ERROR_CODE_KEY, string> = {
 export const THROW_TRPC_ERROR = (code: TRPC_ERROR_CODE_KEY, message?: string) => {
   throw new TRPCError({ code, message: message ? message : ERROR_MESSAGES[code] });
 };
-
-export type RouterInputs = inferRouterInputs<AppRouter>;
-export type RouterOutputs = inferRouterOutputs<AppRouter>;
