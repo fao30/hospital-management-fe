@@ -1,10 +1,12 @@
-"use client";
-
-import { api } from "@/trpc/react";
-import React, { Fragment } from "react";
+import ClientComponent from "@/components/ClientComponent";
+import ServerComponents from "@/components/ServerComponents";
+import { Fragment } from "react";
 
 export default function HomePage() {
-  const { data } = api.user.list.useQuery();
-  console.log(data);
-  return <Fragment></Fragment>;
+  return (
+    <Fragment>
+      <ClientComponent />
+      <ServerComponents />
+    </Fragment>
+  );
 }
