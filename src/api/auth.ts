@@ -15,8 +15,6 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user }) => ({ ...token, ...user }),
     session: async ({ session, token }) => ({ ...session, user: { ...session.user, id: token.id, token: token.token } }),
   },
-
-  
   providers: [
     CredentialsProvider({
       name: "credentials",

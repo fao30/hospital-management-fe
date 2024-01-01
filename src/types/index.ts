@@ -8,9 +8,3 @@ export type MouseEvent = React.MouseEventHandler<HTMLButtonElement>;
 export type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 export type Lang = (typeof internationalization)["locales"][number];
 export type Dictionary = UnwrapPromise<ReturnType<typeof useDictionary>>;
-
-export type User = {
-  users: {
-    name: string;
-  }[];
-};

@@ -1,15 +1,3 @@
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/api/trpc";
-import { type RouterOutputs } from "@/trpc/shared";
-import { getData } from "./shared";
+import { createTRPCRouter } from "@/api/trpc";
 
-export const user = createTRPCRouter({
-  list: publicProcedure.query(async () => {
-    const res = await getData({ endpoint: "/users" });
-    return res;
-  }),
-});
-
-// outputs
-export type UserList = RouterOutputs["user"]["list"];
-
-// inputs
+export const user = createTRPCRouter({});
