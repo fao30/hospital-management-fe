@@ -103,7 +103,11 @@ export const checkValidation = <T>(zodSchema: z.ZodType<T, any, any>, input: unk
   return validation.data;
 };
 
-const timestampError = `❌ ${getNewDate().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
+const timestampError = `❌ ${getNewDate().toLocaleTimeString(undefined, {
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+})} 👉`;
 
 export const getError = ({
   error,
@@ -117,9 +121,9 @@ export const getError = ({
   plain?: boolean;
 }) => {
   const details = {
-    error: `${timestampError} 👉 ERROR: `,
-    url: `${timestampError} 👉 URL: `,
-    session: `${timestampError} 👉 SESSION: `,
+    error: `${timestampError} ERROR: `,
+    url: `${timestampError} URL: `,
+    session: `${timestampError} SESSION: `,
   };
   if (plain)
     return `${details.error}${typeof error === "string" ? error : JSON.stringify(error)}\n${details.url}${url}\n${
@@ -130,4 +134,4 @@ export const getError = ({
   console.error(details.session, session);
 };
 
-export const consoleError = (error: string) => console.error(`❌ ${timestampError} 👉 ${error}`);
+export const consoleError = (error: string) => console.error(`${timestampError} ${error}`);
