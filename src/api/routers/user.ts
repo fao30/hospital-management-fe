@@ -1,4 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/api/trpc";
+import { type RouterInputs, type RouterOutputs, type User } from "@/types";
 import { schema } from "@schema";
 import { getData } from "./shared";
 
@@ -10,6 +11,12 @@ export const user = createTRPCRouter({
 
   list: publicProcedure.input(schema.user.list).query(async ({ input }) => {
     const data = await getData({ endpoint: "/user", params: input.params });
-    return data;
+    return data as User[];
   }),
 });
+
+// outputs
+export type UserList = RouterOutputs["user"]["list"];
+
+// inputs
+export type UserCreateInput = RouterInputs["user"]["create"];
