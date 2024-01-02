@@ -1,10 +1,14 @@
 import { withTV } from "tailwind-variants/transformer";
 import { type Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default withTV({
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ["var(--font-poppins)", ...fontFamily.sans],
+      },
       padding: {
         shorter4: "1vw",
         shorter3: "2vw",

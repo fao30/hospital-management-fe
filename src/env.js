@@ -8,9 +8,7 @@ export const env = createEnv({
     NEXTAUTH_URL: z.preprocess((str) => process.env.VERCEL_URL ?? str, process.env.VERCEL ? z.string() : z.string().url()),
   },
 
-  client: {
-    NEXT_PUBLIC_API: z.string(),
-  },
+  client: { NEXT_PUBLIC_API: z.string() },
 
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
