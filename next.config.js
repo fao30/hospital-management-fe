@@ -1,6 +1,6 @@
 await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 
-const config = { transpilePackages: ["@ctrl/tinycolor"] };
+const config = {};
 
 export default config;
