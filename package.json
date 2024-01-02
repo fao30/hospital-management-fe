@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",
+    "@ctrl/tinycolor": "^4.0.2",
     "@formatjs/intl-localematcher": "^0.5.2",
     "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.3",
@@ -33,6 +34,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.2",
     "server-only": "^0.0.1",
+    "sharp": "^0.33.1",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.0",
     "tailwind-variants": "^0.1.19",

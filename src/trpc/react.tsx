@@ -5,7 +5,6 @@ import { getUrl, transformer } from "@/trpc/shared";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { unstable_httpBatchStreamLink as httpBatchStreamLink, loggerLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
-import { ConfigProvider } from "antd";
 import { useState } from "react";
 
 export const api = createTRPCReact<AppRouter>();
@@ -31,7 +30,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode; cookies: s
   return (
     <QueryClientProvider client={queryClient}>
       <api.Provider client={trpcClient} queryClient={queryClient}>
-        <ConfigProvider>{props.children}</ConfigProvider>
+        {props.children}
       </api.Provider>
     </QueryClientProvider>
   );
