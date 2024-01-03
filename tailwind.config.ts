@@ -7,7 +7,7 @@ export default withTV({
   theme: {
     extend: {
       fontFamily: {
-        poppins: ["var(--font-poppins)", ...fontFamily.sans],
+        montserrat: ["var(--font-montserrat)", ...fontFamily.sans],
       },
       padding: {
         shorter4: "1vw",
