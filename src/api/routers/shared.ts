@@ -21,14 +21,15 @@ export const getData = async ({ endpoint, params, cacheType }: { endpoint: strin
   let headers: HeadersInit | undefined = undefined;
   if (session) headers = { Authorization: `Bearer ${session.user.token}` };
   const url = getUrl(endpoint, params);
-  try {
-    const res = await fetch(url, { cache: cacheType ?? "no-store", headers });
-    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
-    if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    return res.json() as unknown;
-  } catch (error) {
-    getError({ error, url, session });
-  }
+  const res = await fetch(url, { cache: cacheType ?? "no-store", headers });
+
+  if (!res.ok)
+    return THROW_TRPC_ERROR(
+      "INTERNAL_SERVER_ERROR",
+      getError({ plain: true, error: await res.json(), url, session, status: res.status }),
+    );
+
+  return res.json() as unknown;
 };
 
 export const postData = async ({ endpoint, body }: { endpoint: string; body: unknown }) => {
@@ -36,14 +37,15 @@ export const postData = async ({ endpoint, body }: { endpoint: string; body: unk
   const headers: HeadersInit = { "Content-Type": "application/json" };
   if (session) headers.Authorization = `Bearer ${session.user.token}`;
   const url = getUrl(endpoint);
-  try {
-    const res = await fetch(url, { method: "POST", headers, body: JSON.stringify(body) });
-    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
-    if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    return res.json() as unknown;
-  } catch (error) {
-    getError({ error, url, session });
-  }
+  const res = await fetch(url, { method: "POST", headers, body: JSON.stringify(body) });
+
+  if (!res.ok)
+    return THROW_TRPC_ERROR(
+      "INTERNAL_SERVER_ERROR",
+      getError({ plain: true, error: await res.json(), url, session, status: res.status }),
+    );
+
+  return res.json() as unknown;
 };
 
 export const postFormData = async ({ endpoint, formData }: { endpoint: string; formData: FormData }) => {
@@ -51,14 +53,15 @@ export const postFormData = async ({ endpoint, formData }: { endpoint: string; f
   const headers: HeadersInit = { "Content-Type": "multipart/form-data" };
   if (session) headers.Authorization = `Bearer ${session.user.token}`;
   const url = getUrl(endpoint);
-  try {
-    const res = await fetch(url, { method: "POST", headers, body: formData });
-    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
-    if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    return res.json() as unknown;
-  } catch (error) {
-    getError({ error, url, session });
-  }
+  const res = await fetch(url, { method: "POST", headers, body: formData });
+
+  if (!res.ok)
+    return THROW_TRPC_ERROR(
+      "INTERNAL_SERVER_ERROR",
+      getError({ plain: true, error: await res.json(), url, session, status: res.status }),
+    );
+
+  return res.json() as unknown;
 };
 
 export const putData = async ({ endpoint, body }: { endpoint: string; body: unknown }) => {
@@ -66,14 +69,15 @@ export const putData = async ({ endpoint, body }: { endpoint: string; body: unkn
   const headers: HeadersInit = { "Content-Type": "application/json" };
   if (session) headers.Authorization = `Bearer ${session.user.token}`;
   const url = getUrl(endpoint);
-  try {
-    const res = await fetch(url, { method: "PUT", headers, body: JSON.stringify(body) });
-    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
-    if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    return res.json() as unknown;
-  } catch (error) {
-    getError({ error, url, session });
-  }
+  const res = await fetch(url, { method: "PUT", headers, body: JSON.stringify(body) });
+
+  if (!res.ok)
+    return THROW_TRPC_ERROR(
+      "INTERNAL_SERVER_ERROR",
+      getError({ plain: true, error: await res.json(), url, session, status: res.status }),
+    );
+
+  return res.json() as unknown;
 };
 
 export const patchData = async ({ endpoint, body }: { endpoint: string; body: unknown }) => {
@@ -81,14 +85,15 @@ export const patchData = async ({ endpoint, body }: { endpoint: string; body: un
   const headers: HeadersInit = { "Content-Type": "application/json" };
   if (session) headers.Authorization = `Bearer ${session.user.token}`;
   const url = getUrl(endpoint);
-  try {
-    const res = await fetch(url, { method: "PATCH", headers, body: JSON.stringify(body) });
-    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
-    if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    return res.json() as unknown;
-  } catch (error) {
-    getError({ error, url, session });
-  }
+  const res = await fetch(url, { method: "PATCH", headers, body: JSON.stringify(body) });
+
+  if (!res.ok)
+    return THROW_TRPC_ERROR(
+      "INTERNAL_SERVER_ERROR",
+      getError({ plain: true, error: await res.json(), url, session, status: res.status }),
+    );
+
+  return res.json() as unknown;
 };
 
 export const deleteData = async ({ endpoint }: { endpoint: string }) => {
@@ -96,12 +101,13 @@ export const deleteData = async ({ endpoint }: { endpoint: string }) => {
   let headers: HeadersInit | undefined = undefined;
   if (session) headers = { Authorization: `Bearer ${session.user.token}` };
   const url = getUrl(endpoint);
-  try {
-    const res = await fetch(url, { method: "DELETE", headers });
-    if (res.status === 401) return THROW_TRPC_ERROR("UNAUTHORIZED", getError({ plain: true, error: await res.json(), url, session }));
-    if (!res.ok) return THROW_TRPC_ERROR("INTERNAL_SERVER_ERROR", getError({ plain: true, error: await res.json(), url, session }));
-    return res.json() as unknown;
-  } catch (error) {
-    getError({ error, url, session });
-  }
+  const res = await fetch(url, { method: "DELETE", headers });
+
+  if (!res.ok)
+    return THROW_TRPC_ERROR(
+      "INTERNAL_SERVER_ERROR",
+      getError({ plain: true, error: await res.json(), url, session, status: res.status }),
+    );
+
+  return res.json() as unknown;
 };

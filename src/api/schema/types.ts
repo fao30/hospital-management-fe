@@ -1,4 +1,4 @@
-import { type Gender, type RoleName } from "@schema";
+import { type Gender, type RoleName } from "@schema/schemas";
 
 export type User = {
   firstName: string;

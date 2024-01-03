@@ -2,7 +2,7 @@ import { api } from "@/trpc/server";
 import { Fragment } from "react";
 
 export default async function HomePage() {
-  const data = await api.user.list.query({ params: { limit: 1, page: 1 } });
+  const data = await api.role.list.query();
 
-  return <Fragment></Fragment>;
+  return <Fragment>page</Fragment>;
 }

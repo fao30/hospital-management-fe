@@ -1,4 +1,4 @@
-import { type RoleName } from "@/api/schema";
+import { type RoleName } from "@/api/schema/schemas";
 
 export const ICONS = {};
 

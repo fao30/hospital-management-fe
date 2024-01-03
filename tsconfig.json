@@ -29,7 +29,7 @@
       "@/*": ["./src/*"],
       "#/*": ["./public/*"],
       "@routers/*": ["./src/api/routers/*"],
-      "@schema": ["./src/api/schema/index.ts"]
+      "@schema/*": ["./src/api/schema/*"]
     }
   },
   "include": [".eslintrc.cjs", "next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.js", ".next/types/**/*.ts"],

@@ -114,21 +114,24 @@ export const getError = ({
   url,
   session,
   plain,
+  status,
 }: {
   error: unknown;
   url: string;
   session: Session | null;
   plain?: boolean;
+  status: number;
 }) => {
   const details = {
     error: `${timestampError} ERROR: `,
     url: `${timestampError} URL: `,
+    status: `${timestampError} STATUS: `,
     session: `${timestampError} SESSION: `,
   };
   if (plain)
-    return `${details.error}${typeof error === "string" ? error : JSON.stringify(error)}\n${details.url}${url}\n${
-      details.session
-    }${JSON.stringify(session)}`;
+    return `\n${details.error}${typeof error === "string" ? error : JSON.stringify(error)}\n${details.url}${url}\n${
+      details.status
+    }${status}\n${details.session}${JSON.stringify(session)}`;
   console.error(details.error, error);
   console.error(details.url, url);
   console.error(details.session, session);

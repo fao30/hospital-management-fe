@@ -1,8 +1,8 @@
+import { role } from "@/api/routers/role";
 import { createTRPCRouter } from "@/api/trpc";
-import { user } from "@routers/user";
 
 export const appRouter = createTRPCRouter({
-  user,
+  role,
 });
 
 export type AppRouter = typeof appRouter;
