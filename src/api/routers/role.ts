@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "@/api/trpc";
 import { type RouterOutputs } from "@/types";
-import { type Role } from "../schema/types";
+import { type Role } from "@schema/types";
 import { getData } from "./shared";
 
 export const role = createTRPCRouter({
