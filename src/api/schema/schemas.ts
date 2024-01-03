@@ -26,6 +26,7 @@ export class schema {
         country_id: z.number(),
         role_id: z.number(),
         hospital_id: z.number(),
+        // make it false after dev for verification proccess
         is_active: z.boolean().default(true),
       }),
     }),
@@ -36,3 +37,4 @@ export class schema {
 export type Gender = z.infer<typeof schema.gender>;
 export type RoleName = z.infer<typeof schema.roleName>;
 export type PaymentStatusName = z.infer<typeof schema.paymentStatusName>;
+export type Login = z.infer<typeof schema.login>;
