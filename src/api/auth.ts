@@ -12,7 +12,7 @@ declare module "next-auth" {
 
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 604800 },
   jwt: { maxAge: 604800 },
   callbacks: {
     jwt: async ({ token, user }) => ({ ...token, ...user }),
@@ -27,8 +27,10 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({ refresh_token: token.refresh_token }),
         });
 
-        const data = (await res.json()) as { token: string };
-        updatedToken.token = data.token;
+        if (res.ok) {
+          const data = (await res.json()) as { token: string };
+          updatedToken.token = data.token;
+        }
       }
 
       return {
