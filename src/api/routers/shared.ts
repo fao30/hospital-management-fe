@@ -1,7 +1,7 @@
 import { getServerAuthSession } from "@/api/auth";
 import { env } from "@/env";
 import { getError } from "@/lib/functions";
-import { THROW_TRPC_ERROR } from "@/trpc/shared";
+import { THROW_TRPC_ERROR, TRPC_ERROR_CODES } from "@/trpc/shared";
 
 type Params = Record<string, string | number>;
 
@@ -25,7 +25,7 @@ export const getData = async ({ endpoint, params, cacheType }: { endpoint: strin
 
   if (!res.ok)
     return THROW_TRPC_ERROR(
-      "INTERNAL_SERVER_ERROR",
+      TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
 
@@ -41,7 +41,7 @@ export const postData = async ({ endpoint, body }: { endpoint: string; body: unk
 
   if (!res.ok)
     return THROW_TRPC_ERROR(
-      "INTERNAL_SERVER_ERROR",
+      TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
 
@@ -57,7 +57,7 @@ export const postFormData = async ({ endpoint, formData }: { endpoint: string; f
 
   if (!res.ok)
     return THROW_TRPC_ERROR(
-      "INTERNAL_SERVER_ERROR",
+      TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
 
@@ -73,7 +73,7 @@ export const putData = async ({ endpoint, body }: { endpoint: string; body: unkn
 
   if (!res.ok)
     return THROW_TRPC_ERROR(
-      "INTERNAL_SERVER_ERROR",
+      TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
 
@@ -89,7 +89,7 @@ export const patchData = async ({ endpoint, body }: { endpoint: string; body: un
 
   if (!res.ok)
     return THROW_TRPC_ERROR(
-      "INTERNAL_SERVER_ERROR",
+      TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
 
@@ -105,7 +105,7 @@ export const deleteData = async ({ endpoint }: { endpoint: string }) => {
 
   if (!res.ok)
     return THROW_TRPC_ERROR(
-      "INTERNAL_SERVER_ERROR",
+      TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
 
