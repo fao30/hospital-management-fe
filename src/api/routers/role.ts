@@ -11,4 +11,4 @@ export const role = createTRPCRouter({
 });
 
 // outputs
-export type RoleList = RouterOutputs["role"]["list"];
+export type RoleListOutput = RouterOutputs["role"]["list"];

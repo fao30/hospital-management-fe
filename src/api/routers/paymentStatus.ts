@@ -11,4 +11,4 @@ export const paymentStatus = createTRPCRouter({
 });
 
 // outputs
-export type PaymentStatusList = RouterOutputs["paymentStatus"]["list"];
+export type PaymentStatusListOuput = RouterOutputs["paymentStatus"]["list"];

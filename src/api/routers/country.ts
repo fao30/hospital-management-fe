@@ -11,4 +11,4 @@ export const country = createTRPCRouter({
 });
 
 // outputs
-export type CountryList = RouterOutputs["country"]["list"];
+export type CountryListOuput = RouterOutputs["country"]["list"];

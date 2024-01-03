@@ -28,6 +28,14 @@ export const getInputDate = (date?: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
+export const convertInputDate = (dateString: string): string => {
+  const parts = dateString.split("-");
+  const year = parts[0];
+  const month = parts[1];
+  const day = parts[2];
+  return `${day}-${month}-${year}`;
+};
+
 export const formatDate = ({ lang, date, style }: { lang: Lang; date?: Date; style: "long" | "short" }): string => {
   return (date ?? getNewDate()).toLocaleDateString(lang, {
     year: "numeric",
