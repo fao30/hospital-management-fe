@@ -1,9 +1,5 @@
 import { type PaymentStatusName, type RoleName } from "@schema/schemas";
 
-export const ICONS = {};
-
-export const COLORS = {};
-
 export const ROLES: { id: number; name: RoleName }[] = [
   { id: 1, name: "superadmin" },
   { id: 2, name: "hospital-manager" },
