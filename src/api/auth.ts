@@ -1,43 +1,30 @@
 import { env } from "@/env";
-import { schema } from "@schema/schemas";
-import { jwtDecode } from "jwt-decode";
+import { schema, type RoleName } from "@schema/schemas";
 import { getServerSession, type DefaultSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: { id: string; token: string; refreshToken: string } & DefaultSession["user"];
+    user: { id: string; token: string; refreshToken: string; roleId: number; role: RoleName } & DefaultSession["user"];
   }
 }
 
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
-  session: { strategy: "jwt", maxAge: 604800 },
-  jwt: { maxAge: 604800 },
+  session: { strategy: "jwt", maxAge: 86400 }, // 1 day
+  jwt: { maxAge: 86400 }, // 1 day
   callbacks: {
     jwt: async ({ token, user }) => ({ ...token, ...user }),
-    session: async ({ session, token }) => {
-      const updatedToken = token;
-      const decodedToken = jwtDecode(token.token as string);
-
-      if (Date.now() < decodedToken.exp!) {
-        const res = await fetch(env.NEXT_PUBLIC_API + "/login/refresh", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refresh_token: token.refresh_token }),
-        });
-
-        if (res.ok) {
-          const data = (await res.json()) as { token: string };
-          updatedToken.token = data.token;
-        }
-      }
-
-      return {
-        ...session,
-        user: { ...session.user, token: updatedToken.token, refreshToken: token.refresh_token },
-      };
-    },
+    session: async ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        token: token.token,
+        refreshToken: token.refresh_token,
+        roleId: token.role_id,
+        role: token.role_name as RoleName,
+      },
+    }),
   },
   providers: [
     CredentialsProvider({
@@ -53,6 +40,7 @@ export const authOptions: NextAuthOptions = {
             body: JSON.stringify(validation.data),
           });
           if (!res.ok) return null;
+
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return await res.json();
         }

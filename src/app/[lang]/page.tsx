@@ -4,8 +4,7 @@ import { Fragment } from "react";
 
 export default async function HomePage() {
   const session = await getServerAuthSession();
-
-  console.log("SESSION", session);
+  // const data = await api.visit.list.query();
 
   return <Fragment>page</Fragment>;
 }

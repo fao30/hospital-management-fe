@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/api/trpc";
 import { country } from "@routers/country";
 import { hospital } from "@routers/hospital";
 import { medicine } from "@routers/medicine";
+import { medicineTreatment } from "@routers/medicineTreatment";
 import { paymentStatus } from "@routers/paymentStatus";
 import { role } from "@routers/role";
 import { treatment } from "@routers/treatment";
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   hospital,
   visit,
   medicine,
+  medicineTreatment,
   treatment,
 });
 

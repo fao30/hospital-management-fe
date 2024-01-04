@@ -104,6 +104,22 @@ export class schema {
       body: this.create.shape.body,
     });
   };
+
+  static medicineTreatment = class {
+    static create = z.object({
+      body: z.object({
+        medicine_id: z.number(),
+        medicines_treatment: z.string(),
+        quantity: z.number().min(1),
+        visit_id: z.number(),
+      }),
+    });
+
+    static update = z.object({
+      medicineTreatmentId: z.number(),
+      body: this.create.shape.body,
+    });
+  };
 }
 
 // type infereces from zod (enums, etc)

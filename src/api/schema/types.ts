@@ -85,7 +85,6 @@ export type MedicinesTreatment = {
   id: number;
   medicines_treatment: string;
   quantity: number;
-  amount: string;
 
   // relations
   visit_id: number;
