@@ -72,6 +72,38 @@ export class schema {
       body: this.create.shape.body,
     });
   };
+
+  static medicine = class {
+    static create = z.object({
+      body: z.object({
+        hospital_id: z.number(),
+        article_number: z.string(),
+        currency: z.string(),
+        price: z.string(),
+        in_stock: z.number(),
+      }),
+    });
+    static update = z.object({
+      medicineId: z.number(),
+      body: this.create.shape.body,
+    });
+  };
+
+  static treatment = class {
+    static create = z.object({
+      body: z.object({
+        doctor_id: z.number(),
+        visit_id: z.string(),
+        medical_treatment: z.string(),
+        currency: z.string(),
+        price: z.number(),
+      }),
+    });
+    static update = z.object({
+      treatmentId: z.number(),
+      body: this.create.shape.body,
+    });
+  };
 }
 
 // type infereces from zod (enums, etc)
