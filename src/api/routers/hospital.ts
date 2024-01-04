@@ -22,7 +22,7 @@ export const hospital = createTRPCRouter({
   }),
 
   update: publicProcedure.input(schema.hospital.update).mutation(async ({ input }) => {
-    const data = await postData({ endpoint: `/hospitals${input.hospitalId}`, body: input.body });
+    const data = await postData({ endpoint: `/hospitals/${input.hospitalId}`, body: input.body });
     return data as { message: string };
   }),
 });
