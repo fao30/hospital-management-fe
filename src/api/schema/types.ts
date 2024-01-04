@@ -1,18 +1,19 @@
 import { type Gender, type RoleName } from "@schema/schemas";
 
 export type User = {
-  firstName: string;
-  lastName: string;
-  idNumber: string;
-  dateOfBirth: string;
+  first_name: string;
+  last_name: string;
+  id_number: string;
+  date_of_birth: string;
   email: string;
   password?: string;
-  phoneNumber: string;
-  isActive: boolean;
+  phone_number: string;
+  is_active: boolean;
 
   // relations
-  countryId: number;
-  roleId: number;
+  country_id: number;
+  role_id: number;
+  hospital_id: number;
 };
 
 export type Role = {
@@ -22,36 +23,26 @@ export type Role = {
 
 export type Country = {
   id: number;
-  countryCode: string;
   name: string;
 };
 
-export type HospitalEmployee = {
-  id: string;
-  isHospitalAdmin: boolean;
-
-  // relations
-  hospitalId: number;
-  userId: number;
-};
-
 export type Visit = {
-  dateStart: Date;
-  dateEnd: Date;
+  date_start: Date;
+  date_end: Date;
   weight: number;
   height: number;
   temperature: number;
-  bloodPressure: number;
-  dueAmount: number;
-  paidAmount: number;
+  blood_presure: number;
+  due_amount: number;
+  paid_amount: number;
   diagnosis: string;
-  caseNotes: string;
+  case_notes: string;
   gender: Gender;
 
   // relations
-  statusId: number;
-  patientId: number;
-  hospitalId: number;
+  status_id: number;
+  patient_id: number;
+  hospital_id: number;
 };
 
 export type PaymentStatus = {
@@ -64,44 +55,46 @@ export type File = {
   name: string;
 
   // relations
-  treatmentId: number;
+  treatment_id: number;
 };
 
 export type Hospital = {
   id: number;
   name: string;
   address: string;
-  phoneNumber: string;
-  isActive: boolean;
+  phone_number: string;
+  is_active: boolean;
+  max_users: number;
 };
 
 export type Treatment = {
   id: number;
-  medicalTreatment: string;
+  medical_treatment: string;
   currency: string;
   price: number;
 
   // relations
-  doctorId: number;
-  visitId: number;
+  doctor_id: number;
+  visit_id: number;
 };
 
 export type MedicinesTreatment = {
   id: number;
-  medicinesTreatment: string;
+  medicines_treatment: string;
   quantity: number;
+  amount: string;
 
   // relations
-  visitId: number;
-  medicineId: number;
+  visit_id: number;
+  medicine_id: number;
 };
 
 export type Medicine = {
   id: number;
-  articleNumber: string;
+  article_number: string;
   currency: string;
   price: string;
-  inStock: number;
+  in_stock: number;
 
   // relations
   hospitalid: number;
@@ -116,6 +109,8 @@ export type AlergiesUser = {
   id: number;
 
   // relations
-  alergyId: number;
-  userId: number;
+  alergy_id: number;
+  user_id: number;
 };
+
+export type DateTime = { updatedAt: Date; createdDate: Date };

@@ -12,9 +12,9 @@ export class schema {
   static login = z.object({ email: schema.email, password: z.string().min(4) });
 
   // routers
-  static user = {
-    list: z.object({ params: z.object({ ...schema.pagination }) }),
-    register: z.object({
+  static user = class {
+    static list = z.object({ params: z.object({ ...schema.pagination }) });
+    static register = z.object({
       body: z.object({
         first_name: z.string(),
         last_name: z.string(),
@@ -29,7 +29,23 @@ export class schema {
         // make it false after dev for verification proccess
         is_active: z.boolean().default(true),
       }),
-    }),
+    });
+  };
+
+  static hospital = class {
+    static create = z.object({
+      body: z.object({
+        name: z.string(),
+        address: z.string(),
+        phone_number: z.string(),
+        is_active: z.boolean().default(true),
+        max_users: z.number().min(1),
+      }),
+    });
+    static update = z.object({
+      hospitalId: z.number(),
+      body: this.create.shape.body,
+    });
   };
 }
 
