@@ -5,8 +5,9 @@ export type User = {
   last_name: string;
   id_number: string;
   date_of_birth: string;
+  gender: Gender;
   email: string;
-  password?: string;
+  password: string;
   phone_number: string;
   is_active: boolean;
 
