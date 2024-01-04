@@ -11,6 +11,7 @@ export type User = {
   password: string;
   phone_number: string;
   is_active: boolean;
+  is_on_duty: boolean;
 
   // relations
   country_id: number;
@@ -41,9 +42,10 @@ export type Visit = {
   diagnosis: string;
   case_notes: string;
   gender: Gender;
+  is_patient_discharged: boolean;
 
   // relations
-  status_id: number;
+  payment_status_id: number;
   patient_id: number;
   hospital_id: number;
 };
@@ -97,6 +99,8 @@ export type Medicine = {
   currency: string;
   price: string;
   in_stock: number;
+  manufacturer: string;
+  expiry_date: Date;
 
   // relations
   hospitalid: number;

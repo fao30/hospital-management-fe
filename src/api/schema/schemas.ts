@@ -51,7 +51,7 @@ export class schema {
   static visit = class {
     static create = z.object({
       body: z.object({
-        status_id: z.number(),
+        payment_status_id: z.number(),
         patient_id: z.number(),
         hospital_id: z.number(),
         due_amount: z.number(),
@@ -62,7 +62,7 @@ export class schema {
         blood_presure: z.number(),
         diagnosis: z.string(),
         case_notes: z.string(),
-
+        is_patient_discharged: z.boolean(),
         // date_start, date_end
       }),
     });
@@ -81,6 +81,8 @@ export class schema {
         currency: z.string(),
         price: z.string(),
         in_stock: z.number(),
+        manufacturer: z.string(),
+        expiry_date: z.string(),
       }),
     });
     static update = z.object({
@@ -112,6 +114,8 @@ export class schema {
         medicines_treatment: z.string(),
         quantity: z.number().min(1),
         visit_id: z.number(),
+        dischardged: z.boolean(),
+        newProperty: z.string(),
       }),
     });
 
