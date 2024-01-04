@@ -1,6 +1,7 @@
 import { type Gender, type RoleName } from "@schema/schemas";
 
 export type User = {
+  id: string;
   first_name: string;
   last_name: string;
   id_number: string;
@@ -28,6 +29,7 @@ export type Country = {
 };
 
 export type Visit = {
+  id: number;
   date_start: Date;
   date_end: Date;
   weight: number;
