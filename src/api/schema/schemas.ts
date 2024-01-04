@@ -47,6 +47,31 @@ export class schema {
       body: this.create.shape.body,
     });
   };
+
+  static visit = class {
+    static create = z.object({
+      body: z.object({
+        status_id: z.number(),
+        patient_id: z.number(),
+        hospital_id: z.number(),
+        due_amount: z.number(),
+        paid_amount: z.number(),
+        weight: z.number(),
+        heigh: z.number(),
+        temperature: z.number(),
+        blood_presure: z.number(),
+        diagnosis: z.string(),
+        case_notes: z.string(),
+
+        // date_start, date_end
+      }),
+    });
+
+    static update = z.object({
+      visitId: z.number(),
+      body: this.create.shape.body,
+    });
+  };
 }
 
 // type infereces from zod (enums, etc)
