@@ -1,10 +1,10 @@
-import { createTRPCRouter, publicProcedure } from "@/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/api/trpc";
 import { type RouterOutputs } from "@/types";
 import { type PaymentStatus } from "@schema/types";
 import { getData } from "./shared";
 
 export const paymentStatus = createTRPCRouter({
-  list: publicProcedure.query(async () => {
+  list: protectedProcedure.query(async () => {
     const data = await getData({ endpoint: "/paymentStatuses" });
     return data as { payment_statuses: PaymentStatus[] };
   }),

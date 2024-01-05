@@ -36,9 +36,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               inputMode={type === "number" ? "numeric" : undefined}
               type={type ? type : "text"}
               className={cn(
-                "pr-3",
                 inputVariants({ className, size, color: disabled ? "disabled" : color }),
-                { "border-red-500 focus:border-red-500": error },
+                { "border-red focus:border-red": error },
                 { "pl-7": icon },
               )}
               ref={ref}
@@ -47,7 +46,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             />
             {icon ? <Iconify width={inputIconSize} icon={icon} className="absolute centered-left text-dark" /> : null}
           </section>
-          {error ? <small className={cn("text-red-500 text-xs mt-0.5")}>{error}</small> : null}
+          {error ? <small className={cn("text-red text-xs mt-0.5")}>{error}</small> : null}
         </section>
       );
     }
@@ -63,8 +62,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             placeholder="*********"
             type={showPassword ? "text" : "password"}
             className={cn(inputVariants({ size, color, className }), {
-              "border-red-500 focus:border-red-500": error,
-              "pl-7 pr-9": withPasswordIcon,
+              "border-red focus:border-red": error,
+              "px-7": withPasswordIcon,
             })}
           />
 
@@ -72,14 +71,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <Iconify width={inputIconSize} icon={ICONS.password} className="absolute centered-left text-dark" />
           ) : null}
 
-          <section
-            className="absolute centered-right -translate-x-3 text-dark cursor-pointer text-xl"
-            onClick={() => setShowPassword(!showPassword)}
-          >
+          <section className="absolute centered-right text-dark cursor-pointer text-xl" onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
           </section>
         </section>
-        {error ? <small className={cn("text-red-500 text-xs mt-0.5")}>{error}</small> : null}
+        {error ? <small className={cn("text-red text-xs mt-0.5")}>{error}</small> : null}
       </section>
     );
   },

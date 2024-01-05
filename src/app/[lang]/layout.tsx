@@ -9,7 +9,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
 import jwt from "jsonwebtoken";
 import { type Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Lato, Montserrat } from "next/font/google";
 import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
@@ -22,6 +22,14 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  variable: "--font-lato",
+  weight: ["300", "400", "700", "900"],
+  display: "swap",
 });
 
 type Props = { children: React.ReactNode; params: { lang: Lang } };
@@ -37,7 +45,7 @@ export default async function RootLayout({ children, params }: Props) {
   }
 
   return (
-    <html lang={params.lang} className={montserrat.variable}>
+    <html lang={params.lang} className={`${lato.variable} ${montserrat.variable}`}>
       <body>
         <AuthLogoutHelper isTokenValid={isTokenValid} session={session} />
         <TRPCReactProvider cookies={cookies().toString()}>

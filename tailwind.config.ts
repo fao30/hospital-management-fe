@@ -6,8 +6,17 @@ export default withTV({
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      colors: {
+        gray: "#999999",
+        dark: "#333333",
+        charcoal: "#373F51",
+        red: "#de6262",
+        hover: "#f5f5f5",
+        blue: "#008DD5",
+      },
       fontFamily: {
         montserrat: ["var(--font-montserrat)", ...fontFamily.sans],
+        lato: ["var(--font-lato)", ...fontFamily.sans],
       },
       padding: {
         shorter4: "1vw",

@@ -1,6 +1,7 @@
 "use client";
 
 import { schema, type Login } from "@/api/schema/schemas";
+import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { ICONS } from "@/lib/constants";
 import { type Lang, type SearchParams } from "@/types";
@@ -39,12 +40,23 @@ export default function LoginPage({ searchParams, params }: Props) {
 
   return (
     <article className="flex min-h-screen justify-center items-center">
-      <form onSubmit={handleSubmit(onSubmit)} className="p-6 shadow-lg rounded-md bg-gray-50 w-96 flex flex-col gap-6">
-        <Input error={errors.email?.message} {...register("email")} type="email" icon={ICONS.email} />
-        <Input error={errors.password?.message} {...register("password")} type="password" withPasswordIcon />
-        <button disabled={loading} type="submit">
+      <form onSubmit={handleSubmit(onSubmit)} className="p-6 shadow-lg rounded-md bg-gray-50 w-[24rem] flex flex-col gap-8">
+        <h3 className="text-dark font-bold">
+          DOCMOVE<span className="text-red">.</span>
+        </h3>
+        <section className="flex flex-col gap-6">
+          <Input
+            placeholder="admin@docmove.com.my "
+            error={errors.email?.message}
+            {...register("email")}
+            type="email"
+            icon={ICONS.email}
+          />
+          <Input error={errors.password?.message} {...register("password")} type="password" withPasswordIcon />
+        </section>
+        <Button loading={loading} type="submit">
           Login
-        </button>
+        </Button>
       </form>
     </article>
   );

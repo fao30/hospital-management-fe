@@ -21,3 +21,34 @@ export const inputVariants = tv({
     rounded: "none",
   },
 });
+
+export const buttonVariants = tv({
+  base: "select-none font-medium outline-none text-center text-white",
+  variants: {
+    color: {
+      none: "bg-transparent",
+      primary: "bg-blue",
+      disabled: "bg-charcoal",
+      danger: "bg-red",
+    },
+    size: {
+      small: "h-8",
+      medium: "h-10",
+      large: "h-12",
+    },
+    rounded: {
+      none: "rounded-none",
+      md: "rounded-md",
+      lg: "rounded-lg",
+      xl: "rounded-xl",
+      "2xl": "rounded-2xl",
+      "3xl": "rounded-3xl",
+      full: "rounded-full",
+    },
+  },
+  defaultVariants: {
+    rounded: "none",
+    size: "medium",
+    color: "primary",
+  },
+});

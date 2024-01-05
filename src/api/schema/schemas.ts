@@ -9,7 +9,7 @@ export class schema {
   // others
   static email = z.string().email();
   static pagination = { page: z.number().min(1), limit: z.number().optional() };
-  static login = z.object({ email: schema.email, password: z.string().min(4) });
+  static login = z.object({ email: schema.email, password: z.string().min(6, "Password must contain at least 6 characters") });
 
   // routers
   static user = class {
