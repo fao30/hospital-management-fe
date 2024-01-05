@@ -3,6 +3,7 @@ import "@/styles/stylesheet.css";
 import { getServerAuthSession } from "@/api/auth";
 import AuthLogoutHelper from "@/components/AuthLogoutHelper";
 import { env } from "@/env";
+import { theme } from "@/styles/theme";
 import { TRPCReactProvider } from "@/trpc/react";
 import { type Lang } from "@/types";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
@@ -50,7 +51,7 @@ export default async function RootLayout({ children, params }: Props) {
         <AuthLogoutHelper isTokenValid={isTokenValid} session={session} />
         <TRPCReactProvider cookies={cookies().toString()}>
           <AntdRegistry>
-            <ConfigProvider>
+            <ConfigProvider theme={theme}>
               <main>{children}</main>
             </ConfigProvider>
           </AntdRegistry>

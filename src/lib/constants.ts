@@ -36,6 +36,5 @@ export const ICONS = {
   name: "mdi:rename-outline",
   invoice: "iconamoon:invoice",
   detail: "carbon:folder-details-reference",
+  medicine: "icon-park-outline:medicine-chest",
 };
-
-export const COLORS = {};

@@ -13,6 +13,8 @@ export default withTV({
         red: "#de6262",
         hover: "#f5f5f5",
         blue: "#008DD5",
+        emerald: "#50C878",
+        sunflower: "#FFC512",
       },
       fontFamily: {
         montserrat: ["var(--font-montserrat)", ...fontFamily.sans],

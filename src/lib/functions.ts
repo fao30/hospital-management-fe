@@ -146,3 +146,21 @@ export const getError = ({
 };
 
 export const consoleError = (error: string) => console.error(`${timestampError} ${error}`);
+
+export const getSelectedMenu = (pathname: string): string[] => {
+  const substring = "/dashboard";
+  const startIndex = pathname.indexOf(substring);
+
+  if (startIndex !== -1) {
+    const extractedString = pathname.substring(startIndex + substring.length);
+    const parts = extractedString.split("/").filter((part) => part !== "");
+    const result = parts.map((_, index) => `/${parts.slice(0, index + 1).join("/")}`);
+    if (result.length > 0) {
+      return result;
+    } else {
+      return ["/"];
+    }
+  } else {
+    return [];
+  }
+};
