@@ -1,6 +1,8 @@
 "use client";
 
 import { schema, type Login } from "@/api/schema/schemas";
+import Input from "@/components/Input";
+import { ICONS } from "@/lib/constants";
 import { type Lang, type SearchParams } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -13,7 +15,11 @@ type Props = { searchParams: SearchParams; params: { lang: Lang } };
 export default function LoginPage({ searchParams, params }: Props) {
   console.log(searchParams);
   const router = useRouter();
-  const { register, handleSubmit } = useForm<Login>({ resolver: zodResolver(schema.login) });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Login>({ resolver: zodResolver(schema.login) });
 
   const onSubmit: SubmitHandler<Login> = (data) => logIn(data);
 
@@ -34,9 +40,9 @@ export default function LoginPage({ searchParams, params }: Props) {
 
   return (
     <article className="flex min-h-screen justify-center items-center">
-      <form onSubmit={handleSubmit(onSubmit)} className="p-6 shadow-lg rounded-md bg-gray-50 w-[50%] flex flex-col gap-6">
-        <input {...register("email")} type="email" />
-        <input {...register("password")} type="password" />
+      <form onSubmit={handleSubmit(onSubmit)} className="p-6 shadow-lg rounded-md bg-gray-50 w-96 flex flex-col gap-6">
+        <Input error={errors.email?.message} {...register("email")} type="email" icon={ICONS.email} />
+        <Input error={errors.password?.message} {...register("password")} type="password" withPasswordIcon />
         <button disabled={loading} type="submit">
           Login
         </button>
