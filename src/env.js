@@ -6,6 +6,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     NEXTAUTH_SECRET: process.env.NODE_ENV === "production" ? z.string() : z.string().optional(),
     NEXTAUTH_URL: z.preprocess((str) => process.env.VERCEL_URL ?? str, process.env.VERCEL ? z.string() : z.string().url()),
+    ACCESS_TOKEN_SECRET: z.string(),
   },
 
   client: { NEXT_PUBLIC_API: z.string() },
@@ -15,6 +16,7 @@ export const env = createEnv({
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXT_PUBLIC_API: process.env.NEXT_PUBLIC_API,
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

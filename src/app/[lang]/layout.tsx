@@ -1,9 +1,13 @@
 import "@/styles/tailwind.css";
 import "@/styles/stylesheet.css";
+import { getServerAuthSession } from "@/api/auth";
+import AuthLogoutHelper from "@/components/AuthLogoutHelper";
+import { env } from "@/env";
 import { TRPCReactProvider } from "@/trpc/react";
 import { type Lang } from "@/types";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
+import jwt from "jsonwebtoken";
 import { type Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { cookies } from "next/headers";
@@ -22,13 +26,23 @@ const montserrat = Montserrat({
 
 type Props = { children: React.ReactNode; params: { lang: Lang } };
 
-export default function RootLayout({ children, params }: Props) {
+export default async function RootLayout({ children, params }: Props) {
+  const session = await getServerAuthSession();
+  let isTokenValid;
+
+  if (session) {
+    jwt.verify(session.user.token, env.ACCESS_TOKEN_SECRET, (err) => {
+      if (err) isTokenValid = false;
+    });
+  }
+
   return (
     <html lang={params.lang} className={montserrat.variable}>
       <body>
         <TRPCReactProvider cookies={cookies().toString()}>
           <AntdRegistry>
             <ConfigProvider>
+              <AuthLogoutHelper isTokenValid={isTokenValid} />
               <main>{children}</main>
             </ConfigProvider>
           </AntdRegistry>
