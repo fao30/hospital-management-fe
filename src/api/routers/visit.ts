@@ -11,16 +11,18 @@ export const visit = createTRPCRouter({
       Treatments: Treatment[];
       Medicines_Treatments: MedicinesTreatment[];
     };
-
     const data = (await getData({ endpoint: "/visits" })) as { visits: Visits[] };
+    const fieldsToConvert: (keyof Visit)[] = ["weight", "height", "temperature", "blood_presure"];
+    const updatedData = data.visits.map((visit) => {
+      const parsedVisit = Object.fromEntries(
+        Object.entries(visit).map(([key, value]) => [
+          key,
+          fieldsToConvert.includes(key as keyof Visit) ? parseFloat(value.toString()) : value,
+        ]),
+      );
+      return parsedVisit as Visits;
+    });
 
-    const updatedData = data.visits.map((visit) => ({
-      ...visit,
-      weight: parseFloat(visit.weight.toString()),
-      height: parseFloat(visit.height.toString()),
-      temperature: parseFloat(visit.temperature.toString()),
-      blood_presure: parseFloat(visit.blood_presure.toString()),
-    }));
     return updatedData;
   }),
 
