@@ -13,7 +13,6 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 type Props = { searchParams: SearchParams; params: { lang: Lang } };
 
 export default function LoginPage({ searchParams, params }: Props) {
-  console.log(searchParams);
   const router = useRouter();
   const {
     register,

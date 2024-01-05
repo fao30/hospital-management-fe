@@ -29,17 +29,17 @@ type Props = { children: React.ReactNode; params: { lang: Lang } };
 export default async function RootLayout({ children, params }: Props) {
   const session = await getServerAuthSession();
   let isTokenValid;
-
   if (session) {
-    jwt.verify(session.user.token, env.ACCESS_TOKEN_SECRET, (err) => {
+    jwt.verify(session.user.token, env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) isTokenValid = false;
+      if (decoded && typeof decoded !== "string" && Date.now() >= decoded.exp! * 1000) isTokenValid = false;
     });
   }
 
   return (
     <html lang={params.lang} className={montserrat.variable}>
       <body>
-        <AuthLogoutHelper isTokenValid={isTokenValid} />
+        <AuthLogoutHelper isTokenValid={isTokenValid} session={session} />
         <TRPCReactProvider cookies={cookies().toString()}>
           <AntdRegistry>
             <ConfigProvider>
