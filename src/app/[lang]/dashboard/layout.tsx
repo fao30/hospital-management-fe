@@ -2,9 +2,8 @@ import { getServerAuthSession } from "@/api/auth";
 import DashboardMenu from "@/components/DashboardMenu";
 import DashboardNavigator from "@/components/DashboardNavigator";
 import Iconify from "@/components/Iconify";
-import { ICONS } from "@/lib/constants";
-import { type Lang } from "@/types";
-import { type ItemType, type MenuItemType } from "antd/es/menu/hooks/useItems";
+import { ICONS, MENU_ICON_SIZE, MENU_ITEMS_TO_REMOVE } from "@/lib/constants";
+import { type Lang, type MenuItemKey } from "@/types";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -17,7 +16,7 @@ export default async function DashboardLayout({ params, children }: Props) {
   const session = await getServerAuthSession();
   if (!session) redirect(`/${params.lang}/login/?callbackUrl=/dashboard`);
 
-  const items: ItemType<MenuItemType>[] = [
+  const items: { title: string; key: MenuItemKey; label: React.JSX.Element; icon: React.JSX.Element }[] = [
     {
       title: "",
       key: "/",
@@ -26,7 +25,7 @@ export default async function DashboardLayout({ params, children }: Props) {
           Home
         </DashboardNavigator>
       ),
-      icon: <Iconify icon={ICONS.home} width={25} />,
+      icon: <Iconify icon={ICONS.home} width={MENU_ICON_SIZE} />,
     },
     {
       title: "",
@@ -36,12 +35,17 @@ export default async function DashboardLayout({ params, children }: Props) {
           Medicine
         </DashboardNavigator>
       ),
-      icon: <Iconify icon={ICONS.medicine} width={25} />,
+      icon: <Iconify icon={ICONS.medicine} width={MENU_ICON_SIZE} />,
     },
   ];
 
+  const filteredItems = items.filter((item) => {
+    const itemsToRemove = MENU_ITEMS_TO_REMOVE[session.user.roleId] ?? [];
+    return !itemsToRemove.includes(item.key);
+  });
+
   return (
-    <DashboardMenu items={items} lang={lang}>
+    <DashboardMenu items={filteredItems} lang={lang}>
       {children}
     </DashboardMenu>
   );

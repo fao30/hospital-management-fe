@@ -1,3 +1,17 @@
+import { type MenuItemKey } from "@/types";
+
+export const MENU_ICON_SIZE = 25;
+
+export const MENU_ITEMS = ["/", "/medicine"] as const;
+
+export const MENU_ITEMS_TO_REMOVE: Record<number, MenuItemKey[]> = {
+  1: ["/medicine"],
+  2: [],
+  3: [],
+  4: [],
+  5: [],
+};
+
 export const ICONS = {
   search: "material-symbols:search",
   searchName: "icon-park-outline:edit-name",

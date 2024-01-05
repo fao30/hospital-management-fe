@@ -5,9 +5,17 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: { id: string; token: string; refreshToken: string; roleId: number; role: RoleName } & DefaultSession["user"];
+    user: { id: number; token: string; roleId: number; role: RoleName } & DefaultSession["user"];
   }
 }
+
+type LoginData = {
+  data: {
+    token: string;
+    id: number;
+    role_id: number;
+  };
+};
 
 export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
@@ -15,16 +23,10 @@ export const authOptions: NextAuthOptions = {
   jwt: { maxAge: 86400 }, // 1 day
   callbacks: {
     jwt: async ({ token, user }) => ({ ...token, ...user }),
-    session: async ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        token: token.token,
-        refreshToken: token.refresh_token,
-        roleId: token.role_id,
-        role: token.role_name as RoleName,
-      },
-    }),
+    session: async ({ session, token }) => {
+      const { data } = token as LoginData;
+      return { ...session, user: { ...session.user, token: data.token, id: data.id, roleId: data.role_id } };
+    },
   },
   providers: [
     CredentialsProvider({

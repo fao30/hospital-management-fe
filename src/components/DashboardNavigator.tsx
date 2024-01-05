@@ -1,5 +1,5 @@
 import { cn } from "@/lib/functions";
-import { type Lang } from "@/types";
+import { type Lang, type MenuItemKey } from "@/types";
 import Link from "next/link";
 
 const DashboardNavigator = ({
@@ -10,7 +10,7 @@ const DashboardNavigator = ({
   children,
   lang,
 }: {
-  href: string;
+  href: MenuItemKey;
   isChildren?: boolean;
   children: React.ReactNode;
   className?: string;
