@@ -39,10 +39,10 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={params.lang} className={montserrat.variable}>
       <body>
+        <AuthLogoutHelper isTokenValid={isTokenValid} />
         <TRPCReactProvider cookies={cookies().toString()}>
           <AntdRegistry>
             <ConfigProvider>
-              <AuthLogoutHelper isTokenValid={isTokenValid} />
               <main>{children}</main>
             </ConfigProvider>
           </AntdRegistry>
