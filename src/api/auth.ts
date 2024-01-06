@@ -10,11 +10,10 @@ declare module "next-auth" {
 }
 
 type LoginData = {
-  data: {
-    token: string;
-    id: number;
-    role_id: number;
-  };
+  data: { token: string; id: number; role_id: number };
+  iat: number;
+  exp: number;
+  jti: string;
 };
 
 export const authOptions: NextAuthOptions = {
@@ -24,8 +23,8 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: async ({ token, user }) => ({ ...token, ...user }),
     session: async ({ session, token }) => {
-      const { data } = token as LoginData;
-      return { ...session, user: { ...session.user, token: data.token, id: data.id, roleId: data.role_id } };
+      const { data, ...rest } = token as LoginData;
+      return { ...session, ...rest, user: { ...session.user, ...data } };
     },
   },
   providers: [
