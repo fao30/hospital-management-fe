@@ -46,7 +46,7 @@ export const visit = createTRPCRouter({
 });
 
 // outputs
-export type VisitListOuput = RouterOutputs["visit"]["list"];
+export type VisitListOutput = RouterOutputs["visit"]["list"];
 export type VisitCreateOutput = RouterOutputs["visit"]["create"];
 
 // inputs

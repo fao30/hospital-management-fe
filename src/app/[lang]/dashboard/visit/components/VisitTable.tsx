@@ -1,4 +1,4 @@
-import { type VisitListInput, type VisitListOuput } from "@/api/routers/visit";
+import { type VisitListInput, type VisitListOutput } from "@/api/routers/visit";
 import Button from "@/components/Button";
 import FilterIcon from "@/components/FilterIcon";
 import Input from "@/components/Input";
@@ -11,7 +11,7 @@ import { type FilterDropdownProps } from "antd/es/table/interface";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
-  data?: VisitListOuput;
+  data?: VisitListOutput;
   loading: boolean;
   lang: Lang;
   query: VisitListInput;

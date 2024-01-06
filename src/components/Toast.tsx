@@ -14,7 +14,7 @@ const toastIcons: Record<ToastType, { icon: IconifyIcon | string; color: string 
   },
   error: {
     icon: ICONS.error,
-    color: COLORS.red,
+    color: COLORS.briquette,
   },
   info: {
     icon: ICONS.info,
@@ -31,7 +31,7 @@ export const toast = ({ type, description, t }: { type: ToastType; description: 
     description,
     message: t.toast[type],
     duration: 3,
-    style: { backgroundColor: "#FFFFFF" },
+    style: { backgroundColor: "white" },
     icon: <Iconify icon={toastIcons[type].icon} width={25} color={toastIcons[type].color} />,
   });
 };
