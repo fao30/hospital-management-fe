@@ -14,7 +14,7 @@ export class schema {
 
   // routers
   static user = class {
-    static list = z.object({ params: z.object({ ...schema.pagination }) });
+    static list = z.object({ ...schema.pagination });
     static register = z.object({
       body: z.object({
         first_name: z.string(),

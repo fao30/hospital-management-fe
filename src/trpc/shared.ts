@@ -49,5 +49,5 @@ export const TRPC_ERROR_CODES: Record<number, TRPC_ERROR_CODE_KEY> = {
 };
 
 export const THROW_TRPC_ERROR = (code: TRPC_ERROR_CODE_KEY, message?: string) => {
-  throw new TRPCError({ code, message: message ? `${message}` : ERROR_MESSAGES[code] });
+  throw new TRPCError({ code, message: message ?? ERROR_MESSAGES[code] });
 };
