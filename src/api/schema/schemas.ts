@@ -74,10 +74,8 @@ export class schema {
     });
 
     static list = z.object({
-      params: z.object({
-        ...schema.pagination,
-        createdAt: z.string().optional(),
-      }),
+      ...schema.pagination,
+      createdAt: z.string().optional(),
     });
   };
 

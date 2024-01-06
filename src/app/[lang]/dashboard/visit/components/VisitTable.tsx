@@ -14,11 +14,11 @@ type Props = {
   data?: VisitListOuput;
   loading: boolean;
   lang: Lang;
-  params: VisitListInput;
+  query: VisitListInput;
   searchParams: SearchParams;
 };
 
-export default function VisitTable({ data, loading, lang, params, searchParams }: Props) {
+export default function VisitTable({ data, loading, lang, query, searchParams }: Props) {
   const router = useRouter();
   const newSearchParams = useSearchParams();
   const newParams = new URLSearchParams(newSearchParams.toString());
@@ -100,8 +100,8 @@ export default function VisitTable({ data, loading, lang, params, searchParams }
         redirectTable(newParams);
       }}
       pagination={{
-        current: params?.page,
-        pageSize: params?.limit,
+        current: query?.page,
+        pageSize: query?.limit,
         total: data?.totalPage,
         showSizeChanger: true,
         pageSizeOptions: [String(PAGINATION_LIMIT), "75", "100"],

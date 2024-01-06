@@ -11,11 +11,9 @@ type Props = {
 };
 
 export default function VisitPage({ params, searchParams }: Props) {
-  const query = schema.visit.list.parse({ params: searchParams });
+  const query = schema.visit.list.parse(searchParams);
 
-  const { data, isLoading: loading } = api.visit.list.useQuery({
-    params: { ...query.params, page: query.params.page - 1 },
-  });
+  const { data, isLoading: loading } = api.visit.list.useQuery({ ...query, page: query.page - 1 });
 
-  return <VisitTable data={data} loading={loading} lang={params.lang} params={query.params} searchParams={searchParams} />;
+  return <VisitTable data={data} loading={loading} lang={params.lang} query={query} searchParams={searchParams} />;
 }

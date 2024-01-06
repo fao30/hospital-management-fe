@@ -12,7 +12,7 @@ export const visit = createTRPCRouter({
       User: User;
     };
 
-    const { visits, ...rest } = (await getData({ endpoint: "/visits", params: input.params })) as {
+    const { visits, ...rest } = (await getData({ endpoint: "/visits", params: input })) as {
       visits: Visits[];
       totalPage: number;
     };
@@ -52,4 +52,4 @@ export type VisitCreateOutput = RouterOutputs["visit"]["create"];
 // inputs
 export type VisitCreateInput = RouterInputs["visit"]["create"];
 export type VisitUpdateInput = RouterInputs["visit"]["update"];
-export type VisitListInput = RouterInputs["visit"]["list"]["params"];
+export type VisitListInput = RouterInputs["visit"]["list"];
