@@ -1,3 +1,4 @@
+import { PAGINATION_LIMIT } from "@/lib/constants";
 import { z } from "zod";
 
 export class schema {
@@ -8,7 +9,7 @@ export class schema {
 
   // others
   static email = z.string().email();
-  static pagination = { page: z.number().min(1), limit: z.number().optional() };
+  static pagination = { page: z.coerce.number().default(1), limit: z.coerce.number().default(PAGINATION_LIMIT) };
   static login = z.object({ email: schema.email, password: z.string().min(6, "Password must contain at least 6 characters") });
 
   // routers
@@ -70,6 +71,13 @@ export class schema {
     static update = z.object({
       visitId: z.number(),
       body: this.create.shape.body,
+    });
+
+    static list = z.object({
+      params: z.object({
+        ...schema.pagination,
+        createdAt: z.string().optional(),
+      }),
     });
   };
 

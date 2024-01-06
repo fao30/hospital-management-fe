@@ -6,13 +6,16 @@ import { z } from "zod";
 import { getData, postData } from "./shared";
 
 export const visit = createTRPCRouter({
-  list: protectedProcedure.query(async () => {
+  list: protectedProcedure.input(schema.visit.list).query(async ({ input }) => {
     type Visits = Visit & {
       Hospital: Hospital;
       User: User;
     };
 
-    const { visits, ...rest } = (await getData({ endpoint: "/visits" })) as { visits: Visits[]; totalPage: number };
+    const { visits, ...rest } = (await getData({ endpoint: "/visits", params: input.params })) as {
+      visits: Visits[];
+      totalPage: number;
+    };
 
     return {
       ...rest,
@@ -49,3 +52,4 @@ export type VisitCreateOutput = RouterOutputs["visit"]["create"];
 // inputs
 export type VisitCreateInput = RouterInputs["visit"]["create"];
 export type VisitUpdateInput = RouterInputs["visit"]["update"];
+export type VisitListInput = RouterInputs["visit"]["list"]["params"];

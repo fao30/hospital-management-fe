@@ -1,5 +1,7 @@
 import { type MenuItemKey } from "@/types";
 
+export const PAGINATION_LIMIT = 50;
+
 export const MENU_ICON_SIZE = 25;
 
 export const MENU_ITEMS = ["/", "/medicine", "/visit", "/schedule"] as const;

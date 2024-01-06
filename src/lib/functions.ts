@@ -36,14 +36,22 @@ export const convertInputDate = (dateString: string): string => {
   return `${day}-${month}-${year}`;
 };
 
-export const formatDate = ({ lang, date, style }: { lang: Lang; date?: Date; style: "long" | "short" }): string => {
-  console.log(lang, date, style);
+export const formatDate = ({
+  lang,
+  date,
+  style,
+  withTime,
+}: {
+  withTime?: boolean;
+  lang: Lang;
+  date?: Date;
+  style: "long" | "short";
+}): string => {
   return (date ? getNewDate(date.toString()) : getNewDate()).toLocaleDateString(lang, {
     year: "numeric",
     month: style === "long" ? "long" : "numeric",
     day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+    ...(withTime ? { hour: "2-digit", minute: "2-digit" } : undefined),
   });
 };
 

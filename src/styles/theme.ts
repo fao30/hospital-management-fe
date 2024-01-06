@@ -28,5 +28,18 @@ export const theme: ThemeConfig = {
     Layout: {
       siderBg: COLORS.hover,
     },
+    Table: {
+      headerBg: COLORS.dark,
+      headerColor: "white",
+      headerSortHoverBg: COLORS.dark,
+      headerSplitColor: COLORS.hover,
+      borderColor: COLORS.hover,
+      headerSortActiveBg: COLORS.blue,
+      headerBorderRadius: 6,
+      colorBgContainer: "white",
+      cellPaddingBlock: 6,
+      rowHoverBg: "white",
+      headerFilterHoverBg: "",
+    },
   },
 };
