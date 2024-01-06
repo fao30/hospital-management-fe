@@ -4,7 +4,7 @@ export const COLORS = {
   gray: "#999999",
   dark: "#333333",
   charcoal: "#373F51",
-  red: "#de6262",
+  briquette: "#de6262",
   hover: "#f1f1f1",
   hover2: "#f8f8f8",
   blue: "#008DD5",
@@ -19,7 +19,7 @@ export const theme: ThemeConfig = {
   components: {
     Menu: {
       itemSelectedColor: COLORS.hover,
-      itemSelectedBg: COLORS.red,
+      itemSelectedBg: COLORS.briquette,
       itemBg: COLORS.hover,
       itemHoverBg: "#D3D3D3",
       itemActiveBg: "#D3D3D3",

@@ -38,10 +38,13 @@ type Props = { children: React.ReactNode; params: { lang: Lang } };
 export default async function RootLayout({ children, params }: Props) {
   const session = await getServerAuthSession();
   let isTokenValid;
+
   if (session) {
+    // console.log(Date.now(), session?.user.exp * 1000);
     jwt.verify(session.user.token, env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) isTokenValid = false;
       if (decoded && typeof decoded !== "string" && Date.now() >= decoded.exp! * 1000) isTokenValid = false;
+      if (Date.now() >= session.user.exp * 1000) isTokenValid = false;
     });
   }
 

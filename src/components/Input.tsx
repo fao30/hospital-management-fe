@@ -37,7 +37,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               type={type ? type : "text"}
               className={cn(
                 inputVariants({ className, size, color: disabled ? "disabled" : color }),
-                { "border-red focus:border-red": error },
+                { "border-briquette focus:border-briquette": error },
                 { "pl-7": icon },
               )}
               ref={ref}
@@ -46,7 +46,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             />
             {icon ? <Iconify width={inputIconSize} icon={icon} className="absolute centered-left text-dark" /> : null}
           </section>
-          {error ? <small className={cn("text-red text-xs mt-0.5")}>{error}</small> : null}
+          {error ? <small className={cn("text-briquette text-xs mt-0.5")}>{error}</small> : null}
         </section>
       );
     }
@@ -62,7 +62,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             placeholder="*********"
             type={showPassword ? "text" : "password"}
             className={cn(inputVariants({ size, color, className }), {
-              "border-red focus:border-red": error,
+              "border-briquette focus:border-briquette": error,
               "px-7": withPasswordIcon,
             })}
           />
@@ -75,7 +75,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
           </section>
         </section>
-        {error ? <small className={cn("text-red text-xs mt-0.5")}>{error}</small> : null}
+        {error ? <small className={cn("text-briquette text-xs mt-0.5")}>{error}</small> : null}
       </section>
     );
   },

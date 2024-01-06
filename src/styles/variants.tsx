@@ -29,7 +29,7 @@ export const buttonVariants = tv({
       none: "bg-transparent",
       primary: "bg-blue",
       disabled: "bg-charcoal",
-      danger: "bg-red",
+      danger: "bg-briquette",
     },
     size: {
       small: "h-8",

@@ -54,7 +54,7 @@ export default function DashboardMenu({ children, items }: Props) {
             {collapsed ? null : (
               <section className="w-full flex flex-col gap-4 text-cream items-center justify-center">
                 <h5 className="text-dark font-bold">
-                  DOCMOVE<span className="text-red">.</span>
+                  DOCMOVE<span className="text-briquette">.</span>
                 </h5>
               </section>
             )}

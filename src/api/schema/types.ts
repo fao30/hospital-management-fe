@@ -77,6 +77,8 @@ export type Treatment = {
   medical_treatment: string;
   currency: string;
   price: number;
+  start_time: Date;
+  end_time: Date;
 
   // relations
   doctor_id: number;
@@ -118,5 +120,20 @@ export type AlergiesUser = {
   alergy_id: number;
   user_id: number;
 };
+
+export type Schedule = {
+  id: number;
+  is_admin_approved: boolean;
+  is_doctor_approved: boolean;
+  date_time: Date;
+  status: ScheduleStatus;
+
+  // relations
+  doctor_id: number;
+  patient_id: number;
+  admin_id: number;
+};
+
+export type ScheduleStatus = "PENDING";
 
 export type DateTime = { updatedAt: Date; createdDate: Date };

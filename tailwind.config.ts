@@ -10,11 +10,18 @@ export default withTV({
         gray: "#999999",
         dark: "#333333",
         charcoal: "#373F51",
-        red: "#de6262",
+
         hover: "#f5f5f5",
         blue: "#008DD5",
-        emerald: "#50C878",
+
         sunflower: "#FFC512",
+        highblue: "#50abe7",
+        norfolksky: "#6cbde9",
+        afternoonsky: "#87ceeb",
+        dilutedblue: "#bae0f3",
+        insignia: "#edf2fb",
+        briquette: "#de6262",
+        emerald: "#50C878",
       },
       fontFamily: {
         montserrat: ["var(--font-montserrat)", ...fontFamily.sans],
