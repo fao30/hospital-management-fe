@@ -47,6 +47,16 @@ export default async function DashboardLayout({ params, children }: Props) {
       ),
       icon: <Iconify icon={ICONS.medicine} width={MENU_ICON_SIZE} />,
     },
+    {
+      title: "",
+      key: "/schedule",
+      label: (
+        <DashboardNavigator href="/schedule" lang={lang}>
+          Schedule
+        </DashboardNavigator>
+      ),
+      icon: <Iconify icon={ICONS.schedule} width={MENU_ICON_SIZE} />,
+    },
   ];
 
   const filteredItems = items.filter((item) => {

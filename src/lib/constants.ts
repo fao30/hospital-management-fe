@@ -2,7 +2,7 @@ import { type MenuItemKey } from "@/types";
 
 export const MENU_ICON_SIZE = 25;
 
-export const MENU_ITEMS = ["/", "/medicine", "/visit"] as const;
+export const MENU_ITEMS = ["/", "/medicine", "/visit", "/schedule"] as const;
 
 export const MENU_ITEMS_TO_REMOVE: Record<number, MenuItemKey[]> = {
   1: ["/medicine"],
