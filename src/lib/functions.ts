@@ -37,10 +37,13 @@ export const convertInputDate = (dateString: string): string => {
 };
 
 export const formatDate = ({ lang, date, style }: { lang: Lang; date?: Date; style: "long" | "short" }): string => {
-  return (date ?? getNewDate()).toLocaleDateString(lang, {
+  console.log(lang, date, style);
+  return (date ? getNewDate(date.toString()) : getNewDate()).toLocaleDateString(lang, {
     year: "numeric",
     month: style === "long" ? "long" : "numeric",
     day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
@@ -164,3 +167,5 @@ export const getSelectedMenu = (pathname: string): string[] => {
     return [];
   }
 };
+
+export const localizePhoneNumber = (phoneNumber: string): string => `+${phoneNumber}`;

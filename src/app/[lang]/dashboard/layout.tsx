@@ -29,6 +29,16 @@ export default async function DashboardLayout({ params, children }: Props) {
     },
     {
       title: "",
+      key: "/visit",
+      label: (
+        <DashboardNavigator href="/visit" lang={lang}>
+          Visit
+        </DashboardNavigator>
+      ),
+      icon: <Iconify icon={ICONS.visit} width={MENU_ICON_SIZE} />,
+    },
+    {
+      title: "",
       key: "/medicine",
       label: (
         <DashboardNavigator href="/medicine" lang={lang}>

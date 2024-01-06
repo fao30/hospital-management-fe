@@ -1,29 +1,29 @@
 import { createTRPCRouter, protectedProcedure } from "@/api/trpc";
 import { type RouterInputs, type RouterOutputs } from "@/types";
 import { schema } from "@schema/schemas";
-import { type DateTime, type MedicinesTreatment, type Treatment, type Visit } from "@schema/types";
+import { type DateTime, type Hospital, type User, type Visit } from "@schema/types";
 import { z } from "zod";
 import { getData, postData } from "./shared";
 
 export const visit = createTRPCRouter({
   list: protectedProcedure.query(async () => {
     type Visits = Visit & {
-      Treatments: Treatment[];
-      Medicines_Treatments: MedicinesTreatment[];
+      Hospital: Hospital;
+      User: User;
     };
-    const data = (await getData({ endpoint: "/visits" })) as { visits: Visits[] };
-    const fieldsToConvert: (keyof Visit)[] = ["weight", "height", "temperature", "blood_presure"];
-    const updatedData = data.visits.map((visit) => {
-      const parsedVisit = Object.fromEntries(
-        Object.entries(visit).map(([key, value]) => [
-          key,
-          fieldsToConvert.includes(key as keyof Visit) ? parseFloat(value.toString()) : value,
-        ]),
-      );
-      return parsedVisit as Visits;
-    });
 
-    return updatedData;
+    const { visits, ...rest } = (await getData({ endpoint: "/visits" })) as { visits: Visits[]; totalPage: number };
+
+    return {
+      ...rest,
+      visits: visits.map((e) => ({
+        ...e,
+        weight: parseFloat(e.weight.toString()),
+        height: parseFloat(e.height.toString()),
+        temperature: parseFloat(e.temperature.toString()),
+        blood_presure: parseFloat(e.blood_presure.toString()),
+      })),
+    };
   }),
 
   detail: protectedProcedure.input(z.object({ visitId: z.number() })).query(async ({ input }) => {
