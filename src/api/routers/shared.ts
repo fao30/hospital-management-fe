@@ -3,7 +3,7 @@ import { env } from "@/env";
 import { getError } from "@/lib/functions";
 import { THROW_TRPC_ERROR, TRPC_ERROR_CODES } from "@/trpc/shared";
 
-type Params = Record<string, string | number>;
+type Params = Record<string, string | number | boolean>;
 
 const getUrl = (endpoint: string, params?: Params): string => {
   const newUrl = new URL(`${env.NEXT_PUBLIC_API}${endpoint}`);
