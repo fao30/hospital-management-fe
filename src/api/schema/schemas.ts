@@ -3,6 +3,7 @@ import { z } from "zod";
 
 export class schema {
   // enums
+  static sorting = z.enum(["ASC", "DESC"]);
   static gender = z.enum(["MALE", "FEMALE"]);
   static roleName = z.enum(["superadmin", "hospital-manager", "hospital-admin", "doctor", "patient", "pharmacist"]);
   static paymentStatusName = z.enum(["full_paid", "partially_paid", "unpaid"]);
@@ -118,7 +119,7 @@ export class schema {
       ...schema.pagination,
       filter_by_date: z.coerce.boolean().default(true),
       date_time: z.string(),
-      sort_doctor_id: z.enum(["ASC", "DESC"]).default("ASC"),
+      sort_doctor_id: schema.sorting,
     });
   };
 
