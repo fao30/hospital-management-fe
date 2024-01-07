@@ -122,11 +122,13 @@ export const checkValidation = <T>(zodSchema: z.ZodType<T, any, any>, input: unk
   return validation.data;
 };
 
-export const timestampError = `❌ ${getNewDate().toLocaleTimeString(undefined, {
+const timestampInfo = `${getNewDate().toLocaleTimeString(undefined, {
   hour: "2-digit",
   minute: "2-digit",
   second: "2-digit",
 })} 👉`;
+
+export const timestamp = { error: `❌ ${timestampInfo}`, success: `✅ ${timestampInfo}` };
 
 export const getError = ({
   error,
@@ -142,10 +144,10 @@ export const getError = ({
   status: number;
 }) => {
   const details = {
-    error: `${timestampError} ERROR: `,
-    url: `${timestampError} URL: `,
-    status: `${timestampError} STATUS: `,
-    session: `${timestampError} SESSION: `,
+    error: `${timestamp.error} ERROR: `,
+    url: `${timestamp.error} URL: `,
+    status: `${timestamp.error} STATUS: `,
+    session: `${timestamp.error} SESSION: `,
   };
   if (plain)
     return `\n${details.error}${typeof error === "string" ? error : JSON.stringify(error)}\n${details.url}${url}\n${
@@ -156,7 +158,7 @@ export const getError = ({
   console.error(details.session, session);
 };
 
-export const consoleError = (error: string) => console.error(`${timestampError} ${error}`);
+export const consoleError = (error: string) => console.error(`${timestamp.error} ${error}`);
 
 export const getSelectedMenu = (pathname: string): string[] => {
   const substring = "/dashboard";

@@ -1,6 +1,6 @@
 import { getServerAuthSession } from "@/api/auth";
 import { env } from "@/env";
-import { getError, timestampError } from "@/lib/functions";
+import { getError, timestamp } from "@/lib/functions";
 import { THROW_TRPC_ERROR, TRPC_ERROR_CODES } from "@/trpc/shared";
 
 type Params = Record<string, string | number | boolean>;
@@ -13,7 +13,7 @@ const getUrl = (endpoint: string, params?: Params): string => {
       if (value) newUrl.searchParams.set(key, value.toString());
     }
   }
-  console.log(`${timestampError} API HITTED: ${newUrl.toString()}`);
+  console.log(`${timestamp.success} API HITTED: ${newUrl.toString()}`);
   return newUrl.toString();
 };
 
