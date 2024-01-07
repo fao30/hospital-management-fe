@@ -5,6 +5,7 @@ import { medicine } from "@routers/medicine";
 import { medicineTreatment } from "@routers/medicineTreatment";
 import { paymentStatus } from "@routers/paymentStatus";
 import { role } from "@routers/role";
+import { schedule } from "@routers/schedule";
 import { treatment } from "@routers/treatment";
 import { user } from "@routers/user";
 import { visit } from "@routers/visit";
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   medicine,
   medicineTreatment,
   treatment,
+  schedule,
 });
 
 export type AppRouter = typeof appRouter;

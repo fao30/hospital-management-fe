@@ -13,6 +13,7 @@ const getUrl = (endpoint: string, params?: Params): string => {
       if (value) newUrl.searchParams.set(key, value.toString());
     }
   }
+  console.log(newUrl.toString());
   return newUrl.toString();
 };
 

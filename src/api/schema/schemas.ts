@@ -113,6 +113,15 @@ export class schema {
     });
   };
 
+  static schedule = class {
+    static list = z.object({
+      ...schema.pagination,
+      filter_by_date: z.coerce.boolean().default(true),
+      date_time: z.string(),
+      sort_doctor_id: z.enum(["ASC", "DESC"]).default("ASC"),
+    });
+  };
+
   static medicineTreatment = class {
     static create = z.object({
       body: z.object({
