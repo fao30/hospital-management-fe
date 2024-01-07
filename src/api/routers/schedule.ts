@@ -26,8 +26,34 @@ export const schedule = createTRPCRouter({
       })[];
       totalPage: number;
     };
+
     const data = (await getData({ endpoint: "/schedules", params: input })) as Response;
-    return data;
+
+    console.log(data);
+
+    const receipt: {
+      doctor: {
+        id: number;
+        first_name: string;
+        last_name: string;
+      };
+      schedules: Date[];
+    }[] = [];
+
+    data.schedules.forEach((schedule) => {
+      const existingDoctor = receipt.find((item) => item.doctor.id === schedule.doctor.id);
+
+      if (existingDoctor) {
+        existingDoctor.schedules.push(schedule.date_time);
+      } else {
+        receipt.push({
+          doctor: schedule.doctor,
+          schedules: [schedule.date_time],
+        });
+      }
+    });
+
+    return receipt;
   }),
 });
 
