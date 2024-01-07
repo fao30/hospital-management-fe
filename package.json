@@ -26,6 +26,7 @@
     "@types/next-pwa": "^5.6.9",
     "antd": "^5.12.8",
     "clsx": "^2.1.0",
+    "dayjs": "^1.11.10",
     "jsonwebtoken": "^9.0.2",
     "negotiator": "^0.6.3",
     "next": "^14.0.4",
