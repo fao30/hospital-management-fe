@@ -148,12 +148,6 @@ export default function VisitTable({ data, loading, lang, query, searchParams }:
           dataIndex: "date_end",
           render: (date: Date) => date && formatDate({ date, lang, style: "short", withTime: true }),
         },
-        {
-          title: "Temperature",
-          key: "temperature",
-          dataIndex: "temperature",
-          render: (text: number) => `${text} °C`,
-        },
       ]}
     />
   );
