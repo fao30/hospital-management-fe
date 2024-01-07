@@ -13,7 +13,6 @@ const getUrl = (endpoint: string, params?: Params): string => {
       if (value) newUrl.searchParams.set(key, value.toString());
     }
   }
-  console.log(`${timestamp.success} API HITTED: ${newUrl.toString()}`);
   return newUrl.toString();
 };
 
@@ -24,12 +23,14 @@ export const getData = async ({ endpoint, params, cacheType }: { endpoint: strin
   const url = getUrl(endpoint, params);
   const res = await fetch(url, { cache: cacheType ?? "no-store", headers });
 
-  if (!res.ok)
+  if (!res.ok) {
     return THROW_TRPC_ERROR(
       TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
+  }
 
+  console.log(`${timestamp.success} API HITTED: ${url}`);
   return res.json() as unknown;
 };
 
@@ -40,12 +41,14 @@ export const postData = async ({ endpoint, body }: { endpoint: string; body: unk
   const url = getUrl(endpoint);
   const res = await fetch(url, { method: "POST", headers, body: JSON.stringify(body) });
 
-  if (!res.ok)
+  if (!res.ok) {
     return THROW_TRPC_ERROR(
       TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
+  }
 
+  console.log(`${timestamp.success} API HITTED: ${url}`);
   return res.json() as unknown;
 };
 
@@ -56,12 +59,14 @@ export const postFormData = async ({ endpoint, formData }: { endpoint: string; f
   const url = getUrl(endpoint);
   const res = await fetch(url, { method: "POST", headers, body: formData });
 
-  if (!res.ok)
+  if (!res.ok) {
     return THROW_TRPC_ERROR(
       TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
+  }
 
+  console.log(`${timestamp.success} API HITTED: ${url}`);
   return res.json() as unknown;
 };
 
@@ -72,12 +77,14 @@ export const putData = async ({ endpoint, body }: { endpoint: string; body: unkn
   const url = getUrl(endpoint);
   const res = await fetch(url, { method: "PUT", headers, body: JSON.stringify(body) });
 
-  if (!res.ok)
+  if (!res.ok) {
     return THROW_TRPC_ERROR(
       TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
+  }
 
+  console.log(`${timestamp.success} API HITTED: ${url}`);
   return res.json() as unknown;
 };
 
@@ -88,12 +95,14 @@ export const patchData = async ({ endpoint, body }: { endpoint: string; body: un
   const url = getUrl(endpoint);
   const res = await fetch(url, { method: "PATCH", headers, body: JSON.stringify(body) });
 
-  if (!res.ok)
+  if (!res.ok) {
     return THROW_TRPC_ERROR(
       TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
+  }
 
+  console.log(`${timestamp.success} API HITTED: ${url}`);
   return res.json() as unknown;
 };
 
@@ -104,11 +113,13 @@ export const deleteData = async ({ endpoint }: { endpoint: string }) => {
   const url = getUrl(endpoint);
   const res = await fetch(url, { method: "DELETE", headers });
 
-  if (!res.ok)
+  if (!res.ok) {
     return THROW_TRPC_ERROR(
       TRPC_ERROR_CODES[res.status] ?? "INTERNAL_SERVER_ERROR",
       getError({ plain: true, error: await res.json(), url, session, status: res.status }),
     );
+  }
 
+  console.log(`${timestamp.success} API HITTED: ${url}`);
   return res.json() as unknown;
 };
