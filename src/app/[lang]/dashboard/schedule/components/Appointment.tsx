@@ -1,16 +1,11 @@
-import { type ScheduleListInput } from "@/api/routers/schedule";
-import { api } from "@/trpc/react";
+import { type ScheduleListOuput } from "@/api/routers/schedule";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Empty, Tooltip } from "antd";
 import dayjs from "dayjs";
 
-type Props = {
-  query: ScheduleListInput;
-};
+type Props = { data?: ScheduleListOuput };
 
-export default function Appointment({ query }: Props) {
-  const { data } = api.schedule.list.useQuery(query);
-
+export default function Appointment({ data }: Props) {
   return (
     <section className="space-y-5">
       <section className="flex justify-between items-center">

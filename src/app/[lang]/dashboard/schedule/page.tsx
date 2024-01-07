@@ -1,33 +1,30 @@
 "use client";
 
 import { type ScheduleListInput } from "@/api/routers/schedule";
-import { type Lang } from "@/types";
+import { getInputDate } from "@/lib/functions";
+import { api } from "@/trpc/react";
 import { Calendar } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Appointment from "./components/Appointment";
 
-type Props = {
-  params: { lang: Lang };
-};
-
-export default function SchedulePage({ params }: Props) {
+export default function SchedulePage() {
   const [query, setQuery] = useState<ScheduleListInput>({
     page: 0,
-    limit: 50,
-    date_time: "2024-01-10",
+    limit: 9999,
+    date_time: getInputDate(),
     sort_doctor_id: "ASC",
   });
 
-  const onSelect = (newValue: Dayjs) => {
-    setQuery({ ...query, date_time: newValue.format("YYYY-MM-DD") });
-  };
+  const onSelect = (newValue: Dayjs) => setQuery({ ...query, date_time: newValue.format("YYYY-MM-DD") });
+
+  const { data } = api.schedule.list.useQuery(query);
 
   return (
-    <>
+    <Fragment>
       <Calendar value={dayjs(query.date_time)} onSelect={onSelect} />
-      <Appointment query={query} />
-    </>
+      <Appointment data={data} />
+    </Fragment>
   );
 }
