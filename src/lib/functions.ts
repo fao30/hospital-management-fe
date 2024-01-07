@@ -122,7 +122,7 @@ export const checkValidation = <T>(zodSchema: z.ZodType<T, any, any>, input: unk
   return validation.data;
 };
 
-const timestampError = `❌ ${getNewDate().toLocaleTimeString(undefined, {
+export const timestampError = `❌ ${getNewDate().toLocaleTimeString(undefined, {
   hour: "2-digit",
   minute: "2-digit",
   second: "2-digit",
