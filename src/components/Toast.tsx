@@ -29,7 +29,7 @@ const toastIcons: Record<ToastType, { icon: IconifyIcon | string; color: string 
 export const toast = ({ type, description, t }: { type: ToastType; description: string; t: Dictionary | null }) => {
   return notification[type]({
     description,
-    message: t.toast[type],
+    message: t?.toast[type],
     duration: 3,
     style: { backgroundColor: "white" },
     icon: <Iconify icon={toastIcons[type].icon} width={25} color={toastIcons[type].color} />,
