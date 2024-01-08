@@ -15,7 +15,7 @@ export default function SchedulePage() {
     limit: 9999,
     date_time: getInputDate(),
     sort_doctor_id: "ASC",
-    queryKey: "schedules",
+    queryKey: "scheduleList",
   });
   const { data } = api.schedule.list.useQuery(query);
 

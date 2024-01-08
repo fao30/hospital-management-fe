@@ -1,6 +1,7 @@
 import { type ScheduleListOuput } from "@/api/routers/schedule";
 import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button, Empty, TimePicker, Tooltip } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -20,9 +21,11 @@ type Props = {
 export default function Appointment({ data, isEdit, setIsEdit, selectedDate }: Props) {
   const [isSelected, setIsSelected] = useState<number>(0);
 
+  const queryClient = useQueryClient();
   const addSchedule = api.schedule.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       console.log("SUCCESS");
+      await queryClient.invalidateQueries(["scheduleList"]);
       setIsEdit(false);
     },
   });
