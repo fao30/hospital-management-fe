@@ -15,10 +15,9 @@ type Props = {
   data?: ScheduleListOuput;
   isEdit: boolean;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
-  selectedDate: Dayjs | null;
 };
 
-export default function Appointment({ data, isEdit, setIsEdit, selectedDate }: Props) {
+export default function Appointment({ data, isEdit, setIsEdit }: Props) {
   const [isSelected, setIsSelected] = useState<number>(0);
 
   const queryClient = useQueryClient();
