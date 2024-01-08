@@ -98,6 +98,7 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
               name="body.role_id"
               render={({ field }) => (
                 <InputSelect
+                  placeholder="Role"
                   error={errors.body?.role_id?.message}
                   {...field}
                   options={ROLES.map((role) => ({ value: role.id, label: role.label }))}
@@ -105,9 +106,7 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
               )}
             />
           </section>
-          <section className="grid grid-cols-2 gap-4">
-            <Input error={errors.body?.id_number?.message} {...register("body.id_number")} placeholder="ID Number" />
-          </section>
+          <Input error={errors.body?.id_number?.message} {...register("body.id_number")} placeholder="ID Number" />
           <Button loading={loading} type="submit">
             Create User
           </Button>

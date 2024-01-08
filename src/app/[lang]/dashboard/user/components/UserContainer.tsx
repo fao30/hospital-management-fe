@@ -25,7 +25,11 @@ export default function UserContainer({ searchParams, lang, session, t }: Props)
     <Fragment>
       <UserRegisterModal session={session} showModal={showModal} closeModal={() => setShowModal(false)} t={t} />
       <article className="flex flex-col gap-6">
-        <section className="flex justify-end">
+        <section className="flex justify-between">
+          <section className="flex flex-col">
+            <p>Total User(s): {data?.count}</p>
+            <p>Maximum User(s): {data?.hospital.max_users}</p>
+          </section>
           <Button
             onClick={() => setShowModal(true)}
             size="small"

@@ -28,7 +28,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     if (type !== "password") {
       return (
-        <section className={cn(classNameDiv, { "gap-0.5 flex flex-col": label })}>
+        <section className={cn("flex flex-col", classNameDiv, { "gap-0.5": label })}>
           {label ? <label htmlFor={id}>{label}</label> : null}
           <section className="relative">
             <input
@@ -52,7 +52,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     }
 
     return (
-      <section className={cn(classNameDiv, { "gap-0.5 flex flex-col": label })}>
+      <section className={cn("flex flex-col", classNameDiv, { "gap-0.5": label })}>
         {label ? <label htmlFor={id}>{label}</label> : null}
         <section className="relative">
           <input

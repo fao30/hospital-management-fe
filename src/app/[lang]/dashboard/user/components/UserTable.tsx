@@ -1,4 +1,5 @@
 import { type UserListInput, type UserListOutput } from "@/api/routers/user";
+import { ROLES } from "@/api/schema/constants";
 import Button from "@/components/Button";
 import FilterIcon from "@/components/FilterIcon";
 import Input from "@/components/Input";
@@ -105,7 +106,7 @@ export default function UserTable({ data, loading, lang, query, searchParams }: 
           } else newParams.set("limit", String(limit));
           redirectTable(newParams);
         },
-        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} visitors`,
+        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} users`,
       }}
       onChange={(pagination) => {
         if (pagination.current === 1) {
@@ -118,6 +119,11 @@ export default function UserTable({ data, loading, lang, query, searchParams }: 
           title: "Full Name",
           key: "fullName",
           render: (_, item) => `${item?.first_name} ${item.last_name}`,
+        },
+        {
+          title: "Role",
+          key: "role",
+          render: (_, item) => ROLES.find((e) => e.id === item.role_id)?.label,
         },
         {
           title: "Phone Number",

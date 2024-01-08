@@ -12,23 +12,30 @@ export class schema {
   static email = z.string().email();
   static pagination = { page: z.coerce.number().default(1), limit: z.coerce.number().default(PAGINATION_LIMIT) };
   static login = z.object({ email: schema.email, password: z.string().min(6, "Password must contain at least 6 characters") });
+  static phoneNumber = z
+    .string()
+    .regex(/^\d+$/, "Provide a valid phone number")
+    .regex(/^62|61/, "Phone Number should starts with number 61 or 62")
+    .min(9, "At least 9 characters")
+    .max(14);
+  static date = z.string().min(1, "Provide a date");
 
   // routers
   static user = class {
     static list = z.object({ ...schema.pagination, role_id: z.number().optional() });
     static register = z.object({
       body: z.object({
-        first_name: z.string(),
-        last_name: z.string(),
-        date_of_birth: z.string(),
+        first_name: z.string().min(1, "Required"),
+        last_name: z.string().min(1, "Required"),
+        date_of_birth: schema.date,
         email: schema.email,
-        password: z.string(),
-        phone_number: z.string(),
+        password: z.string().min(6),
+        phone_number: schema.phoneNumber,
         gender: schema.gender,
         country_id: z.number(),
         role_id: z.number(),
         hospital_id: z.number(),
-        id_number: z.string(),
+        id_number: z.string().min(1, "Provide a ID Number"),
         // make it false after dev for verification proccess
         is_active: z.boolean().default(true),
       }),
@@ -40,7 +47,7 @@ export class schema {
       body: z.object({
         name: z.string(),
         address: z.string(),
-        phone_number: z.string(),
+        phone_number: schema.phoneNumber,
         is_active: z.boolean().default(true),
         max_users: z.number().min(1),
       }),

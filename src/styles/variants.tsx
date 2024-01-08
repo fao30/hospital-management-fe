@@ -1,10 +1,10 @@
 import { tv } from "tailwind-variants";
 
 export const inputVariants = tv({
-  base: "w-full animate outline-none focus:outline-none active:outline-none border-b-1.5 border-black bg-inherit",
+  base: "text-base w-full animate outline-none focus:outline-none active:outline-none border-b-1.5 border-black hover:border-[#2121294d] bg-inherit",
   variants: {
     color: {
-      primary: "focus:border-blue-500",
+      primary: "focus:border-blue",
       disabled: "bg-gray-300",
     },
     size: {
