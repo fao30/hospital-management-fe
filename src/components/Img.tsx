@@ -9,5 +9,5 @@ type Props = {
 };
 
 export default function Img({ className, src, alt }: Props) {
-  return <Image priority={true} src={src} className={cn(className)} width={1000} height={1000} alt={`DOCMOVE - ${alt}`} />;
+  return <Image priority={true} src={src} className={cn(className)} width={1000} height={1000} alt={`faoTech - ${alt}`} />;
 }

@@ -43,11 +43,11 @@ export default function LoginForm({ searchParams, lang, t }: Props) {
     <article className="flex min-h-screen justify-center items-center">
       <form onSubmit={handleSubmit(onSubmit)} className="p-6 shadow-lg rounded-md bg-gray-50 w-[24rem] flex flex-col gap-8">
         <h3 className="text-dark font-bold">
-          DOCMOVE<span className="text-briquette">.</span>
+          faoTech<span className="text-briquette">.</span>
         </h3>
         <section className="flex flex-col gap-6">
           <Input
-            placeholder="admin@docmove.com.my "
+            placeholder="admin@faoTech.com.my "
             error={errors.email?.message}
             {...register("email")}
             type="email"
