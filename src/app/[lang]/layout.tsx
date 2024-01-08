@@ -2,7 +2,7 @@ import "@/styles/tailwind.css";
 import "@/styles/stylesheet.css";
 import { getServerAuthSession } from "@/api/auth";
 import { env } from "@/env";
-import GlobalHelper from "@/global/GlobalHelper";
+import HigherOrderComponent from "@/global/HigherOrderComponent";
 import { useDictionary } from "@/lib/dictionary";
 import { theme } from "@/styles/theme";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -52,14 +52,15 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={params.lang} className={`${lato.variable} ${montserrat.variable}`}>
       <body>
-        <GlobalHelper isTokenValid={isTokenValid} session={session} t={t} lang={params.lang} />
-        <TRPCReactProvider cookies={cookies().toString()}>
+        <HigherOrderComponent isTokenValid={isTokenValid} session={session} t={t} lang={params.lang}>
           <AntdRegistry>
             <ConfigProvider theme={theme}>
-              <main>{children}</main>
+              <TRPCReactProvider cookies={cookies().toString()}>
+                <main>{children}</main>
+              </TRPCReactProvider>
             </ConfigProvider>
           </AntdRegistry>
-        </TRPCReactProvider>
+        </HigherOrderComponent>
       </body>
     </html>
   );
