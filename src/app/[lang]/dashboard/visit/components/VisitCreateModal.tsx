@@ -9,7 +9,9 @@ import { toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useDebounce } from "@uidotdev/usehooks";
+import { Empty, Spin } from "antd";
+import { useEffect, useState } from "react";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
 type Props = {
@@ -43,7 +45,13 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
     },
   });
 
-  const { data: patients } = api.user.search.useQuery({ role_id: 5 });
+  const [patientSearch, setPatientSearch] = useState<string>("");
+  const debouncedPatientSearch = useDebounce(patientSearch, 500);
+
+  const { data: patients, isFetching: loadingPatient } = api.user.search.useQuery(
+    { role_id: 5, key_words: debouncedPatientSearch },
+    { enabled: !!debouncedPatientSearch },
+  );
 
   const watched = {
     dueAmount: watch("body.due_amount"),
@@ -74,7 +82,16 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
               <InputSelect
                 {...field}
                 error={errors.body?.patient_id?.message}
-                notFoundContent={<p>Create a patient</p>}
+                onSearch={(v) => setPatientSearch(v)}
+                notFoundContent={
+                  loadingPatient ? (
+                    <section className="flex justify-center items-center py-4">
+                      <Spin size="small" />
+                    </section>
+                  ) : (
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  )
+                }
                 showSearch={true}
                 placeholder="Patient"
                 options={patients?.search.map((e) => ({

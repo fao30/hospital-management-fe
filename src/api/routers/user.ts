@@ -18,7 +18,7 @@ export const user = createTRPCRouter({
     return data;
   }),
 
-  search: protectedProcedure.input(z.object({ role_id: z.number() })).query(async ({ input }) => {
+  search: protectedProcedure.input(z.object({ role_id: z.number(), key_words: z.string().optional() })).query(async ({ input }) => {
     const data = (await getData({ endpoint: "/search/user", params: input })) as { search: User[] };
     return data;
   }),
