@@ -23,7 +23,7 @@ export const inputVariants = tv({
 });
 
 export const buttonVariants = tv({
-  base: "select-none font-medium outline-none text-center text-white",
+  base: "select-none font-medium outline-none text-center text-white px-4",
   variants: {
     color: {
       none: "bg-transparent",

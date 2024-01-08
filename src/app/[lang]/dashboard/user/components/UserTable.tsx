@@ -1,9 +1,9 @@
-import { type VisitListInput, type VisitListOutput } from "@/api/routers/visit";
+import { type UserListInput, type UserListOutput } from "@/api/routers/user";
 import Button from "@/components/Button";
 import FilterIcon from "@/components/FilterIcon";
 import Input from "@/components/Input";
 import { PAGINATION_LIMIT } from "@/lib/constants";
-import { cn, createUrl, formatDate, localizePhoneNumber } from "@/lib/functions";
+import { cn, createUrl, localizePhoneNumber } from "@/lib/functions";
 import { type Lang, type SearchParams } from "@/types";
 import { type IconifyIcon } from "@iconify/react/dist/iconify.js";
 import { Table } from "antd";
@@ -11,20 +11,20 @@ import { type FilterDropdownProps } from "antd/es/table/interface";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
-  data?: VisitListOutput;
+  data?: UserListOutput;
   loading: boolean;
   lang: Lang;
-  query: VisitListInput;
+  query: UserListInput;
   searchParams: SearchParams;
 };
 
-export default function VisitTable({ data, loading, lang, query, searchParams }: Props) {
+export default function UserTable({ data, loading, lang, query, searchParams }: Props) {
   const router = useRouter();
   const newSearchParams = useSearchParams();
   const newParams = new URLSearchParams(newSearchParams.toString());
 
   const redirectTable = (newParams: URLSearchParams) => {
-    router.push(createUrl(`/${lang}/dashboard/visit`, newParams));
+    router.push(createUrl(`/${lang}/dashboard/user`, newParams));
   };
 
   const getTableFilter = ({
@@ -32,7 +32,7 @@ export default function VisitTable({ data, loading, lang, query, searchParams }:
     icon,
     type,
   }: {
-    name: keyof VisitListInput;
+    name: keyof UserListInput;
     icon?: IconifyIcon | string;
     type?: React.HTMLInputTypeAttribute;
   }) => ({
@@ -92,13 +92,7 @@ export default function VisitTable({ data, loading, lang, query, searchParams }:
       scroll={{ x: "max-content" }}
       rowKey="id"
       loading={loading}
-      dataSource={data?.visits}
-      onChange={(pagination) => {
-        if (pagination.current === 1) {
-          newParams.delete("page");
-        } else newParams.set("page", String(pagination.current));
-        redirectTable(newParams);
-      }}
+      dataSource={data?.users}
       pagination={{
         current: query?.page,
         pageSize: query?.limit,
@@ -111,42 +105,25 @@ export default function VisitTable({ data, loading, lang, query, searchParams }:
           } else newParams.set("limit", String(limit));
           redirectTable(newParams);
         },
-        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} visits`,
+        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} visitors`,
+      }}
+      onChange={(pagination) => {
+        if (pagination.current === 1) {
+          newParams.delete("page");
+        } else newParams.set("page", String(pagination.current));
+        redirectTable(newParams);
       }}
       columns={[
         {
-          title: "Hospital",
-          key: "hospital",
-          render: (_, item) => item?.Hospital?.name,
-        },
-        {
-          title: "Name",
-          key: "name",
-          render: (_, item) => `${item?.User?.first_name} ${item.User?.last_name}`,
+          title: "Full Name",
+          key: "fullName",
+          render: (_, item) => `${item?.first_name} ${item.last_name}`,
         },
         {
           title: "Phone Number",
-          key: "phoneNumber",
-          render: (_, item) => localizePhoneNumber(item?.User?.phone_number),
-        },
-        {
-          title: "Date",
-          key: "createdAt",
-          dataIndex: "createdAt",
-          render: (date: Date) => formatDate({ lang, date, style: "short" }),
-          ...getTableFilter({ name: "createdAt", type: "date" }),
-        },
-        {
-          title: "Start",
-          key: "date_start",
-          dataIndex: "date_start",
-          render: (date: Date) => date && formatDate({ date, lang, style: "short", withTime: true }),
-        },
-        {
-          title: "End",
-          key: "date_end",
-          dataIndex: "date_end",
-          render: (date: Date) => date && formatDate({ date, lang, style: "short", withTime: true }),
+          key: "phone_number",
+          dataIndex: "phone_number",
+          render: (text: string) => localizePhoneNumber(text),
         },
       ]}
     />

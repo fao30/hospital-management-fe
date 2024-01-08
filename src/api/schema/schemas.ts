@@ -15,7 +15,7 @@ export class schema {
 
   // routers
   static user = class {
-    static list = z.object({ ...schema.pagination });
+    static list = z.object({ ...schema.pagination, role_id: z.number().optional() });
     static register = z.object({
       body: z.object({
         first_name: z.string(),
@@ -160,3 +160,4 @@ export type Gender = z.infer<typeof schema.gender>;
 export type RoleName = z.infer<typeof schema.roleName>;
 export type PaymentStatusName = z.infer<typeof schema.paymentStatusName>;
 export type Login = z.infer<typeof schema.login>;
+export type RoleId = 1 | 2 | 3 | 4 | 5 | 6;

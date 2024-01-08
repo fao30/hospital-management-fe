@@ -17,14 +17,14 @@ type ButtonProps = ComponentProps<"button"> &
   };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ type, color, size, className, loading = false, children, classNameDiv, rounded, icon, ...rest }, ref) => {
+  ({ type, color, disabled, size, className, loading = false, children, classNameDiv, rounded, icon, ...rest }, ref) => {
     return (
       <button
-        disabled={type === "submit" ? loading : undefined}
+        disabled={type === "submit" ? loading || disabled : disabled}
         type={type ? type : "button"}
         ref={ref}
         {...rest}
-        className={cn(buttonVariants({ color: loading ? "disabled" : color, size, rounded, className }))}
+        className={cn(buttonVariants({ color: loading || disabled ? "disabled" : color, size, rounded, className }))}
       >
         {loading ? (
           <ButtonLoader />

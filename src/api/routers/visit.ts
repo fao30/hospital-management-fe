@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "@/api/trpc";
 import { type RouterInputs, type RouterOutputs } from "@/types";
 import { schema } from "@schema/schemas";
-import { type DateTime, type Hospital, type User, type Visit } from "@schema/types";
+import { type DateTime, type Hospital, type PaginationResponse, type User, type Visit } from "@schema/types";
 import { z } from "zod";
 import { getData, postData } from "./shared";
 
@@ -12,8 +12,7 @@ export const visit = createTRPCRouter({
         Hospital: Hospital;
         User: User;
       })[];
-      totalPage: number;
-    };
+    } & PaginationResponse;
 
     const { visits, ...rest } = (await getData({ endpoint: "/visits", params: input })) as Response;
 
