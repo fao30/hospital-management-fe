@@ -130,8 +130,8 @@ export class schema {
         admin_id: z.number(),
         is_admin_approved: z.boolean(),
         is_doctor_approved: z.boolean(),
-        date_time: z.string(),
         status: z.string().default("SCHEDULED"),
+        date_time: z.string(),
       }),
     });
   };
