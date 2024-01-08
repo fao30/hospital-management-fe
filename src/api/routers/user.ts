@@ -5,7 +5,7 @@ import { schema } from "@schema/schemas";
 import { type Hospital, type PaginationResponse, type Role, type User } from "@schema/types";
 
 export const user = createTRPCRouter({
-  register: protectedProcedure.input(schema.user.register).query(async ({ input }) => {
+  register: protectedProcedure.input(schema.user.register).mutation(async ({ input }) => {
     const data = await postData({ endpoint: "/register", body: input.body });
     return data as { message: string; info: { id: number; email: string; role: number } };
   }),
