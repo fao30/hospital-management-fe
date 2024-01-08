@@ -125,6 +125,11 @@ export default function UserTable({ data, loading, lang, query, searchParams }: 
           dataIndex: "phone_number",
           render: (text: string) => localizePhoneNumber(text),
         },
+        {
+          title: "Email",
+          key: "email",
+          dataIndex: "email",
+        },
       ]}
     />
   );

@@ -1,7 +1,6 @@
 import { type PaymentStatusName, type RoleName } from "@schema/schemas";
 
 export const ROLES: { id: number; name: RoleName; label?: string }[] = [
-  { id: 1, name: "superadmin" },
   { id: 2, name: "hospital-manager", label: "Hospital Manager" },
   { id: 3, name: "hospital-admin", label: "Hospital Admin" },
   { id: 4, name: "doctor", label: "Doctor" },

@@ -1,4 +1,5 @@
-import { type RoleId } from "@/api/schema/schemas";
+import { type Gender, type RoleId } from "@/api/schema/schemas";
+import { COLORS } from "@/styles/theme";
 import { type MenuItemKey } from "@/types";
 
 export const PAGINATION_LIMIT = 50;
@@ -15,6 +16,26 @@ export const MENU_ITEMS_TO_REMOVE: Record<RoleId, MenuItemKey[]> = {
   5: ["/user"],
   6: ["/user"],
 };
+
+export const GENDERS: {
+  value: Gender;
+  icon: string;
+  label: string;
+  color: string;
+}[] = [
+  {
+    icon: "material-symbols:male",
+    value: "MALE",
+    label: "Male",
+    color: COLORS.blue,
+  },
+  {
+    icon: "material-symbols:female",
+    value: "FEMALE",
+    label: "Female",
+    color: "#ec4899",
+  },
+];
 
 export const ICONS = {
   search: "material-symbols:search",

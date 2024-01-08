@@ -28,6 +28,7 @@ export class schema {
         country_id: z.number(),
         role_id: z.number(),
         hospital_id: z.number(),
+        id_number: z.string(),
         // make it false after dev for verification proccess
         is_active: z.boolean().default(true),
       }),

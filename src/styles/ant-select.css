@@ -1,0 +1,40 @@
+.ant-select-selector {
+  border-width: 0px 0px 1.5px 0px !important;
+  outline: none !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  transition-property: all !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-duration: 300ms !important;
+  border-radius: 0px !important;
+}
+
+.ant-select-selection-search-input {
+  height: 100% !important;
+}
+
+.ant-select-selection-search {
+  border-radius: 0px !important;
+}
+
+.ant-select-item,
+.ant-select-dropdown {
+  border-radius: 0 !important;
+  align-items: center !important;
+}
+
+.ant-select-selection-search {
+  margin-inline-start: 0px !important;
+}
+
+.ant-select-selector:hover {
+  border-color: #2121294d !important;
+}
+
+.ant-select-focused .ant-select-selector,
+.ant-select-selector:focus,
+.ant-select-selector:active,
+.ant-select-open .ant-select-selector {
+  border-color: #0078cc !important;
+  box-shadow: none !important;
+}
