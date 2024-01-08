@@ -2,9 +2,10 @@ import { type VisitListInput, type VisitListOutput } from "@/api/routers/visit";
 import Button from "@/components/Button";
 import FilterIcon from "@/components/FilterIcon";
 import Input from "@/components/Input";
+import { useStore } from "@/global/store";
 import { PAGINATION_LIMIT } from "@/lib/constants";
 import { cn, createUrl, formatDate, localizePhoneNumber } from "@/lib/functions";
-import { type Lang, type SearchParams } from "@/types";
+import { type SearchParams } from "@/types";
 import { type IconifyIcon } from "@iconify/react/dist/iconify.js";
 import { Table } from "antd";
 import { type FilterDropdownProps } from "antd/es/table/interface";
@@ -13,12 +14,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 type Props = {
   data?: VisitListOutput;
   loading: boolean;
-  lang: Lang;
   query: VisitListInput;
   searchParams: SearchParams;
 };
 
-export default function VisitTable({ data, loading, lang, query, searchParams }: Props) {
+export default function VisitTable({ data, loading, query, searchParams }: Props) {
+  const { lang } = useStore();
   const router = useRouter();
   const newSearchParams = useSearchParams();
   const newParams = new URLSearchParams(newSearchParams.toString());

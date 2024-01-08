@@ -60,21 +60,33 @@ export class schema {
 
   static visit = class {
     static create = z.object({
-      body: z.object({
-        payment_status_id: z.number(),
-        patient_id: z.number(),
-        hospital_id: z.number(),
-        due_amount: z.number(),
-        paid_amount: z.number(),
-        weight: z.number(),
-        heigh: z.number(),
-        temperature: z.number(),
-        blood_presure: z.number(),
-        diagnosis: z.string(),
-        case_notes: z.string(),
-        is_patient_discharged: z.boolean(),
-        // date_start, date_end
-      }),
+      body: z
+        .object({
+          payment_status_id: z.number(),
+          patient_id: z.number(),
+          hospital_id: z.number(),
+          due_amount: z.number().min(1),
+          paid_amount: z.number().min(0),
+          weight: z.number().min(1),
+          height: z.number().min(1),
+          temperature: z.number().min(1),
+          blood_presure: z.number().min(1),
+          diagnosis: z.string(),
+          case_notes: z.string(),
+          is_patient_discharged: z.boolean().default(false),
+          date_start: schema.date,
+          date_end: schema.date.optional(),
+        })
+        .refine(
+          ({ due_amount, paid_amount }) => {
+            if (due_amount > paid_amount) return false;
+            return true;
+          },
+          {
+            message: "Paid amount should be lower than due amount",
+            path: ["paid_amount"],
+          },
+        ),
     });
 
     static update = z.object({

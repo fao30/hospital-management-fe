@@ -30,6 +30,7 @@ const InputSelect = React.forwardRef<BaseSelectRef, InputSelectProps>((props, re
         components: {
           Select: {
             selectorBg: "",
+            padding: 0,
           },
         },
       }}
@@ -43,7 +44,7 @@ const InputSelect = React.forwardRef<BaseSelectRef, InputSelectProps>((props, re
             id={id}
             optionFilterProp="children"
             filterOption={(input, option) => ((option?.label as string) ?? "").toLowerCase().includes(input.toLowerCase())}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "100%", padding: 0 }}
             showSearch={props.showSearch}
           />
           {props.icon ? (
