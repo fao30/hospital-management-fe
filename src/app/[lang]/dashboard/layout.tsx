@@ -60,7 +60,7 @@ export default async function DashboardLayout({ params, children }: Props) {
   ];
 
   const filteredItems = items.filter((item) => {
-    const itemsToRemove = MENU_ITEMS_TO_REMOVE[session.user.roleId] ?? [];
+    const itemsToRemove = MENU_ITEMS_TO_REMOVE[session.user.role_id] ?? [];
     return !itemsToRemove.includes(item.key);
   });
 

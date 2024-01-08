@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { schema, type RoleName } from "@schema/schemas";
+import { schema } from "@schema/schemas";
 import { getServerSession, type DefaultSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -8,8 +8,8 @@ declare module "next-auth" {
     user: {
       id: number;
       token: string;
-      roleId: number;
-      role: RoleName;
+      role_id: number;
+      hospital_id: number;
       iat: number;
       exp: number;
       jti: string;
@@ -18,7 +18,7 @@ declare module "next-auth" {
 }
 
 type LoginData = {
-  data: { token: string; id: number; role_id: number };
+  data: { token: string; id: number; role_id: number; hospital_id: number };
   iat: number;
   exp: number;
   jti: string;
