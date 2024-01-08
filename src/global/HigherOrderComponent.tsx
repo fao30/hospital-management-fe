@@ -28,7 +28,7 @@ export default function HigherOrderComponent({ isTokenValid, session, t, lang, c
     if (lang) setLang(lang);
   }, [session, t, lang]);
 
-  if (session) {
+  if (session && pathname.includes("dashboard")) {
     if (MENU_ITEMS_TO_REMOVE[session.user.role_id].includes(getSelectedMenu(pathname).at(0)!)) redirect(`/${lang}/dashboard`);
   }
 
