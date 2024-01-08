@@ -1,8 +1,9 @@
 import "@/styles/tailwind.css";
 import "@/styles/stylesheet.css";
 import { getServerAuthSession } from "@/api/auth";
-import AuthLogoutHelper from "@/components/AuthLogoutHelper";
+import Helper from "@/components/Helper";
 import { env } from "@/env";
+import { useDictionary } from "@/lib/dictionary";
 import { theme } from "@/styles/theme";
 import { TRPCReactProvider } from "@/trpc/react";
 import { type Lang } from "@/types";
@@ -37,6 +38,7 @@ type Props = { children: React.ReactNode; params: { lang: Lang } };
 
 export default async function RootLayout({ children, params }: Props) {
   const session = await getServerAuthSession();
+  const t = await useDictionary(params.lang);
   let isTokenValid;
 
   if (session) {
@@ -50,7 +52,7 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={params.lang} className={`${lato.variable} ${montserrat.variable}`}>
       <body>
-        <AuthLogoutHelper isTokenValid={isTokenValid} session={session} />
+        <Helper isTokenValid={isTokenValid} session={session} t={t} lang={params.lang} />
         <TRPCReactProvider cookies={cookies().toString()}>
           <AntdRegistry>
             <ConfigProvider theme={theme}>

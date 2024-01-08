@@ -26,7 +26,7 @@ const toastIcons: Record<ToastType, { icon: IconifyIcon | string; color: string 
   },
 };
 
-export const toast = ({ type, description, t }: { type: ToastType; description: string; t: Dictionary }) => {
+export const toast = ({ type, description, t }: { type: ToastType; description: string; t: Dictionary | null }) => {
   return notification[type]({
     description,
     message: t.toast[type],
@@ -36,7 +36,11 @@ export const toast = ({ type, description, t }: { type: ToastType; description: 
   });
 };
 
-export const toastError = ({ t, description }: { t: Dictionary; description: string }) => toast({ t, description, type: "error" });
-export const toastSuccess = ({ t, description }: { t: Dictionary; description: string }) => toast({ t, description, type: "success" });
-export const toastWarning = ({ t, description }: { t: Dictionary; description: string }) => toast({ t, description, type: "warning" });
-export const toastInfo = ({ t, description }: { t: Dictionary; description: string }) => toast({ t, description, type: "info" });
+export const toastError = ({ t, description }: { t: Dictionary | null; description: string }) =>
+  toast({ t, description, type: "error" });
+export const toastSuccess = ({ t, description }: { t: Dictionary | null; description: string }) =>
+  toast({ t, description, type: "success" });
+export const toastWarning = ({ t, description }: { t: Dictionary | null; description: string }) =>
+  toast({ t, description, type: "warning" });
+export const toastInfo = ({ t, description }: { t: Dictionary | null; description: string }) =>
+  toast({ t, description, type: "info" });
