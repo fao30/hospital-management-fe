@@ -129,6 +129,19 @@ export class schema {
       date_time: z.string(),
       sort_doctor_id: schema.sorting,
     });
+
+    static create = z.object({
+      body: z.object({
+        hospital_id: z.number(),
+        doctor_id: z.number(),
+        patient_id: z.number(),
+        admin_id: z.number(),
+        is_admin_approved: z.boolean(),
+        is_doctor_approved: z.boolean(),
+        status: z.string().default("SCHEDULED"),
+        date_time: z.string(),
+      }),
+    });
   };
 
   static medicineTreatment = class {
