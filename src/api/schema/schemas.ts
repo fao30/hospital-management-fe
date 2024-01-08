@@ -77,16 +77,10 @@ export class schema {
           date_start: schema.date,
           date_end: schema.date.optional(),
         })
-        .refine(
-          ({ due_amount, paid_amount }) => {
-            if (due_amount > paid_amount) return false;
-            return true;
-          },
-          {
-            message: "Paid amount should be lower than due amount",
-            path: ["paid_amount"],
-          },
-        ),
+        .refine(({ due_amount, paid_amount }) => paid_amount <= due_amount, {
+          message: "Paid amount should be lower than or equal to due amount",
+          path: ["paid_amount"],
+        }),
     });
 
     static update = z.object({

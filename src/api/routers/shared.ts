@@ -30,7 +30,7 @@ export const getData = async ({ endpoint, params, cacheType }: { endpoint: strin
     );
   }
 
-  console.log(`${timestamp.success} (${res.status} GET) URL: ${url}`);
+  console.log(`${timestamp.success} (${res.status} GET) ${url}`);
   return res.json() as unknown;
 };
 
@@ -48,7 +48,7 @@ export const postData = async ({ endpoint, body }: { endpoint: string; body: unk
     );
   }
 
-  console.log(`${timestamp.success} (${res.status} POST) URL: ${url}`);
+  console.log(`${timestamp.success} (${res.status} POST) ${url}`);
   return res.json() as unknown;
 };
 
@@ -66,7 +66,7 @@ export const postFormData = async ({ endpoint, formData }: { endpoint: string; f
     );
   }
 
-  console.log(`${timestamp.success} (${res.status} POST FORM DATA) URL: ${url}`);
+  console.log(`${timestamp.success} (${res.status} POST FORM DATA) ${url}`);
   return res.json() as unknown;
 };
 
@@ -84,7 +84,7 @@ export const putData = async ({ endpoint, body }: { endpoint: string; body: unkn
     );
   }
 
-  console.log(`${timestamp.success} (${res.status} PUT) URL: ${url}`);
+  console.log(`${timestamp.success} (${res.status} PUT) ${url}`);
   return res.json() as unknown;
 };
 
@@ -102,7 +102,7 @@ export const patchData = async ({ endpoint, body }: { endpoint: string; body: un
     );
   }
 
-  console.log(`${timestamp.success} (${res.status} PATCH) URL: ${url}`);
+  console.log(`${timestamp.success} (${res.status} PATCH) ${url}`);
   return res.json() as unknown;
 };
 
@@ -120,6 +120,6 @@ export const deleteData = async ({ endpoint }: { endpoint: string }) => {
     );
   }
 
-  console.log(`${timestamp.success} (${res.status} DELETE) URL: ${url}`);
+  console.log(`${timestamp.success} (${res.status} DELETE) ${url}`);
   return res.json() as unknown;
 };
