@@ -137,3 +137,4 @@ export type Schedule = {
 export type ScheduleStatus = "PENDING";
 
 export type DateTime = { updatedAt: Date; createdDate: Date };
+export type PaginationResponse = { count: number; totalPage: number };

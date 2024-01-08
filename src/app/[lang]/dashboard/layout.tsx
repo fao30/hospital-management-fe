@@ -57,10 +57,20 @@ export default async function DashboardLayout({ params, children }: Props) {
       ),
       icon: <Iconify icon={ICONS.schedule} width={MENU_ICON_SIZE} />,
     },
+    {
+      title: "",
+      key: "/user",
+      label: (
+        <DashboardNavigator href="/user" lang={lang}>
+          User
+        </DashboardNavigator>
+      ),
+      icon: <Iconify icon={ICONS.visitor} width={MENU_ICON_SIZE} />,
+    },
   ];
 
   const filteredItems = items.filter((item) => {
-    const itemsToRemove = MENU_ITEMS_TO_REMOVE[session.user.role_id] ?? [];
+    const itemsToRemove = MENU_ITEMS_TO_REMOVE[session.user.role_id];
     return !itemsToRemove.includes(item.key);
   });
 

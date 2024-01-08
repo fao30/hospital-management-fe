@@ -1,17 +1,19 @@
+import { type RoleId } from "@/api/schema/schemas";
 import { type MenuItemKey } from "@/types";
 
 export const PAGINATION_LIMIT = 50;
 
 export const MENU_ICON_SIZE = 25;
 
-export const MENU_ITEMS = ["/", "/medicine", "/visit", "/schedule"] as const;
+export const MENU_ITEMS = ["/", "/medicine", "/visit", "/schedule", "/user"] as const;
 
-export const MENU_ITEMS_TO_REMOVE: Record<number, MenuItemKey[]> = {
-  1: ["/medicine"],
+export const MENU_ITEMS_TO_REMOVE: Record<RoleId, MenuItemKey[]> = {
+  1: [],
   2: [],
-  3: [],
-  4: [],
-  5: [],
+  3: ["/user"],
+  4: ["/user"],
+  5: ["/user"],
+  6: ["/user"],
 };
 
 export const ICONS = {

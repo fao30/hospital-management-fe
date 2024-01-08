@@ -1,4 +1,4 @@
-import { type Lang } from "@/types";
+import { type Lang, type MenuItemKey } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { type Session } from "next-auth";
 import { type ReadonlyURLSearchParams } from "next/navigation";
@@ -160,7 +160,7 @@ export const getError = ({
 
 export const consoleError = (error: string) => console.error(`${timestamp.error} ${error}`);
 
-export const getSelectedMenu = (pathname: string): string[] => {
+export const getSelectedMenu = (pathname: string): MenuItemKey[] => {
   const substring = "/dashboard";
   const startIndex = pathname.indexOf(substring);
 
@@ -169,7 +169,7 @@ export const getSelectedMenu = (pathname: string): string[] => {
     const parts = extractedString.split("/").filter((part) => part !== "");
     const result = parts.map((_, index) => `/${parts.slice(0, index + 1).join("/")}`);
     if (result.length > 0) {
-      return result;
+      return result as MenuItemKey[];
     } else {
       return ["/"];
     }
