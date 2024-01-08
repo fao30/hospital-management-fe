@@ -29,7 +29,7 @@ export default function HigherOrderComponent({ isTokenValid, session, t, lang, c
   }, [session, t, lang]);
 
   if (session) {
-    if (MENU_ITEMS_TO_REMOVE[session.user.role_id].includes(getSelectedMenu(pathname).at(0)!)) redirect(`/${lang}/dashboard/visit`);
+    if (MENU_ITEMS_TO_REMOVE[session.user.role_id].includes(getSelectedMenu(pathname).at(0)!)) redirect(`/${lang}/dashboard`);
   }
 
   return children;
