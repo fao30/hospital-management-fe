@@ -1,8 +1,8 @@
 import { type RouterInputs, type RouterOutputs } from "@/types";
-import { type Schedule } from "@schema/types";
+import { type DateTime, type Schedule } from "@schema/types";
 import { schema } from "../schema/schemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { getData } from "./shared";
+import { getData, postData } from "./shared";
 
 export const schedule = createTRPCRouter({
   list: protectedProcedure.input(schema.schedule.list).query(async ({ input }) => {
@@ -26,10 +26,17 @@ export const schedule = createTRPCRouter({
 
     return updatedData;
   }),
+
+  create: protectedProcedure.input(schema.schedule.create).mutation(async ({ input }) => {
+    const data = await postData({ endpoint: `/schedules`, body: input.body });
+    return data as Schedule & DateTime;
+  }),
 });
 
 // outputs
 export type ScheduleListOuput = RouterOutputs["schedule"]["list"];
+export type ScheduleCreateOutput = RouterOutputs["schedule"]["create"];
 
 // inputs
 export type ScheduleListInput = RouterInputs["schedule"]["list"];
+export type ScheduleCreateInput = RouterInputs["schedule"]["create"];

@@ -28,7 +28,7 @@ export default function Appointment({ data }: Props) {
                   {dayjs(time).format("HH:mm")}
                 </li>
               ))}
-              <Button type="primary" icon={<PlusOutlined />} />
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => console.log("asd")} />
             </ul>
           </section>
         ))
