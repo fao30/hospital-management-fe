@@ -8,7 +8,7 @@ import { Fragment, useEffect } from "react";
 
 type Props = { isTokenValid?: boolean; session: Session | null; t: Dictionary; lang: Lang };
 
-export default function Helper({ isTokenValid, session, t, lang }: Props) {
+export default function GlobalHelper({ isTokenValid, session, t, lang }: Props) {
   const { setT, setSession, setLang } = useStore();
 
   useEffect(() => {

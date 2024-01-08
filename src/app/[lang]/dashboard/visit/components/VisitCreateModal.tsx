@@ -147,6 +147,7 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
               {...register("body.due_amount", { setValueAs: (v: string) => +v })}
             />
             <Input
+              max={watched.dueAmount}
               error={errors.body?.paid_amount?.message}
               placeholder="Paid Amount"
               type="number"

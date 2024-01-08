@@ -1,8 +1,8 @@
 import "@/styles/tailwind.css";
 import "@/styles/stylesheet.css";
 import { getServerAuthSession } from "@/api/auth";
-import Helper from "@/components/Helper";
 import { env } from "@/env";
+import GlobalHelper from "@/global/GlobalHelper";
 import { useDictionary } from "@/lib/dictionary";
 import { theme } from "@/styles/theme";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -52,7 +52,7 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={params.lang} className={`${lato.variable} ${montserrat.variable}`}>
       <body>
-        <Helper isTokenValid={isTokenValid} session={session} t={t} lang={params.lang} />
+        <GlobalHelper isTokenValid={isTokenValid} session={session} t={t} lang={params.lang} />
         <TRPCReactProvider cookies={cookies().toString()}>
           <AntdRegistry>
             <ConfigProvider theme={theme}>
