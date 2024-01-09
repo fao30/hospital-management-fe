@@ -19,6 +19,10 @@ export default function VisitSocket() {
       console.log('Disconnected from Socket.IO');
     });
 
+    socket.on("error", (error) => {
+      console.error("Socket.IO error:", error);
+    });
+
     return () => {
       // Clean up the socket connection when the component unmounts
       socket.disconnect();
