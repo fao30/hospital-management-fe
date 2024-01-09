@@ -7,24 +7,24 @@ import io from 'socket.io-client';
 export default function VisitSocket() {
 
   useEffect(() => {
-    const socket = io('ws://fao-med.faotech.dev:3003'); // Update with your server URL
+    // const socket = io("ws://fao-med.faotech.dev:3003");
 
-    socket.on('connect', () => {
-      console.log('Connected to Socket.IO');
-    });
+    // socket.on("connect", () => {
+    //   console.log("Connected to WebSocket server");
+    // });
 
-    socket.on('disconnect', () => {
-      console.log('Disconnected from Socket.IO');
-    });
+    // socket.on("disconnect", () => {
+    //   console.log("Disconnected from WebSocket server");
+    // });
 
-    socket.on("error", (error) => {
-      console.error("Socket.IO error:", error);
-    });
+    // socket.on("error", (error) => {
+    //   console.error("WebSocket error:", error);
+    // });
 
-    return () => {
-      // Clean up the socket connection when the component unmounts
-      socket.disconnect();
-    };
+    // return () => {
+    //   // Clean up the socket connection when the component unmounts
+    //   socket.disconnect();
+    // };
   }, []);
 
   return (
