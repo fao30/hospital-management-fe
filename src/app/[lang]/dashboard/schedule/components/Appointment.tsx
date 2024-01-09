@@ -5,7 +5,7 @@ import { Button, Empty, TimePicker, Tooltip } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -22,6 +22,7 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
 
   const addSchedule = api.schedule.create.useMutation({
     onSuccess: async () => {
+      console.log("TRIGG");
       await utils.schedule.invalidate();
       setIsEdit(false);
     },
@@ -32,10 +33,18 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
     setTimeValue(time);
   };
 
-  const toggleAdd = (index: number) => {
+  const toggleAddButton = (index: number) => {
     setIsSelected(index);
     setIsEdit(true);
   };
+
+  useEffect(() => {
+    console.log("isSelected >", isSelected);
+  }, [isSelected]);
+
+  useEffect(() => {
+    console.log("isEdit >", isEdit);
+  }, [isEdit]);
 
   return (
     <section className="space-y-5">
@@ -67,13 +76,16 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
                   icon={selected ? <CheckOutlined /> : <PlusOutlined />}
                   loading={addSchedule.isLoading && selected}
                   onClick={() => {
-                    toggleAdd(index);
+                    toggleAddButton(index);
                     // console.log("KK >>", dayjs(selectedDate).utc().toString());
                     if (selected) {
                       const doctorId = doctor?.doctor?.id;
-                      data?.forEach((doctor2) => {
-                        console.log(">>", doctor2?.doctor_id === doctorId);
-                        if (doctor?.doctor?.id === doctorId) {
+                      const selectedDoctor = data?.find((doc) => doc?.doctor?.id === doctorId)?.doctor_id;
+                      console.log("selectedDoctor >", selectedDoctor, doctorId);
+                      data?.find((doctor2, index: number) => {
+                        console.log(">>", doctor2?.doctor_id, doctorId, doctor2?.doctor_id === doctorId);
+                        if (doctor2?.doctor_id === doctorId) {
+                          console.log("TRIGG HERE", index);
                           addSchedule.mutate({
                             body: {
                               hospital_id: doctor.hospital_id,
