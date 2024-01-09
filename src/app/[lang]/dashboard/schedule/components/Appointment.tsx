@@ -1,11 +1,11 @@
-import { type ScheduleListOuput } from "@/api/routers/schedule";
+import { type ScheduleListOuput, type TUpdatedData } from "@/api/routers/schedule";
 import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Empty, TimePicker, Tooltip } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -22,12 +22,10 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
 
   const addSchedule = api.schedule.create.useMutation({
     onSuccess: async () => {
-      console.log("TRIGG");
       await utils.schedule.invalidate();
       setIsEdit(false);
     },
   });
-
   const [timeValue, setTimeValue] = useState<Dayjs | null>(null);
   const onChange = (time: Dayjs | null) => {
     setTimeValue(time);
@@ -38,13 +36,25 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
     setIsEdit(true);
   };
 
-  useEffect(() => {
-    console.log("isSelected >", isSelected);
-  }, [isSelected]);
-
-  useEffect(() => {
-    console.log("isEdit >", isEdit);
-  }, [isEdit]);
+  const handleAddMutation = (doctor: TUpdatedData) => {
+    const doctorId = doctor?.doctor?.id;
+    data?.find((doctor2) => {
+      if (doctor2?.doctor_id === doctorId) {
+        addSchedule.mutate({
+          body: {
+            hospital_id: doctor.hospital_id,
+            doctor_id: doctor.doctor_id,
+            patient_id: doctor.patient_id,
+            admin_id: doctor.admin_id,
+            is_admin_approved: doctor.is_admin_approved,
+            is_doctor_approved: doctor.is_doctor_approved,
+            status: doctor.status,
+            date_time: dayjs(timeValue).utc().toString(),
+          },
+        });
+      }
+    });
+  };
 
   return (
     <section className="space-y-5">
@@ -77,29 +87,9 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
                   loading={addSchedule.isLoading && selected}
                   onClick={() => {
                     toggleAddButton(index);
-                    // console.log("KK >>", dayjs(selectedDate).utc().toString());
                     if (selected) {
-                      const doctorId = doctor?.doctor?.id;
-                      const selectedDoctor = data?.find((doc) => doc?.doctor?.id === doctorId)?.doctor_id;
-                      console.log("selectedDoctor >", selectedDoctor, doctorId);
-                      data?.find((doctor2, index: number) => {
-                        console.log(">>", doctor2?.doctor_id, doctorId, doctor2?.doctor_id === doctorId);
-                        if (doctor2?.doctor_id === doctorId) {
-                          console.log("TRIGG HERE", index);
-                          addSchedule.mutate({
-                            body: {
-                              hospital_id: doctor.hospital_id,
-                              doctor_id: doctor.doctor_id,
-                              patient_id: doctor.patient_id,
-                              admin_id: doctor.admin_id,
-                              is_admin_approved: doctor.is_admin_approved,
-                              is_doctor_approved: doctor.is_doctor_approved,
-                              status: doctor.status,
-                              date_time: dayjs(timeValue).utc().toString(),
-                            },
-                          });
-                        }
-                      });
+                      console.log("TRIGGER");
+                      handleAddMutation(doctor);
                     }
                   }}
                 />

@@ -4,26 +4,33 @@ import { schema } from "../schema/schemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { getData, postData } from "./shared";
 
+type TUserInfo = {
+  id: number;
+  first_name: string;
+  last_name: string;
+};
+
+export type TUpdatedData = {
+  doctor: TUserInfo;
+  schedules: Date[];
+  hospital_id: number;
+  doctor_id: number;
+  patient_id: number;
+  admin_id: number;
+  is_admin_approved: boolean;
+  is_doctor_approved: boolean;
+  status: string;
+};
+
 export const schedule = createTRPCRouter({
   list: protectedProcedure.input(schema.schedule.list).query(async ({ input }) => {
-    type UserInfo = { id: number; first_name: string; last_name: string };
     type Response = {
-      schedules: (Schedule & { patient: UserInfo; admin: UserInfo; doctor: UserInfo; hospital_id: number })[];
+      schedules: (Schedule & { patient: TUserInfo; admin: TUserInfo; doctor: TUserInfo; hospital_id: number })[];
     } & PaginationResponse;
 
     const data = (await getData({ endpoint: "/schedules", params: input })) as Response;
 
-    const updatedData: {
-      doctor: UserInfo;
-      schedules: Date[];
-      hospital_id: number;
-      doctor_id: number;
-      patient_id: number;
-      admin_id: number;
-      is_admin_approved: boolean;
-      is_doctor_approved: boolean;
-      status: string;
-    }[] = [];
+    const updatedData: TUpdatedData[] = [];
 
     data.schedules.forEach((schedule) => {
       const existingDoctor = updatedData.find((item) => item.doctor.id === schedule.doctor.id);
