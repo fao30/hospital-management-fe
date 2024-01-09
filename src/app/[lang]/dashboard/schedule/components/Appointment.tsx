@@ -1,4 +1,4 @@
-import { type ScheduleListOuput, type TUpdatedData } from "@/api/routers/schedule";
+import { type ScheduleListOuput, type ScheduleListOuputItem } from "@/api/routers/schedule";
 import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Empty, TimePicker, Tooltip } from "antd";
@@ -38,7 +38,7 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
     setIsEdit(true);
   };
 
-  const handleAddMutation = (doctor: TUpdatedData) => {
+  const handleAddMutation = (doctor: ScheduleListOuputItem) => {
     const doctorId = doctor?.doctor?.id;
     data?.find((doctor2) => {
       if (doctor2?.doctor_id === doctorId) {
