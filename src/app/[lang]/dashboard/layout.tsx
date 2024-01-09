@@ -5,6 +5,7 @@ import Iconify from "@/components/Iconify";
 import { ICONS, MENU_ICON_SIZE, MENU_ITEMS_TO_REMOVE } from "@/lib/constants";
 import { type Lang, type MenuItemKey } from "@/types";
 import { redirect } from "next/navigation";
+import Socket from "../../../components/Socket";
 
 type Props = {
   params: { lang: Lang };
@@ -77,6 +78,7 @@ export default async function DashboardLayout({ params, children }: Props) {
   return (
     <DashboardMenu items={filteredItems} lang={lang}>
       {children}
+      <Socket></Socket>
     </DashboardMenu>
   );
 }

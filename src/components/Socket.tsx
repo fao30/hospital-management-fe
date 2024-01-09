@@ -4,7 +4,7 @@ import { Fragment, useEffect } from "react";
 import io from 'socket.io-client';
 
 
-export default function VisitSocket() {
+export default function Socket() {
 
   useEffect(() => {
     const socket = io("wss://fao-med.faotech.dev", {
@@ -14,7 +14,9 @@ export default function VisitSocket() {
     });
 
     socket.on("connect", () => {
-      console.log("Connected to WebSocket server");
+      console.log("CONNECT WEBSOCKET!!");
+
+      socket.emit("myEvent", { data: "CENGHO, NIHAO!" });
     });
 
     socket.on("disconnect", () => {
@@ -32,14 +34,6 @@ export default function VisitSocket() {
 
   return (
     <Fragment>
-      <article className="flex flex-col gap-6">
-        <section className="flex justify-end">
-          {/* <Button size="small" rounded="md">
-            Add Visit
-          </Button> */}
-        </section>
-
-      </article>
     </Fragment>
   );
 }

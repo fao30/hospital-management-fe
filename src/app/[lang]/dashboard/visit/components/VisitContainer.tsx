@@ -7,7 +7,6 @@ import { type SearchParams } from "@/types";
 import { Fragment, useState } from "react";
 import VisitCreateModal from "../components/VisitCreateModal";
 import VisitTable from "../components/VisitTable";
-import VisitSocket from "./VisitSocket";
 
 type Props = { searchParams: SearchParams };
 
@@ -26,7 +25,6 @@ export default function VisitContainer({ searchParams }: Props) {
             Add Visit
           </Button>
         </section>
-        <VisitSocket></VisitSocket>
         <VisitTable data={data} loading={loading} query={query} searchParams={searchParams} />
       </article>
     </Fragment>
