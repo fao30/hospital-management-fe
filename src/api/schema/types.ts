@@ -5,13 +5,13 @@ export type User = {
   first_name: string;
   last_name: string;
   id_number: string;
-  date_of_birth: string;
+  date_of_birth: Date;
   gender: Gender;
   email: string;
-  password: string;
   phone_number: string;
   is_active: boolean;
   is_on_duty: boolean;
+  socket_id: string;
 
   // relations
   country_id: number;
@@ -43,6 +43,7 @@ export type Visit = {
   case_notes: string;
   gender: Gender;
   is_patient_discharged: boolean;
+  has_insurance: boolean;
 
   // relations
   payment_status_id: number;
@@ -105,7 +106,7 @@ export type Medicine = {
   expiry_date: Date;
 
   // relations
-  hospitalid: number;
+  hospital_id: number;
 };
 
 export type Alergy = {
