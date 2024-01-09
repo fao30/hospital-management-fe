@@ -7,15 +7,8 @@ import { getData, postData } from "./shared";
 
 export const visit = createTRPCRouter({
   list: protectedProcedure.input(schema.visit.list).query(async ({ input }) => {
-    type Response = {
-      visits: (Visit & {
-        Hospital: Hospital;
-        User: User;
-      })[];
-    } & PaginationResponse;
-
+    type Response = { visits: (Visit & { Hospital: Hospital; User: User })[] } & PaginationResponse;
     const { visits, ...rest } = (await getData({ endpoint: "/visits", params: input })) as Response;
-
     return {
       ...rest,
       visits: visits.map((e) => ({
