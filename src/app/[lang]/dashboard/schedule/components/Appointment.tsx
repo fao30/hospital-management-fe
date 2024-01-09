@@ -19,14 +19,16 @@ type Props = {
 export default function Appointment({ data, isEdit, setIsEdit }: Props) {
   const utils = api.useUtils();
   const [isSelected, setIsSelected] = useState<number>(0);
+  const [timeValue, setTimeValue] = useState<Dayjs | null>(null);
 
   const addSchedule = api.schedule.create.useMutation({
     onSuccess: async () => {
       await utils.schedule.invalidate();
       setIsEdit(false);
+      setTimeValue(null);
     },
   });
-  const [timeValue, setTimeValue] = useState<Dayjs | null>(null);
+
   const onChange = (time: Dayjs | null) => {
     setTimeValue(time);
   };
