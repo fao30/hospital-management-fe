@@ -7,6 +7,7 @@ export class schema {
   static gender = z.enum(["MALE", "FEMALE"]);
   static roleName = z.enum(["superadmin", "hospital-manager", "hospital-admin", "doctor", "patient", "pharmacist"]);
   static paymentStatusName = z.enum(["full_paid", "partially_paid", "unpaid"]);
+  static scheduleStatus = z.enum(["SCHEDULED", "CANCELLED"]);
 
   // others
   static email = z.string().email();
@@ -144,7 +145,7 @@ export class schema {
         admin_id: z.number(),
         is_admin_approved: z.boolean(),
         is_doctor_approved: z.boolean(),
-        status: z.string().default("SCHEDULED"),
+        status: schema.scheduleStatus.default("SCHEDULED"),
         date_time: z.string(),
       }),
     });
@@ -175,3 +176,4 @@ export type RoleName = z.infer<typeof schema.roleName>;
 export type PaymentStatusName = z.infer<typeof schema.paymentStatusName>;
 export type Login = z.infer<typeof schema.login>;
 export type RoleId = 1 | 2 | 3 | 4 | 5 | 6;
+export type ScheduleStatus = z.infer<typeof schema.scheduleStatus>;

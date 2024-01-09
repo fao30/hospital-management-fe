@@ -1,6 +1,6 @@
 import { type RouterInputs, type RouterOutputs } from "@/types";
+import { schema, type ScheduleStatus } from "@schema/schemas";
 import { type DateTime, type PaginationResponse, type Schedule } from "@schema/types";
-import { schema } from "../schema/schemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { getData, postData } from "./shared";
 
@@ -19,7 +19,7 @@ export type TUpdatedData = {
   admin_id: number;
   is_admin_approved: boolean;
   is_doctor_approved: boolean;
-  status: string;
+  status: ScheduleStatus;
 };
 
 export const schedule = createTRPCRouter({

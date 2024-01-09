@@ -1,4 +1,4 @@
-import { type Gender, type RoleName } from "@schema/schemas";
+import { type Gender, type RoleName, type ScheduleStatus } from "@schema/schemas";
 
 export type User = {
   id: string;
@@ -133,8 +133,6 @@ export type Schedule = {
   patient_id: number;
   admin_id: number;
 };
-
-export type ScheduleStatus = "PENDING";
 
 export type DateTime = { updatedAt: Date; createdDate: Date };
 export type PaginationResponse = { count: number; totalPage: number };
