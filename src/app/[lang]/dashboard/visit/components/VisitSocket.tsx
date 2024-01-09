@@ -7,11 +7,10 @@ import io from 'socket.io-client';
 export default function VisitSocket() {
 
   useEffect(() => {
-    const socket = io('ws://fao-med.faotech.dev:3003'); // Update with your server URL
+    //EXAMPLE OF SOCKET IO
+    const socket = io('wss://fao-med.faotech.dev:3003'); // Update with your server URL
 
     socket.on('connect', () => {
-      console.log("EHEHEHHE-------->>>>>>>>>>>>>>>>");
-
       console.log('Connected to Socket.IO');
     });
 
