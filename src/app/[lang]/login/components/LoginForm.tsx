@@ -11,11 +11,17 @@ import { useMutation } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import io from 'socket.io-client';
 
 type Props = { searchParams: SearchParams; lang: Lang; t: Dictionary };
 
 export default function LoginForm({ searchParams, lang, t }: Props) {
   const router = useRouter();
+  const socket = io("wss://fao-med.faotech.dev", {
+    path: "/socket.io/",
+    transports: ["websocket"],
+    autoConnect: true
+  });
   const {
     register,
     handleSubmit,
@@ -33,6 +39,7 @@ export default function LoginForm({ searchParams, lang, t }: Props) {
       });
 
       if (!res?.error) {
+        socket.emit("add-socket-id", data.email);
         toastSuccess({ t, description: t.Login.success });
         router.push(`/${lang}${searchParams.callbackUrl ? (searchParams.callbackUrl as string) : "/dashboard"}`);
       } else toastError({ t, description: t.Login.failed });

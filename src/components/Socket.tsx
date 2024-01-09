@@ -16,7 +16,6 @@ export default function Socket() {
     socket.on("connect", () => {
       console.log("CONNECT WEBSOCKET!!");
 
-      socket.emit("myEvent", { data: "CENGHO, NIHAO!" });
     });
 
     socket.on("disconnect", () => {
