@@ -37,6 +37,17 @@ export const GENDERS: {
   },
 ];
 
+export const CURRENCIES = [
+  {
+    label: "IDR - Indonesian Rupiah",
+    value: "IDR",
+  },
+  {
+    label: "MYR - Malaysian Ringgit",
+    value: "MYR",
+  },
+];
+
 export const ICONS = {
   search: "material-symbols:search",
   searchName: "icon-park-outline:edit-name",

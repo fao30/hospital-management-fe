@@ -117,15 +117,21 @@ export class schema {
     static create = z.object({
       body: z.object({
         doctor_id: z.number(),
-        visit_id: z.string(),
+        visit_id: z.number(),
         medical_treatment: z.string(),
-        currency: z.string(),
-        price: z.number(),
+        currency: z.string().nullable(),
+        price: z.number().nullable(),
       }),
     });
     static update = z.object({
       treatmentId: z.number(),
-      body: this.create.shape.body,
+      body: z.object({
+        doctor_id: z.number(),
+        visit_id: z.number(),
+        medical_treatment: z.string(),
+        currency: z.string().nullable(),
+        price: z.number().nullable(),
+      }),
     });
   };
 

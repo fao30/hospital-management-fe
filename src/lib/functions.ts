@@ -55,8 +55,9 @@ export const formatDate = ({
   });
 };
 
-export const formatCurrency = ({ amount, currency, locale }: { amount: number; currency: string; locale: Lang }) => {
-  const formatter = Intl.NumberFormat(locale, {
+export const formatCurrency = ({ amount, currency, locale }: { amount: number; currency: string; locale?: Lang }) => {
+  const determineLocale: Record<string, string> = { IDR: "id-ID", MYR: "en-MY" };
+  const formatter = Intl.NumberFormat(determineLocale[currency] ?? locale, {
     style: "currency",
     currency,
     minimumFractionDigits: 0,
@@ -73,6 +74,20 @@ export const textEllipsis = (text: string, length: number): string => {
 export const accumulateValue = <T extends Record<K, number>, K extends keyof T>(array: T[], fieldName: K): T[K] => {
   return array.reduce((accumulator, item) => accumulator + item[fieldName], 0) as unknown as T[K];
 };
+
+export const getUserAge = (birthDate: Date): string => {
+  const date = getNewDate(birthDate.toString());
+  const currentDate = getNewDate();
+  const age = currentDate.getFullYear() - date.getFullYear();
+
+  const lastBirthday = getNewDate(`${currentDate.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`);
+  const timeDifference = currentDate.getTime() - lastBirthday.getTime();
+  const days = Math.floor(timeDifference / (1000 * 3600 * 24));
+
+  return `${age} years old ${days} days`;
+};
+
+export const getCelius = (temperature: number) => `${temperature} °C`;
 
 type PowOf2 = 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024;
 type SizeUnit = "B" | "KB" | "MB" | "GB";

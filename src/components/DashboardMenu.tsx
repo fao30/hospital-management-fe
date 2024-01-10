@@ -17,7 +17,7 @@ type Props = {
 
 export default function DashboardMenu({ children, items }: Props) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [selectedMenu, setSelectedMenu] = useState(getSelectedMenu(pathname));
   // const handleCollapse = () => (collapsed ? undefined : setCollapsed(true));
 

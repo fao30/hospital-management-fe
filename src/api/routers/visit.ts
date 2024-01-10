@@ -31,11 +31,17 @@ export const visit = createTRPCRouter({
 
   detail: protectedProcedure.input(z.object({ visitId: z.number() })).query(async ({ input }) => {
     const data = await getData({ endpoint: `/visits/${input.visitId}` });
-    return data as {
-      visit: Visit & { User: User & { Visits: Visit[] } } & { Hospital: Hospital } & { Treatments: Treatment } & {
-        Medicines_Treatments: MedicinesTreatment;
+
+    const updatedData = structuredClone(data) as {
+      visit: Visit & { currency?: string } & { User: User & { Visits: Visit[] } } & { Hospital: Hospital } & {
+        Treatments: Treatment[];
+      } & {
+        Medicines_Treatments: MedicinesTreatment[];
       };
     };
+    updatedData.visit.currency = updatedData.visit.Treatments[0]?.currency ?? undefined;
+
+    return updatedData;
   }),
 
   create: protectedProcedure.input(schema.visit.create).mutation(async ({ input }) => {
