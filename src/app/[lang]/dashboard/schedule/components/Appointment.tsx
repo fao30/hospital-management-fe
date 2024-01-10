@@ -1,11 +1,13 @@
 import { type ScheduleListOuput, type ScheduleListOuputItem } from "@/api/routers/schedule";
+import InputSelect from "@/components/InputSelect";
 import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Empty, TimePicker, Tooltip } from "antd";
+import { useDebounce } from "@uidotdev/usehooks";
+import { Button, Empty, Modal, Select, Spin, TimePicker, Tooltip } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -46,8 +48,8 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
         const getDatePicked = date_picked;
         const getTimePicked = dayjs(timeValue).toDate();
 
-        const formattedDatePicked = dayjs(getDatePicked).format('YYYY-MM-DD');
-        const formattedTimePicked = dayjs(getTimePicked).format('HH:mm:ss.SSS Z');
+        const formattedDatePicked = dayjs(getDatePicked).format("YYYY-MM-DD");
+        const formattedTimePicked = dayjs(getTimePicked).format("HH:mm:ss.SSS Z");
 
         const dateTime = new Date(`${formattedDatePicked} ${formattedTimePicked}`);
 
@@ -60,11 +62,35 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
             is_admin_approved: doctor.is_admin_approved,
             is_doctor_approved: doctor.is_doctor_approved,
             status: doctor.status,
-            date_time: dayjs(dateTime).tz('GMT').format("YYYY-MM-DD HH:mm:ss.SSS Z")
+            date_time: dayjs(dateTime).tz("GMT").format("YYYY-MM-DD HH:mm:ss.SSS Z"),
           },
         });
       }
     });
+  };
+
+  const [selectedDoctor, setSelectedDoctor] = useState<string>("");
+  const [doctorSearch, setDoctorSearch] = useState<string>("");
+  const debouncedPatientSearch = useDebounce(doctorSearch, 500);
+
+  const { data: doctors, isFetching: loadingDoctors } = api.user.search.useQuery(
+    { role_id: 4, key_words: debouncedPatientSearch },
+    { enabled: !!debouncedPatientSearch },
+  );
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+    console.log("CHECKK >", selectedDoctor);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -72,10 +98,52 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
       <section className="flex justify-between items-center">
         <h5 className="">Appointments</h5>
         <Tooltip title="Add an appointment for unlisted Doctor" placement="bottom">
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
             Assign an appointment
           </Button>
         </Tooltip>
+        <Modal
+          title="Manage Doctor's Calendar"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={[
+            <Button key="back" onClick={handleCancel}>
+              Cancel
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              // loading={loading}
+              onClick={handleOk}
+            >
+              Submit
+            </Button>,
+          ]}
+        >
+          <section className="grid">
+            <p>Search Doctor</p>
+            <InputSelect
+              onChange={(e) => setSelectedDoctor(e as string)}
+              onSearch={(e) => setDoctorSearch(e)}
+              notFoundContent={
+                loadingDoctors ? (
+                  <section className="flex justify-center items-center py-4">
+                    <Spin size="small" />
+                  </section>
+                ) : (
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                )
+              }
+              showSearch={true}
+              placeholder="Dr. Abdur Rohim"
+              options={doctors?.search.map((doctor) => ({
+                value: doctor?.id,
+                label: `${doctor?.first_name} ${doctor?.last_name}`,
+              }))}
+            />
+          </section>
+        </Modal>
       </section>
       {data && data?.length > 0 ? (
         data?.map((doctor, index: number) => {
