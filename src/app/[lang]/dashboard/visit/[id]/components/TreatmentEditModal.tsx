@@ -32,7 +32,6 @@ export default function TreatmentEditModal({ showModal, closeModal, data, revali
     control,
     reset,
     formState: { errors },
-    watch,
   } = useForm<TreatmentUpdateInput>({
     resolver: zodResolver(schema.treatment.update),
     defaultValues: { body: { ...data } },
@@ -61,8 +60,6 @@ export default function TreatmentEditModal({ showModal, closeModal, data, revali
         treatmentId: data.id,
       });
   }, [data]);
-
-  console.log(watch());
 
   return (
     <Modal show={showModal} closeModal={closeModal}>
