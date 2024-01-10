@@ -134,6 +134,8 @@ export class schema {
       ...schema.pagination,
       filter_by_date: z.coerce.boolean().default(true),
       date_time: z.string(),
+      from_date_time: z.string().optional(),
+      to_date_time: z.string().optional(),
       sort_doctor_id: schema.sorting,
     });
 

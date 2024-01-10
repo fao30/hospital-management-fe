@@ -127,6 +127,8 @@ export type Schedule = {
   is_admin_approved: boolean;
   is_doctor_approved: boolean;
   date_time: Date;
+  from_from_date_time: Date;
+  to_from_date_time: Date;
   status: ScheduleStatus;
 
   // relations

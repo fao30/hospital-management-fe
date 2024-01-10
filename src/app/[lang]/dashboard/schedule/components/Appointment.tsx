@@ -12,11 +12,12 @@ dayjs.extend(utc);
 
 type Props = {
   data?: ScheduleListOuput;
+  date_picked?: string;
   isEdit: boolean;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function Appointment({ data, isEdit, setIsEdit }: Props) {
+export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Props) {
   const utils = api.useUtils();
   const [isSelected, setIsSelected] = useState<number>(0);
   const [timeValue, setTimeValue] = useState<Dayjs | null>(null);
@@ -42,6 +43,14 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
     const doctorId = doctor?.doctor?.id;
     data?.find((doctor2) => {
       if (doctor2?.doctor_id === doctorId) {
+        const getDatePicked = date_picked;
+        const getTimePicked = dayjs(timeValue).toDate();
+
+        const formattedDatePicked = dayjs(getDatePicked).format('YYYY-MM-DD');
+        const formattedTimePicked = dayjs(getTimePicked).format('HH:mm:ss.SSS Z');
+
+        const dateTime = new Date(`${formattedDatePicked} ${formattedTimePicked}`);
+
         addSchedule.mutate({
           body: {
             hospital_id: doctor.hospital_id,
@@ -51,7 +60,7 @@ export default function Appointment({ data, isEdit, setIsEdit }: Props) {
             is_admin_approved: doctor.is_admin_approved,
             is_doctor_approved: doctor.is_doctor_approved,
             status: doctor.status,
-            date_time: dayjs(timeValue).utc().toString(),
+            date_time: dayjs(dateTime).tz('GMT').format("YYYY-MM-DD HH:mm:ss.SSS Z")
           },
         });
       }
