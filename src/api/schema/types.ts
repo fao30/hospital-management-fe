@@ -49,7 +49,7 @@ export type Visit = {
   payment_status_id: number;
   patient_id: number;
   hospital_id: number;
-};
+} & CreatorModifier;
 
 export type PaymentStatus = {
   id: number;
@@ -84,7 +84,7 @@ export type Treatment = {
   // relations
   doctor_id: number;
   visit_id: number;
-};
+} & CreatorModifier;
 
 export type MedicinesTreatment = {
   id: number;
@@ -135,7 +135,8 @@ export type Schedule = {
   doctor_id: number;
   patient_id: number;
   admin_id: number;
-};
+} & CreatorModifier;
 
 export type DateTime = { updatedAt: Date; createdDate: Date };
 export type PaginationResponse = { count: number; totalPage: number };
+export type CreatorModifier = { creator_id: number; modifier_id: number };

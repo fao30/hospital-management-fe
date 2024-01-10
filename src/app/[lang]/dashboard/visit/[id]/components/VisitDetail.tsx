@@ -4,14 +4,17 @@ import { type VisitDetailOutput } from "@/api/routers/visit";
 import Button from "@/components/Button";
 import Iconify from "@/components/Iconify";
 import { useStore } from "@/global/store";
+import { ICONS } from "@/lib/constants";
 import { formatCurrency, formatDate, getCelius, getUserAge, localizePhoneNumber } from "@/lib/functions";
+import { COLORS } from "@/styles/theme";
+import { type Session } from "next-auth";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import TreatmentCreateModal from "./TreatmentCreateModal";
 
-type Props = { data: VisitDetailOutput; revalidateVisit: () => Promise<void> };
+type Props = { data: VisitDetailOutput; revalidateVisit: () => Promise<void>; session: Session | null };
 
-export default function VisitDetail({ data, revalidateVisit }: Props) {
+export default function VisitDetail({ data, revalidateVisit, session }: Props) {
   const { visit } = data;
   const { lang } = useStore();
   const [modalTreatment, setModalTreatment] = useState(false);
@@ -23,6 +26,7 @@ export default function VisitDetail({ data, revalidateVisit }: Props) {
         showModal={modalTreatment}
         closeModal={() => setModalTreatment(false)}
         data={data}
+        session={session}
       />
       <article className="flex items-center justify-center">
         <section className="w-[36rem] flex flex-col gap-6 bg-gray/10 p-6 rounded-xl">
@@ -84,14 +88,25 @@ export default function VisitDetail({ data, revalidateVisit }: Props) {
           <section className="flex flex-col">
             <section className="flex justify-between items-end mb-2">
               <b>Treatments</b>
-              <Button size="small" rounded="md" onClick={() => setModalTreatment(true)}>
-                Add
-              </Button>
+              <section className="flex gap-2">
+                {session?.user?.id === 1 || session?.user?.id === 4 ? (
+                  <Button size="small" rounded="md" onClick={() => setModalTreatment(true)}>
+                    Add
+                  </Button>
+                ) : null}
+              </section>
             </section>
             {visit?.Treatments?.map((e) => (
-              <section key={e?.id} className="flex justify-between">
-                <p>{e.medical_treatment}</p>
-                <p>{formatCurrency({ amount: e.price, currency: e.currency })}</p>
+              <section key={e?.id} className="flex justify-between items-center">
+                <Fragment>
+                  <p>{e.medical_treatment}</p>
+                  <section className="flex gap-2 items-center">
+                    <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
+                    <Link href={`/${lang}/dashboard/visit`}>
+                      <Iconify icon={ICONS.edit} color={COLORS.blue} />
+                    </Link>
+                  </section>
+                </Fragment>
               </section>
             ))}
             {visit?.currency ? (

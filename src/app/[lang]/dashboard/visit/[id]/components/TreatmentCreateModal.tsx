@@ -10,15 +10,22 @@ import { toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { type Session } from "next-auth";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
-type Props = { showModal: boolean; closeModal: () => void; data: VisitDetailOutput; revalidateVisit: () => Promise<void> };
+type Props = {
+  showModal: boolean;
+  closeModal: () => void;
+  data: VisitDetailOutput;
+  revalidateVisit: () => Promise<void>;
+  session: Session | null;
+};
 
-export default function TreatmentCreateModal({ showModal, closeModal, data, revalidateVisit }: Props) {
-  const { session, t } = useStore();
+export default function TreatmentCreateModal({ showModal, closeModal, data, revalidateVisit, session }: Props) {
+  const { t } = useStore();
   const { visit } = data;
 
-  const { register, handleSubmit, watch } = useForm<TreatmentCreateInput>({
+  const { register, handleSubmit } = useForm<TreatmentCreateInput>({
     resolver: zodResolver(schema.treatment.create),
     defaultValues: { body: { doctor_id: session?.user.id, visit_id: visit?.id, currency: null, price: null } },
   });
@@ -32,8 +39,6 @@ export default function TreatmentCreateModal({ showModal, closeModal, data, reva
       toastSuccess({ t, description: "Treatment has been created" });
     },
   });
-
-  console.log(watch());
 
   return (
     <Modal show={showModal} closeModal={closeModal}>

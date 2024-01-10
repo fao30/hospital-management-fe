@@ -87,4 +87,5 @@ export const ICONS = {
   invoice: "iconamoon:invoice",
   detail: "carbon:folder-details-reference",
   medicine: "icon-park-outline:medicine-chest",
+  edit: "uil:edit",
 };
