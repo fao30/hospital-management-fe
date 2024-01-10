@@ -1,4 +1,5 @@
-.ant-select-selector {
+.ant-select-selector,
+.ant-picker {
   border-width: 0px 0px 1.5px 0px !important;
   outline: none !important;
   transition-property: all !important;
@@ -10,7 +11,8 @@
   font-size: 1rem !important;
 }
 
-.ant-select-selection-search-input {
+.ant-select-selection-search-input,
+.ant-picker-input {
   height: 100% !important;
 }
 
@@ -19,7 +21,8 @@
 }
 
 .ant-select-item,
-.ant-select-dropdown {
+.ant-select-dropdown,
+.ant-picker {
   border-radius: 0 !important;
   align-items: center !important;
 }
@@ -28,7 +31,8 @@
   margin-inline-start: 0px !important;
 }
 
-.ant-select-selector:hover {
+.ant-select-selector:hover,
+.ant-picker:hover {
   border-color: #2121294d !important;
 }
 
@@ -37,5 +41,9 @@
 .ant-select-selector:active,
 .ant-select-open .ant-select-selector {
   border-color: #0078cc !important;
+  box-shadow: none !important;
+}
+
+.ant-picker {
   box-shadow: none !important;
 }

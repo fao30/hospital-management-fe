@@ -3,7 +3,7 @@ import InputSelect from "@/components/InputSelect";
 import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDebounce } from "@uidotdev/usehooks";
-import { Button, Empty, Modal, Select, Spin, TimePicker, Tooltip } from "antd";
+import { Button, DatePicker, Empty, Modal, Select, Spin, TimePicker, Tooltip, type DatePickerProps } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
@@ -93,6 +93,15 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
     setIsModalOpen(false);
   };
 
+  const onOkDP = (value: DatePickerProps["value"]) => {
+    console.log("onOk: ", dayjs(value).format("YYYY-MM-DD,HH:mm"));
+  };
+
+  const onChangeDP = (value: DatePickerProps["value"], dateString: [string, string] | string) => {
+    console.log("Selected Time: ", value);
+    console.log("Formatted Selected Time: ", dateString);
+  };
+
   return (
     <section className="space-y-5">
       <section className="flex justify-between items-center">
@@ -121,27 +130,40 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
             </Button>,
           ]}
         >
-          <section className="grid">
-            <p>Search Doctor</p>
-            <InputSelect
-              onChange={(e) => setSelectedDoctor(e as string)}
-              onSearch={(e) => setDoctorSearch(e)}
-              notFoundContent={
-                loadingDoctors ? (
-                  <section className="flex justify-center items-center py-4">
-                    <Spin size="small" />
-                  </section>
-                ) : (
-                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                )
-              }
-              showSearch={true}
-              placeholder="Dr. Abdur Rohim"
-              options={doctors?.search.map((doctor) => ({
-                value: doctor?.id,
-                label: `${doctor?.first_name} ${doctor?.last_name}`,
-              }))}
-            />
+          <section className="grid gap-5">
+            <section>
+              <p>Search Doctor</p>
+              <InputSelect
+                onChange={(e) => setSelectedDoctor(e as string)}
+                onSearch={(e) => setDoctorSearch(e)}
+                notFoundContent={
+                  loadingDoctors ? (
+                    <section className="flex justify-center items-center py-4">
+                      <Spin size="small" />
+                    </section>
+                  ) : (
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  )
+                }
+                showSearch={true}
+                placeholder="Dr. Abdur Rohim"
+                options={doctors?.search.map((doctor) => ({
+                  value: doctor?.id,
+                  label: `${doctor?.first_name} ${doctor?.last_name}`,
+                }))}
+              />
+            </section>
+            <section>
+              <p>Select Date</p>
+              <DatePicker
+                className="w-full"
+                showTime={{ format: "HH:mm" }}
+                format="YYYY-MM-DD HH:mm"
+                onChange={onChangeDP}
+                onOk={onOkDP}
+                placeholder="2024-01-01 22:22"
+              />
+            </section>
           </section>
         </Modal>
       </section>
