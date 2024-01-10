@@ -3,7 +3,7 @@ import { type RouterInputs, type RouterOutputs } from "@/types";
 import { schema } from "@schema/schemas";
 import { type DateTime, type Hospital } from "@schema/types";
 import { z } from "zod";
-import { getData, postData } from "./shared";
+import { getData, postData, putData } from "./shared";
 
 export const hospital = createTRPCRouter({
   list: protectedProcedure.query(async () => {
@@ -22,7 +22,7 @@ export const hospital = createTRPCRouter({
   }),
 
   update: protectedProcedure.input(schema.hospital.update).mutation(async ({ input }) => {
-    const data = await postData({ endpoint: `/hospitals/${input.hospitalId}`, body: input.body });
+    const data = await putData({ endpoint: `/hospitals/${input.hospitalId}`, body: input.body });
     return data as { message: string };
   }),
 });
