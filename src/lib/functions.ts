@@ -43,11 +43,11 @@ export const formatDate = ({
   withTime,
 }: {
   withTime?: boolean;
-  lang: Lang;
+  lang?: Lang;
   date?: Date;
   style: "long" | "short";
 }): string => {
-  return (date ? getNewDate(date.toString()) : getNewDate()).toLocaleDateString(lang, {
+  return (date ? getNewDate(date.toString()) : getNewDate()).toLocaleDateString(lang ?? "en-US", {
     year: "numeric",
     month: style === "long" ? "long" : "numeric",
     day: "numeric",

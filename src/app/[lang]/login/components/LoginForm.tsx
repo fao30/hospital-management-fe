@@ -11,7 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 type Props = { searchParams: SearchParams; lang: Lang; t: Dictionary };
 
@@ -20,7 +20,7 @@ export default function LoginForm({ searchParams, lang, t }: Props) {
   const socket = io("wss://fao-med.faotech.dev", {
     path: "/socket.io/",
     transports: ["websocket"],
-    autoConnect: true
+    autoConnect: true,
   });
   const {
     register,

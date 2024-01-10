@@ -1,21 +1,18 @@
 "use client";
 
 import { Fragment, useEffect } from "react";
-import io from 'socket.io-client';
-
+import io from "socket.io-client";
 
 export default function Socket() {
-
   useEffect(() => {
     const socket = io("wss://fao-med.faotech.dev", {
       path: "/socket.io/",
       transports: ["websocket"],
-      autoConnect: true
+      autoConnect: true,
     });
 
     socket.on("connect", () => {
       console.log("CONNECT WEBSOCKET!!");
-
     });
 
     socket.on("disconnect", () => {
@@ -31,8 +28,5 @@ export default function Socket() {
     };
   }, []);
 
-  return (
-    <Fragment>
-    </Fragment>
-  );
+  return <Fragment></Fragment>;
 }

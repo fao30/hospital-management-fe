@@ -6,14 +6,14 @@ import { getData, postData } from "./shared";
 
 export const schedule = createTRPCRouter({
   list: protectedProcedure.input(schema.schedule.list).query(async ({ input }) => {
-    type TUserInfo = { id: number; first_name: string; last_name: string };
+    type UserInfo = { id: number; first_name: string; last_name: string };
 
     type Response = {
-      schedules: (Schedule & { patient: TUserInfo; admin: TUserInfo; doctor: TUserInfo; hospital_id: number })[];
+      schedules: (Schedule & { patient: UserInfo; admin: UserInfo; doctor: UserInfo; hospital_id: number })[];
     } & PaginationResponse;
 
     type UpdatedResponse = {
-      doctor: TUserInfo;
+      doctor: UserInfo;
       schedules: Date[];
       hospital_id: number;
       doctor_id: number;

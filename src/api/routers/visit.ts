@@ -1,7 +1,15 @@
 import { createTRPCRouter, protectedProcedure } from "@/api/trpc";
 import { type RouterInputs, type RouterOutputs } from "@/types";
 import { schema } from "@schema/schemas";
-import { type DateTime, type Hospital, type PaginationResponse, type User, type Visit } from "@schema/types";
+import {
+  type DateTime,
+  type Hospital,
+  type MedicinesTreatment,
+  type PaginationResponse,
+  type Treatment,
+  type User,
+  type Visit,
+} from "@schema/types";
 import { z } from "zod";
 import { getData, postData } from "./shared";
 
@@ -23,7 +31,11 @@ export const visit = createTRPCRouter({
 
   detail: protectedProcedure.input(z.object({ visitId: z.number() })).query(async ({ input }) => {
     const data = await getData({ endpoint: `/visits/${input.visitId}` });
-    return data as Visit;
+    return data as {
+      visit: Visit & { User: User & { Visits: Visit[] } } & { Hospital: Hospital } & { Treatments: Treatment } & {
+        Medicines_Treatments: MedicinesTreatment;
+      };
+    };
   }),
 
   create: protectedProcedure.input(schema.visit.create).mutation(async ({ input }) => {
@@ -40,6 +52,7 @@ export const visit = createTRPCRouter({
 // outputs
 export type VisitListOutput = RouterOutputs["visit"]["list"];
 export type VisitCreateOutput = RouterOutputs["visit"]["create"];
+export type VisitDetailOutput = RouterOutputs["visit"]["detail"];
 
 // inputs
 export type VisitCreateInput = RouterInputs["visit"]["create"];

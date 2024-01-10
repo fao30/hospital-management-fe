@@ -1,14 +1,16 @@
 import { type VisitListInput, type VisitListOutput } from "@/api/routers/visit";
 import Button from "@/components/Button";
 import FilterIcon from "@/components/FilterIcon";
+import Iconify from "@/components/Iconify";
 import Input from "@/components/Input";
 import { useStore } from "@/global/store";
-import { PAGINATION_LIMIT } from "@/lib/constants";
+import { ICONS, PAGINATION_LIMIT } from "@/lib/constants";
 import { cn, createUrl, formatDate, localizePhoneNumber } from "@/lib/functions";
 import { type SearchParams } from "@/types";
 import { type IconifyIcon } from "@iconify/react/dist/iconify.js";
 import { Table } from "antd";
 import { type FilterDropdownProps } from "antd/es/table/interface";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
@@ -115,6 +117,20 @@ export default function VisitTable({ data, loading, query, searchParams }: Props
         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} visits`,
       }}
       columns={[
+        {
+          title: "Action",
+          key: "id",
+          dataIndex: "id",
+          align: "center",
+          width: 1,
+          render: (id: number) => (
+            <section className="flex items-center justify-center">
+              <Link href={`/${lang}/dashboard/visit/${id}`}>
+                <Iconify onClick={() => null} className="p-1 text-white bg-blue rounded-md" width={25} icon={ICONS.detail} />
+              </Link>
+            </section>
+          ),
+        },
         {
           title: "Hospital",
           key: "hospital",
