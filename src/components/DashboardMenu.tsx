@@ -1,13 +1,18 @@
 "use client";
 
+import { ROLES } from "@/api/schema/constants";
+import { useStore } from "@/global/store";
+import { ICONS } from "@/lib/constants";
 import { cn, getSelectedMenu } from "@/lib/functions";
 import { COLORS } from "@/styles/theme";
 import { type Lang } from "@/types";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import { type ItemType, type MenuItemType } from "antd/es/menu/hooks/useItems";
+import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
+import Iconify from "./Iconify";
 
 type Props = {
   children: React.ReactNode;
@@ -16,6 +21,7 @@ type Props = {
 };
 
 export default function DashboardMenu({ children, items }: Props) {
+  const { session } = useStore();
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(true);
   const [selectedMenu, setSelectedMenu] = useState(getSelectedMenu(pathname));
@@ -51,18 +57,33 @@ export default function DashboardMenu({ children, items }: Props) {
               </button>
               <Menu selectedKeys={selectedMenu} mode="inline" items={items} />
             </nav>
-            {collapsed ? null : (
-              <section className="w-full flex flex-col gap-4 text-cream items-center justify-center">
+
+            <section className="w-full flex flex-col gap-4 text-cream items-center justify-center">
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="items-center justify-center w-full bg-briquette py-2 flex gap-2 text-white"
+              >
+                <Iconify icon={ICONS.signout} width={30} />
+                <p className={collapsed ? "hidden" : "text-lg"}>Logout</p>
+              </button>
+              {collapsed ? null : (
                 <h5 className="text-dark font-bold">
                   faoTech<span className="text-briquette">.</span>
                 </h5>
-              </section>
-            )}
+              )}
+            </section>
           </aside>
         </Layout.Sider>
       </Layout>
 
-      <article className={cn("animate min-h-screen p-shorter bg-cream ml-[3.1rem]", { "xl:ml-64": !collapsed })}>{children}</article>
+      <section className={cn(`animate fixed top-0 w-full ml-[3.1rem] px-shorter py-2 bg-hover`, { "xl:ml-[15rem]": !collapsed })}>
+        <p>{ROLES.find((e) => e.id === session?.user.role_id)?.label}</p>
+      </section>
+
+      <article className={cn("animate min-h-screen p-shorter bg-cream ml-[3.1rem]", { "xl:ml-[15rem]": !collapsed })}>
+        {children}
+      </article>
     </Fragment>
   );
 }
