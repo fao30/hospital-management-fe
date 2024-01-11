@@ -31,10 +31,7 @@ export default function MedicineContainer({ searchParams, session }: Props) {
     <Fragment>
       <MedicineCreateModal
         showModal={showModal}
-        closeModal={() => {
-          setShowModal(false);
-          setIsEdit(false);
-        }}
+        closeModal={() => setShowModal(false)}
         session={session}
         selectedMedicine={selectedMedicine}
         isEdit={isEdit}
@@ -42,7 +39,14 @@ export default function MedicineContainer({ searchParams, session }: Props) {
       <article className="flex flex-col gap-6">
         {allowedToCreate.includes(session?.user.role_id) ? (
           <section className="flex justify-end">
-            <Button onClick={() => setShowModal(true)} size="small" rounded="md">
+            <Button
+              onClick={() => {
+                setShowModal(true);
+                if (isEdit) setIsEdit(false);
+              }}
+              size="small"
+              rounded="md"
+            >
               Create Medicine
             </Button>
           </section>

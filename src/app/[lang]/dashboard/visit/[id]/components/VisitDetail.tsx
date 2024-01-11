@@ -11,6 +11,7 @@ import { ICONS } from "@/lib/constants";
 import { formatCurrency, formatDate, getCelius, getUserAge, localizePhoneNumber } from "@/lib/functions";
 import { COLORS } from "@/styles/theme";
 import { api } from "@/trpc/react";
+import { Skeleton } from "antd";
 import { type Session } from "next-auth";
 import Link from "next/link";
 import { Fragment, useState } from "react";
@@ -48,7 +49,9 @@ export default function VisitDetail({ session, id }: Props) {
   if (!data)
     return (
       <section className="flex items-center justify-center h-[50vh]">
-        <PulseLoader color={COLORS.dark} size={30} />
+        <section className="w-[36rem]">
+          <Skeleton />
+        </section>
       </section>
     );
 

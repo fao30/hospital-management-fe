@@ -127,7 +127,7 @@ export default function MedicineTable({ data, loading, query, searchParams, hand
           width: 1,
           render: (_, e) => (
             <section className="flex justify-center items-center">
-              <Iconify icon={ICONS.edit} color={COLORS.blue} onClick={() => handleEdit(e)} />
+              <Iconify width={20} icon={ICONS.edit} color={COLORS.blue} onClick={() => handleEdit(e)} />
             </section>
           ),
         },
