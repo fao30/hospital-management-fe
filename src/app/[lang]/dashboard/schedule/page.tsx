@@ -26,7 +26,7 @@ export default function SchedulePage() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const onSelect = (newValue: Dayjs) => {
-    const gmtTime = dayjs(newValue).tz('GMT');
+    const gmtTime = dayjs(newValue)
     setQuery({
       ...query,
       date_time: newValue.format("YYYY-MM-DD"),
