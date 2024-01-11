@@ -129,8 +129,8 @@ export class schema {
         doctor_id: z.number(),
         visit_id: z.number(),
         medical_treatment: z.string(),
-        currency: z.string().nullable(),
-        price: z.number().nullable(),
+        currency: z.string().min(1, "Pick a currency"),
+        price: z.number().min(1),
       }),
     });
   };

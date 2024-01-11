@@ -11,7 +11,7 @@ import {
   type Visit,
 } from "@schema/types";
 import { z } from "zod";
-import { getData, postData } from "./shared";
+import { getData, postData, putData } from "./shared";
 
 export const visit = createTRPCRouter({
   list: protectedProcedure.input(schema.visit.list).query(async ({ input }) => {
@@ -50,7 +50,7 @@ export const visit = createTRPCRouter({
   }),
 
   update: protectedProcedure.input(schema.visit.update).mutation(async ({ input }) => {
-    const data = await postData({ endpoint: `/visits/${input.visitId}`, body: input.body });
+    const data = await putData({ endpoint: `/visits/${input.visitId}`, body: input.body });
     return data as { message: string };
   }),
 });

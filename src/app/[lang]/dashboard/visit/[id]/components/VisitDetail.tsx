@@ -1,6 +1,7 @@
 "use client";
 
 import { type VisitDetailOutput } from "@/api/routers/visit";
+import { type Treatment } from "@/api/schema/types";
 import Button from "@/components/Button";
 import Iconify from "@/components/Iconify";
 import { useStore } from "@/global/store";
@@ -11,6 +12,7 @@ import { type Session } from "next-auth";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import TreatmentCreateModal from "./TreatmentCreateModal";
+import TreatmentEditModal from "./TreatmentEditModal";
 
 type Props = { data: VisitDetailOutput; revalidateVisit: () => Promise<void>; session: Session | null };
 
@@ -18,6 +20,8 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
   const { visit } = data;
   const { lang } = useStore();
   const [modalTreatment, setModalTreatment] = useState(false);
+  const [modalTreatmentEdit, setModalTreatmentEdit] = useState(false);
+  const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
 
   return (
     <Fragment>
@@ -27,6 +31,12 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
         closeModal={() => setModalTreatment(false)}
         data={data}
         session={session}
+      />
+      <TreatmentEditModal
+        revalidateVisit={revalidateVisit}
+        data={selectedTreatment}
+        showModal={modalTreatmentEdit}
+        closeModal={() => setModalTreatmentEdit(false)}
       />
       <article className="flex items-center justify-center">
         <section className="w-[36rem] flex flex-col gap-6 bg-gray/10 p-6 rounded-xl">
@@ -102,9 +112,15 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                   <p>{e.medical_treatment}</p>
                   <section className="flex gap-2 items-center">
                     <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
-                    <Link href={`/${lang}/dashboard/visit`}>
-                      <Iconify icon={ICONS.edit} color={COLORS.blue} />
-                    </Link>
+
+                    <Iconify
+                      onClick={() => {
+                        setModalTreatmentEdit(true);
+                        setSelectedTreatment(e);
+                      }}
+                      icon={ICONS.edit}
+                      color={COLORS.blue}
+                    />
                   </section>
                 </Fragment>
               </section>
