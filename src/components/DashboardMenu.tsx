@@ -85,7 +85,7 @@ export default function DashboardMenu({ children, items, session }: Props) {
         <p className="font-semibold">{ROLES.find((e) => e.id === session?.user.role_id)?.label}</p>
       </section>
 
-      <article className={cn("animate min-h-screen p-shorter bg-cream ml-[3.1rem]", { "xl:ml-[15rem]": !collapsed })}>
+      <article className={cn("animate min-h-screen p-shorter bg-cream ml-[3.1rem] mt-14", { "xl:ml-[15rem]": !collapsed })}>
         {children}
       </article>
     </Fragment>

@@ -1,6 +1,5 @@
 "use client";
 
-import { type VisitDetailOutput } from "@/api/routers/visit";
 import { type RoleId } from "@/api/schema/schemas";
 import { type Treatment } from "@/api/schema/types";
 import Button from "@/components/Button";
@@ -15,14 +14,16 @@ import { api } from "@/trpc/react";
 import { type Session } from "next-auth";
 import Link from "next/link";
 import { Fragment, useState } from "react";
+import { PulseLoader } from "react-spinners";
 import TreatmentCreateModal from "./TreatmentCreateModal";
 import TreatmentEditModal from "./TreatmentEditModal";
 
-type Props = { data: VisitDetailOutput; revalidateVisit: () => Promise<void>; session: Session };
+type Props = { session: Session; id: string };
 
-export default function VisitDetail({ data, revalidateVisit, session }: Props) {
-  const { visit } = data;
+export default function VisitDetail({ session, id }: Props) {
+  const { data } = api.visit.detail.useQuery({ visitId: parseInt(id) });
   const { lang, t } = useStore();
+  const utils = api.useUtils();
   const [modalTreatment, setModalTreatment] = useState(false);
   const [modalTreatmentEdit, setModalTreatmentEdit] = useState(false);
   const [isEditTreatmentByDoctor, setIsEditTreatmentByDoctor] = useState(false);
@@ -30,10 +31,12 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
   const [isEditPaidAmount, setIsEditPaidAmount] = useState<boolean>(false);
   const [paidAmount, setPaidAmount] = useState<number>(0);
 
+  const revalidateData = async () => await utils.visit.detail.invalidate({ visitId: parseInt(id) });
+
   const { mutate: updatePaidAmount } = api.visit.updatePaidAmount.useMutation({
     onSuccess: async () => {
-      await revalidateVisit();
       setIsEditPaidAmount(false);
+      await revalidateData();
       toastSuccess({ t, description: "Paid Amount updated" });
     },
   });
@@ -42,10 +45,19 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
   const allowedToEditPaidAmount: RoleId[] = [1, 2, 3];
   const allowedToEditTreatment: RoleId[] = [1, 2, 3, 4];
 
+  if (!data)
+    return (
+      <section className="flex items-center justify-center h-[50vh]">
+        <PulseLoader color={COLORS.dark} size={30} />
+      </section>
+    );
+
+  const { visit } = data;
+
   return (
     <Fragment>
       <TreatmentCreateModal
-        revalidateVisit={revalidateVisit}
+        revalidateData={revalidateData}
         showModal={modalTreatment}
         closeModal={() => setModalTreatment(false)}
         session={session}
@@ -55,7 +67,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
       />
       <TreatmentEditModal
         visit={data}
-        revalidateVisit={revalidateVisit}
+        revalidateData={revalidateData}
         data={selectedTreatment}
         showModal={modalTreatmentEdit}
         closeModal={() => setModalTreatmentEdit(false)}

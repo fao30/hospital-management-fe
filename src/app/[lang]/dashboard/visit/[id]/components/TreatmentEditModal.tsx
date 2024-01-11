@@ -22,11 +22,11 @@ type Props = {
   showModal: boolean;
   closeModal: () => void;
   data: Treatment | null;
-  revalidateVisit: () => Promise<void>;
+  revalidateData: () => Promise<void>;
   visit: VisitDetailOutput;
 };
 
-export default function TreatmentEditModal({ showModal, closeModal, data, revalidateVisit, visit }: Props) {
+export default function TreatmentEditModal({ showModal, closeModal, data, revalidateData, visit }: Props) {
   const { t } = useStore();
 
   const {
@@ -61,7 +61,7 @@ export default function TreatmentEditModal({ showModal, closeModal, data, revali
   const { mutate: updateDueAmount } = api.visit.updateDueAmount.useMutation({
     onSuccess: async () => {
       closeModal();
-      await revalidateVisit();
+      await revalidateData();
       toastSuccess({ t, description: "Treatment has been updated" });
     },
   });

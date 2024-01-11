@@ -18,7 +18,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 type Props = {
   showModal: boolean;
   closeModal: () => void;
-  revalidateVisit: () => Promise<void>;
+  revalidateData: () => Promise<void>;
   session: Session;
   isEdit: boolean;
   selectedTreatment: Treatment | null;
@@ -28,7 +28,7 @@ type Props = {
 export default function TreatmentCreateModal({
   showModal,
   closeModal,
-  revalidateVisit,
+  revalidateData,
   session,
   selectedTreatment,
   isEdit,
@@ -41,7 +41,6 @@ export default function TreatmentCreateModal({
     handleSubmit,
     reset,
     formState: { errors },
-    watch,
   } = useForm<TreatmentCreateInput>({
     resolver: zodResolver(schema.treatment.create),
     defaultValues: { body: { doctor_id: session.user.id } },
@@ -57,7 +56,7 @@ export default function TreatmentCreateModal({
     onSuccess: async () => {
       closeModal();
       toastSuccess({ t, description: "Treatment has been created" });
-      await revalidateVisit();
+      await revalidateData();
     },
   });
 
@@ -65,7 +64,7 @@ export default function TreatmentCreateModal({
     onSuccess: async () => {
       closeModal();
       toastSuccess({ t, description: "Treatment has been updated" });
-      await revalidateVisit();
+      await revalidateData();
     },
   });
 
