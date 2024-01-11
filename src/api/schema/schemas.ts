@@ -128,7 +128,7 @@ export class schema {
       body: z.object({
         doctor_id: z.number(),
         visit_id: z.number(),
-        medical_treatment: z.string(),
+        medical_treatment: z.string().min(4, "At least 4 characters"),
         currency: z.string().nullable(),
         price: z.number().nullable(),
       }),

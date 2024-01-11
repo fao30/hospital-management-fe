@@ -37,10 +37,12 @@ export default function TreatmentCreateModal({
   const { t } = useStore();
   const { visit } = data;
 
-  const { register, handleSubmit, reset } = useForm<TreatmentCreateInput>({
-    resolver: zodResolver(schema.treatment.create),
-    defaultValues: { body: {} },
-  });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<TreatmentCreateInput>({ resolver: zodResolver(schema.treatment.create) });
 
   const onSubmit: SubmitHandler<TreatmentCreateInput> = (data) =>
     isEdit
@@ -80,7 +82,12 @@ export default function TreatmentCreateModal({
     <Modal show={showModal} closeModal={closeModal}>
       <Modal.Body>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-96">
-          <InputTextarea className="h-16" placeholder="Medical Treatment" {...register("body.medical_treatment")} />
+          <InputTextarea
+            error={errors?.body?.medical_treatment?.message}
+            className="h-16"
+            placeholder="Medical Treatment"
+            {...register("body.medical_treatment")}
+          />
           <Button loading={loading || loadingUpdate} type="submit">
             {isEdit ? "Update" : "Create"} Treatment
           </Button>
