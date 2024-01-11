@@ -32,7 +32,6 @@ export default function MedicineCreateModal({ showModal, closeModal, session, is
     formState: { errors },
     control,
     reset,
-    watch,
   } = useForm<MedicineCreateInput>({
     resolver: zodResolver(schema.medicine.create),
   });
@@ -57,14 +56,12 @@ export default function MedicineCreateModal({ showModal, closeModal, session, is
   });
 
   useEffect(() => {
-    if (isEdit && selectedMedicine) {
+    if (isEdit && selectedMedicine && showModal) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id, ...rest } = selectedMedicine;
       reset({ body: { ...rest, expiry_date: getInputDate(rest.expiry_date) } });
-    } else reset({ body: { currency: "IDR", hospital_id: session.user.hospital_id, in_stock: 0, price: 0 } });
+    } else if (showModal) reset({ body: { currency: "IDR", hospital_id: session.user.hospital_id, in_stock: 0, price: 0 } });
   }, [selectedMedicine, isEdit, showModal]);
-
-  console.log(schema.medicine.create.safeParse(watch()));
 
   return (
     <Modal show={showModal} closeModal={closeModal}>

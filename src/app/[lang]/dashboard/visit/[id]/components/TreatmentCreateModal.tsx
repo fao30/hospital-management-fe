@@ -70,7 +70,7 @@ export default function TreatmentCreateModal({
   });
 
   useEffect(() => {
-    if (selectedTreatment && isEdit) {
+    if (selectedTreatment && isEdit && showModal) {
       reset({
         body: {
           doctor_id: selectedTreatment.creator_id,
@@ -80,11 +80,9 @@ export default function TreatmentCreateModal({
           medical_treatment: selectedTreatment.medical_treatment,
         },
       });
-    } else
+    } else if (showModal)
       reset({ body: { medical_treatment: "", doctor_id: session.user.id, visit_id: data.visit.id, currency: null, price: null } });
   }, [selectedTreatment, isEdit, showModal]);
-
-  console.log(schema.treatment.create.safeParse(watch()));
 
   return (
     <Modal show={showModal} closeModal={closeModal}>
