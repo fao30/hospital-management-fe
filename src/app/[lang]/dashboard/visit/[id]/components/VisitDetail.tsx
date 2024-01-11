@@ -37,6 +37,8 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
     },
   });
 
+  console.log(visit.due_amount);
+
   return (
     <Fragment>
       <TreatmentCreateModal
@@ -161,7 +163,13 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                 <section className="flex justify-between">
                   <p>Paid Amount</p>
 
-                  <section className="flex gap-2 items-center">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      updatePaidAmount({ visitId: visit.id, body: { paid_amount: paidAmount } });
+                    }}
+                    className="flex gap-2 items-center"
+                  >
                     {isEditPaidAmount ? (
                       <Input
                         max={visit.due_amount}
@@ -184,14 +192,12 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                       />
                     ) : (
                       (session?.user?.role_id === 1 || session?.user?.role_id === 2 || session?.user?.role_id === 3) && (
-                        <Iconify
-                          color={COLORS.blue}
-                          icon="mdi:check"
-                          onClick={() => updatePaidAmount({ visitId: visit.id, body: { paid_amount: paidAmount } })}
-                        />
+                        <button type="submit">
+                          <Iconify color={COLORS.blue} icon="mdi:check" />
+                        </button>
                       )
                     )}
-                  </section>
+                  </form>
                 </section>
               </Fragment>
             ) : null}
