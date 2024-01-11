@@ -10,7 +10,7 @@ import { CURRENCIES } from "@/lib/constants";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Session } from "next-auth";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
 type Props = {
   showModal: boolean;

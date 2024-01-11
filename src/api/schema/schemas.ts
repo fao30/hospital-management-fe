@@ -1,6 +1,9 @@
 import { PAGINATION_LIMIT } from "@/lib/constants";
 import { z } from "zod";
 
+const stringMessage = (field: string, min: number) => `${field} must contain at least ${min} character(s)`;
+const numberMessage = (field: string, min: number) => `${field} must be greater than or equal to ${min}`;
+
 export class schema {
   // enums
   static sorting = z.enum(["ASC", "DESC"]);
@@ -109,13 +112,13 @@ export class schema {
     static list = z.object({ ...schema.pagination });
     static create = z.object({
       body: z.object({
-        name: z.string().min(1),
+        name: z.string().min(1, stringMessage("Medicine name", 1)),
         hospital_id: z.number(),
-        article_number: z.string().min(1),
+        article_number: z.string().min(1, stringMessage("Article number", 1)),
         currency: z.string(),
-        price: z.number().min(1),
-        in_stock: z.number().min(1),
-        manufacturer: z.string().min(1),
+        price: z.number().min(1, numberMessage("price", 1)),
+        in_stock: z.number().min(1, numberMessage("In stock", 1)),
+        manufacturer: z.string().min(1, stringMessage("Manufacturer", 1)),
         expiry_date: z.string().min(1, "Select expiry date"),
       }),
     });
