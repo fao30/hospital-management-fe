@@ -1,9 +1,9 @@
 import { type VisitCreateInput } from "@/api/routers/visit";
-import { PAYMENT_STATUSES } from "@/api/schema/constants";
 import { schema } from "@/api/schema/schemas";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import InputSelect from "@/components/InputSelect";
+import InputTextarea from "@/components/InputTextarea";
 import { Modal } from "@/components/Modal";
 import { toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
@@ -21,27 +21,27 @@ type Props = {
 
 export default function VisitCreateModal({ showModal, closeModal }: Props) {
   const { session, t } = useStore();
+  const utils = api.useUtils();
   const {
     register,
     handleSubmit,
     control,
     setValue,
-    watch,
     formState: { errors },
-    clearErrors,
     reset,
   } = useForm<VisitCreateInput>({
     resolver: zodResolver(schema.visit.create),
-    defaultValues: { body: { hospital_id: session?.user.hospital_id } },
+    defaultValues: { body: { hospital_id: session?.user.hospital_id, paid_amount: null, due_amount: null, payment_status_id: null } },
   });
 
   const onSubmit: SubmitHandler<VisitCreateInput> = (data) => mutate(data);
 
   const { mutate, isLoading: loading } = api.visit.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       reset();
       closeModal();
       toastSuccess({ t, description: "Visit has been created" });
+      await utils.visit.list.invalidate();
     },
   });
 
@@ -53,19 +53,19 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
     { enabled: !!debouncedPatientSearch },
   );
 
-  const watched = {
-    dueAmount: watch("body.due_amount"),
-    paidAmount: watch("body.paid_amount"),
-  };
+  // const watched = {
+  //   dueAmount: watch("body.due_amount"),
+  //   paidAmount: watch("body.paid_amount"),
+  // };
 
-  useEffect(() => {
-    if (watched.dueAmount) {
-      if (!watched.paidAmount) setValue("body.payment_status_id", 3);
-      if (watched.paidAmount === watched.dueAmount) setValue("body.payment_status_id", 1);
-      if (watched.dueAmount > watched.paidAmount && watched.paidAmount) setValue("body.payment_status_id", 2);
-      clearErrors("body.payment_status_id");
-    }
-  }, [watched.dueAmount, watched.paidAmount]);
+  // useEffect(() => {
+  //   if (watched.dueAmount) {
+  //     if (!watched.paidAmount) setValue("body.payment_status_id", 3);
+  //     if (watched.paidAmount === watched.dueAmount) setValue("body.payment_status_id", 1);
+  //     if (watched.dueAmount > watched.paidAmount && watched.paidAmount) setValue("body.payment_status_id", 2);
+  //     clearErrors("body.payment_status_id");
+  //   }
+  // }, [watched.dueAmount, watched.paidAmount]);
 
   useEffect(() => {
     if (session) setValue("body.hospital_id", session.user.hospital_id);
@@ -136,38 +136,19 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
             />
           </section>
           <section className="grid grid-cols-2 gap-4">
-            <Input error={errors.body?.diagnosis?.message} placeholder="Diagnosis" {...register("body.diagnosis")} />
-            <Input error={errors.body?.case_notes?.message} placeholder="Case Notes" {...register("body.case_notes")} />
-          </section>
-          <section className="grid grid-cols-2 gap-4">
-            <Input
-              error={errors.body?.due_amount?.message}
-              placeholder="Due Amount"
-              type="number"
-              {...register("body.due_amount", { setValueAs: (v: string) => +v })}
+            <InputTextarea
+              className="h-16"
+              error={errors.body?.diagnosis?.message}
+              placeholder="Diagnosis"
+              {...register("body.diagnosis")}
             />
-            <Input
-              max={watched.dueAmount}
-              error={errors.body?.paid_amount?.message}
-              placeholder="Paid Amount"
-              type="number"
-              {...register("body.paid_amount", { setValueAs: (v: string) => +v })}
+            <InputTextarea
+              className="h-16"
+              error={errors.body?.case_notes?.message}
+              placeholder="Case Notes"
+              {...register("body.case_notes")}
             />
           </section>
-          <Controller
-            control={control}
-            name="body.payment_status_id"
-            render={({ field }) => (
-              <InputSelect
-                {...field}
-                disabled
-                error={errors.body?.payment_status_id?.message}
-                showSearch={true}
-                placeholder="Payment Status"
-                options={PAYMENT_STATUSES.map((e) => ({ label: e.label, value: e.id }))}
-              />
-            )}
-          />
           <Button loading={loading} type="submit">
             Create Visit
           </Button>
