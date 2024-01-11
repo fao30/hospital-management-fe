@@ -25,7 +25,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
   const { lang, t } = useStore();
   const [modalTreatment, setModalTreatment] = useState(false);
   const [modalTreatmentEdit, setModalTreatmentEdit] = useState(false);
-  const [isEditTeatmentDoctor, setIsEditTreatmentDoctor] = useState(false);
+  const [isEditTreatmentByDoctor, setIsEditTreatmentByDoctor] = useState(false);
   const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
   const [isEditPaidAmount, setIsEditPaidAmount] = useState<boolean>(false);
   const [paidAmount, setPaidAmount] = useState<number>(0);
@@ -50,7 +50,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
         closeModal={() => setModalTreatment(false)}
         data={data}
         session={session}
-        isEdit={isEditTeatmentDoctor}
+        isEdit={isEditTreatmentByDoctor}
         selectedTreatment={selectedTreatment}
       />
       <TreatmentEditModal
@@ -140,7 +140,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                         onClick={() => {
                           if (session?.user?.role_id === 4) {
                             setModalTreatment(true);
-                            setIsEditTreatmentDoctor(true);
+                            setIsEditTreatmentByDoctor(true);
                           } else {
                             setModalTreatmentEdit(true);
                           }

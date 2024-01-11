@@ -109,11 +109,12 @@ export class schema {
     static list = z.object({ ...schema.pagination });
     static create = z.object({
       body: z.object({
+        name: z.string().min(1),
         hospital_id: z.number(),
         article_number: z.string().min(1),
         currency: z.string(),
         price: z.number().min(1),
-        in_stock: z.number(),
+        in_stock: z.number().min(1),
         manufacturer: z.string().min(1),
         expiry_date: z.string().min(1, "Select expiry date"),
       }),

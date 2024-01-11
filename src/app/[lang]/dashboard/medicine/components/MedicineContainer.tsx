@@ -6,6 +6,7 @@ import { api } from "@/trpc/react";
 import { type SearchParams } from "@/types";
 import { type Session } from "next-auth";
 import { Fragment, useState } from "react";
+import MedicineCreateModal from "./MedicineCreateModal";
 import MedicineTable from "./MedicineTable";
 
 type Props = { searchParams: SearchParams; session: Session };
@@ -19,6 +20,7 @@ export default function MedicineContainer({ searchParams, session }: Props) {
 
   return (
     <Fragment>
+      <MedicineCreateModal showModal={showModal} closeModal={() => setShowModal(false)} session={session} />
       <article className="flex flex-col gap-6">
         {allowedToCreate.includes(session?.user.role_id) ? (
           <section className="flex justify-end">
