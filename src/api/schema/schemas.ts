@@ -15,7 +15,7 @@ export class schema {
   // others
   static email = z.string().email();
   static pagination = { page: z.coerce.number().default(1), limit: z.coerce.number().default(PAGINATION_LIMIT) };
-  static login = z.object({ email: schema.email, password: z.string().min(6, "Password must contain at least 6 characters") });
+  static login = z.object({ email: schema.email, password: z.string().min(6, stringMessage("Password", 6)) });
   static phoneNumber = z
     .string()
     .regex(/^\d+$/, "Provide a valid phone number")
@@ -133,7 +133,7 @@ export class schema {
       body: z.object({
         doctor_id: z.number(),
         visit_id: z.number(),
-        medical_treatment: z.string().min(4, "At least 4 characters"),
+        medical_treatment: z.string().min(4, stringMessage("Medical treatment", 4)),
         currency: z.string().nullable(),
         price: z.number().nullable(),
       }),
@@ -143,14 +143,14 @@ export class schema {
       body: z.object({
         doctor_id: z.number(),
         visit_id: z.number(),
-        medical_treatment: z.string().min(4, "At least 4 characters"),
+        medical_treatment: z.string().min(4, stringMessage("Medical treatment", 4)),
         currency: z.string().min(1, "Pick a currency"),
         price: z.number().min(1),
       }),
     });
     static updateByDoctor = z.object({
       treatmentId: z.number(),
-      body: z.object({ medical_treatment: z.string().min(4, "At least 4 characters") }),
+      body: z.object({ medical_treatment: z.string().min(4, stringMessage("Medical treatment", 4)) }),
     });
   };
 
