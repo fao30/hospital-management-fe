@@ -96,7 +96,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
   const [patientSearch, setPatientSearch] = useState<string>("");
   const debouncedPatientSearch = useDebounce(patientSearch, 500);
   const { data: patients, isFetching: loadingPatients } = api.user.search.useQuery(
-    { role_id: 6, key_words: debouncedPatientSearch },
+    { role_id: 5, key_words: debouncedPatientSearch },
     { enabled: !!debouncedPatientSearch },
   );
 
@@ -204,7 +204,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                 }))}
               />
             </section>
-            <section>
+            {/* <section>
               <p>Search Hospital</p>
               <InputSelect
                 onChange={(e) => setDataSchedule({ ...dataSchedule, hospital_id: e as number })}
@@ -225,7 +225,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                   label: `${hospital?.name}`,
                 }))}
               />
-            </section>
+            </section> */}
             <section>
               <p>Select Date</p>
               <DatePicker

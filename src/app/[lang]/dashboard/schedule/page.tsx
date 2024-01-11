@@ -8,7 +8,7 @@ import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Appointment from "./components/Appointment";
 
 dayjs.extend(utc);
@@ -35,6 +35,10 @@ export default function SchedulePage() {
     });
     setIsEdit(false);
   };
+
+  useEffect(() => {
+    onSelect(dayjs(getInputDate()))
+  }, []);
 
   return (
     <Fragment>
