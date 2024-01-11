@@ -3,7 +3,8 @@ import InputSelect from "@/components/InputSelect";
 import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDebounce } from "@uidotdev/usehooks";
-import { Button, DatePicker, Empty, Modal, Select, Spin, TimePicker, Tooltip, type DatePickerProps } from "antd";
+import { Button, Checkbox, DatePicker, Empty, Modal, Select, Spin, TimePicker, Tooltip, type DatePickerProps } from "antd";
+import { type CheckboxChangeEvent } from "antd/es/checkbox";
 import dayjs, { type Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
@@ -71,13 +72,21 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
 
   const [selectedDoctor, setSelectedDoctor] = useState<string>("");
   const [doctorSearch, setDoctorSearch] = useState<string>("");
-  const debouncedPatientSearch = useDebounce(doctorSearch, 500);
-
+  const debouncedDoctorSearch = useDebounce(doctorSearch, 500);
   const { data: doctors, isFetching: loadingDoctors } = api.user.search.useQuery(
-    { role_id: 4, key_words: debouncedPatientSearch },
+    { role_id: 4, key_words: debouncedDoctorSearch },
+    { enabled: !!debouncedDoctorSearch },
+  );
+
+  const [selectedPatient, setSelectedPatient] = useState<string>("");
+  const [patientSearch, setPatientSearch] = useState<string>("");
+  const debouncedPatientSearch = useDebounce(patientSearch, 500);
+  const { data: patients, isFetching: loadingPatients } = api.user.search.useQuery(
+    { role_id: 6, key_words: debouncedPatientSearch },
     { enabled: !!debouncedPatientSearch },
   );
 
+  // MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -101,6 +110,22 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
     console.log("Selected Time: ", value);
     console.log("Formatted Selected Time: ", dateString);
   };
+
+  const handleCheckboxAdmin = (e: CheckboxChangeEvent) => {
+    console.log(`checked Admin= ${e.target.checked}`);
+  };
+
+  const handleCheckboxDoctor = (e: CheckboxChangeEvent) => {
+    console.log(`checked DOCTOR= ${e.target.checked}`);
+  };
+
+  const handleStatus = (value: string) => {
+    console.log(`selected status ${value}`);
+  };
+
+  const { data: hospitals, isLoading: loadingHospitals } = api.hospital.list.useQuery();
+  const [selectedHospital, setSelectedHospital] = useState<string>("");
+  const [hospitalSearch, setHospitalSearch] = useState<string>("");
 
   return (
     <section className="space-y-5">
@@ -154,6 +179,50 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
               />
             </section>
             <section>
+              <p>Search Patient</p>
+              <InputSelect
+                onChange={(e) => setSelectedPatient(e as string)}
+                onSearch={(e) => setPatientSearch(e)}
+                notFoundContent={
+                  loadingPatients ? (
+                    <section className="flex justify-center items-center py-4">
+                      <Spin size="small" />
+                    </section>
+                  ) : (
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  )
+                }
+                showSearch={true}
+                placeholder=""
+                options={patients?.search.map((patient) => ({
+                  value: patient?.id,
+                  label: `${patient?.first_name} ${patient?.last_name}`,
+                }))}
+              />
+            </section>
+            <section>
+              <p>Search Hospital</p>
+              <InputSelect
+                onChange={(e) => setSelectedHospital(e as string)}
+                onSearch={(e) => setHospitalSearch(e)}
+                notFoundContent={
+                  loadingDoctors ? (
+                    <section className="flex justify-center items-center py-4">
+                      <Spin size="small" />
+                    </section>
+                  ) : (
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  )
+                }
+                showSearch={true}
+                placeholder="Rs. Atmajaya"
+                options={hospitals?.hospitals.map((hospital) => ({
+                  value: hospital?.id,
+                  label: `${hospital?.name}`,
+                }))}
+              />
+            </section>
+            <section>
               <p>Select Date</p>
               <DatePicker
                 className="w-full"
@@ -164,6 +233,22 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                 placeholder="2024-01-01 22:22"
               />
             </section>
+            <section>
+              <p>Select Status</p>
+              <Select
+                defaultValue="Scheduled"
+                className="w-full"
+                onChange={handleStatus}
+                options={[
+                  { value: "SCHEDULED", label: "Scheduled" },
+                  { value: "NOT_SHOW", label: "Not show" },
+                  { value: "DONE", label: "Done" },
+                  { value: "CANCELLED", label: "Cancelled" },
+                ]}
+              />
+            </section>
+            <Checkbox onChange={handleCheckboxDoctor}>Approved by Doctor</Checkbox>
+            <Checkbox onChange={handleCheckboxAdmin}>Approved by Admin</Checkbox>
           </section>
         </Modal>
       </section>
