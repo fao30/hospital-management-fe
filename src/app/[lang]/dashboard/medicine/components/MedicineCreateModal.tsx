@@ -37,7 +37,7 @@ export default function MedicineCreateModal({ showModal, closeModal, session }: 
     onSuccess: async () => {
       closeModal();
       await utils.medicine.list.invalidate();
-      toastSuccess({ t, description: "Treatment has been updated" });
+      toastSuccess({ t, description: "Medicine has been created" });
     },
   });
 
