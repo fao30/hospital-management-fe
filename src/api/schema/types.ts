@@ -94,6 +94,7 @@ export type MedicinesTreatment = {
   // relations
   visit_id: number;
   medicine_id: number;
+  Medicine: Medicine;
 };
 
 export type Medicine = {

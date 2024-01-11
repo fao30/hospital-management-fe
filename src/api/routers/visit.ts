@@ -34,9 +34,9 @@ export const visit = createTRPCRouter({
 
     const updatedData = structuredClone(data) as {
       visit: Visit & { currency?: string } & { User: User & { Visits: Visit[] } } & { Hospital: Hospital } & {
-        Treatments: Treatment[];
-      } & {
-        Medicines_Treatments: MedicinesTreatment[];
+        Treatments: (Treatment & {
+          Medicines_Treatments: MedicinesTreatment[];
+        })[];
       };
     };
     updatedData.visit.currency = updatedData.visit.Treatments[0]?.currency ?? undefined;

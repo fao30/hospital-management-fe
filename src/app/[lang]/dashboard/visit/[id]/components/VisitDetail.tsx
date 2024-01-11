@@ -15,7 +15,6 @@ import { Skeleton } from "antd";
 import { type Session } from "next-auth";
 import Link from "next/link";
 import { Fragment, useState } from "react";
-import { PulseLoader } from "react-spinners";
 import TreatmentCreateModal from "./TreatmentCreateModal";
 import TreatmentEditModal from "./TreatmentEditModal";
 
@@ -151,29 +150,43 @@ export default function VisitDetail({ session, id }: Props) {
               </section>
             </section>
             {visit?.Treatments?.map((e) => (
-              <section key={e?.id} className="flex justify-between items-center">
-                <Fragment>
-                  <p>{e.medical_treatment}</p>
-                  <section className="flex gap-2 items-center">
-                    <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
+              <section className="flex flex-col">
+                <section key={e?.id} className="flex justify-between items-center">
+                  <Fragment>
+                    <p>{e.medical_treatment}</p>
+                    <section className="flex gap-2 items-center">
+                      <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
 
-                    {allowedToEditTreatment.includes(session.user.role_id) ? (
-                      <Iconify
-                        onClick={() => {
-                          if (session?.user?.role_id === 4) {
-                            setModalTreatment(true);
-                            setIsEditTreatmentByDoctor(true);
-                          } else {
-                            setModalTreatmentEdit(true);
-                          }
-                          setSelectedTreatment(e);
-                        }}
-                        icon={ICONS.edit}
-                        color={COLORS.blue}
-                      />
-                    ) : null}
-                  </section>
-                </Fragment>
+                      {allowedToEditTreatment.includes(session.user.role_id) ? (
+                        <Iconify
+                          onClick={() => {
+                            if (session?.user?.role_id === 4) {
+                              setModalTreatment(true);
+                              setIsEditTreatmentByDoctor(true);
+                            } else {
+                              setModalTreatmentEdit(true);
+                            }
+                            setSelectedTreatment(e);
+                          }}
+                          icon={ICONS.edit}
+                          color={COLORS.blue}
+                        />
+                      ) : null}
+                    </section>
+                  </Fragment>
+                </section>
+                {e.Medicines_Treatments.map((medicine) => {
+                  return (
+                    <section className="pl-4 flex justify-between">
+                      <p>
+                        {medicine.quantity}x {medicine.Medicine.name}
+                      </p>
+                      <p>
+                        {formatCurrency({ amount: medicine.quantity * medicine.Medicine.price, currency: medicine.Medicine.currency })}
+                      </p>
+                    </section>
+                  );
+                })}
               </section>
             ))}
             {visit?.currency ? (
