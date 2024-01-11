@@ -7,7 +7,7 @@ export class schema {
   static gender = z.enum(["MALE", "FEMALE"]);
   static roleName = z.enum(["superadmin", "hospital-manager", "hospital-admin", "doctor", "patient", "pharmacist"]);
   static paymentStatusName = z.enum(["full_paid", "partially_paid", "unpaid"]);
-  static scheduleStatus = z.enum(["SCHEDULED", "CANCELLED"]);
+  static scheduleStatus = z.enum(["SCHEDULED", "CANCELLED", "NOT_SHOW", "DONE"]);
 
   // others
   static email = z.string().email();
@@ -150,7 +150,7 @@ export class schema {
         hospital_id: z.number(),
         doctor_id: z.number(),
         patient_id: z.number(),
-        admin_id: z.number(),
+        admin_id: z.number().optional(),
         is_admin_approved: z.boolean(),
         is_doctor_approved: z.boolean(),
         status: schema.scheduleStatus.default("SCHEDULED"),

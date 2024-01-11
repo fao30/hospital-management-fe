@@ -13,6 +13,8 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
 
+type TDataScheduleStatus = "SCHEDULED" | "CANCELLED" | "NOT_SHOW" | "DONE";
+
 type Props = {
   data?: ScheduleListOuput;
   date_picked?: string;
@@ -24,12 +26,14 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
   const utils = api.useUtils();
   const [isSelected, setIsSelected] = useState<number>(0);
   const [timeValue, setTimeValue] = useState<Dayjs | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const addSchedule = api.schedule.create.useMutation({
     onSuccess: async () => {
       await utils.schedule.invalidate();
       setIsEdit(false);
       setTimeValue(null);
+      setIsModalOpen(false);
     },
   });
 
@@ -42,7 +46,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
     setIsEdit(true);
   };
 
-  const handleAddMutation = (doctor: ScheduleListOuputItem) => {
+  const handleAddTime = (doctor: ScheduleListOuputItem) => {
     const doctorId = doctor?.doctor?.id;
     data?.find((doctor2) => {
       if (doctor2?.doctor_id === doctorId) {
@@ -70,7 +74,17 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
     });
   };
 
-  const [selectedDoctor, setSelectedDoctor] = useState<string>("");
+  //
+  const [dataSchedule, setDataSchedule] = useState({
+    doctor_id: 0,
+    patient_id: 0,
+    hospital_id: 0,
+    date_time: "",
+    status: "",
+    is_doctor_approved: false,
+    is_admin_approved: false,
+  });
+
   const [doctorSearch, setDoctorSearch] = useState<string>("");
   const debouncedDoctorSearch = useDebounce(doctorSearch, 500);
   const { data: doctors, isFetching: loadingDoctors } = api.user.search.useQuery(
@@ -78,7 +92,6 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
     { enabled: !!debouncedDoctorSearch },
   );
 
-  const [selectedPatient, setSelectedPatient] = useState<string>("");
   const [patientSearch, setPatientSearch] = useState<string>("");
   const debouncedPatientSearch = useDebounce(patientSearch, 500);
   const { data: patients, isFetching: loadingPatients } = api.user.search.useQuery(
@@ -87,45 +100,35 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
   );
 
   // MODAL
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const handleOk = () => {
     setIsModalOpen(false);
-    console.log("CHECKK >", selectedDoctor);
+    console.log("dataSchedule >", dataSchedule);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const onOkDP = (value: DatePickerProps["value"]) => {
-    console.log("onOk: ", dayjs(value).format("YYYY-MM-DD,HH:mm"));
-  };
-
-  const onChangeDP = (value: DatePickerProps["value"], dateString: [string, string] | string) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
-  };
-
-  const handleCheckboxAdmin = (e: CheckboxChangeEvent) => {
-    console.log(`checked Admin= ${e.target.checked}`);
-  };
-
-  const handleCheckboxDoctor = (e: CheckboxChangeEvent) => {
-    console.log(`checked DOCTOR= ${e.target.checked}`);
-  };
-
-  const handleStatus = (value: string) => {
-    console.log(`selected status ${value}`);
-  };
-
   const { data: hospitals, isLoading: loadingHospitals } = api.hospital.list.useQuery();
-  const [selectedHospital, setSelectedHospital] = useState<string>("");
   const [hospitalSearch, setHospitalSearch] = useState<string>("");
+
+  const handleAddSchedule = () => {
+    addSchedule.mutate({
+      body: {
+        hospital_id: dataSchedule.hospital_id,
+        doctor_id: dataSchedule.doctor_id,
+        patient_id: dataSchedule.patient_id,
+        is_admin_approved: dataSchedule.is_admin_approved,
+        is_doctor_approved: dataSchedule.is_doctor_approved,
+        status: dataSchedule.status as TDataScheduleStatus,
+        date_time: dataSchedule.date_time,
+      },
+    });
+  };
 
   return (
     <section className="space-y-5">
@@ -149,7 +152,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
               key="submit"
               type="primary"
               // loading={loading}
-              onClick={handleOk}
+              onClick={handleAddSchedule}
             >
               Submit
             </Button>,
@@ -159,7 +162,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
             <section>
               <p>Search Doctor</p>
               <InputSelect
-                onChange={(e) => setSelectedDoctor(e as string)}
+                onChange={(e) => setDataSchedule({ ...dataSchedule, doctor_id: e as number })}
                 onSearch={(e) => setDoctorSearch(e)}
                 notFoundContent={
                   loadingDoctors ? (
@@ -181,7 +184,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
             <section>
               <p>Search Patient</p>
               <InputSelect
-                onChange={(e) => setSelectedPatient(e as string)}
+                onChange={(e) => setDataSchedule({ ...dataSchedule, patient_id: e as number })}
                 onSearch={(e) => setPatientSearch(e)}
                 notFoundContent={
                   loadingPatients ? (
@@ -203,10 +206,10 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
             <section>
               <p>Search Hospital</p>
               <InputSelect
-                onChange={(e) => setSelectedHospital(e as string)}
+                onChange={(e) => setDataSchedule({ ...dataSchedule, hospital_id: e as number })}
                 onSearch={(e) => setHospitalSearch(e)}
                 notFoundContent={
-                  loadingDoctors ? (
+                  loadingHospitals ? (
                     <section className="flex justify-center items-center py-4">
                       <Spin size="small" />
                     </section>
@@ -228,8 +231,10 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                 className="w-full"
                 showTime={{ format: "HH:mm" }}
                 format="YYYY-MM-DD HH:mm"
-                onChange={onChangeDP}
-                onOk={onOkDP}
+                onChange={(_, dateString) => {
+                  console.log("DATESTRING >", dateString, dayjs(dateString).utc());
+                  setDataSchedule({ ...dataSchedule, date_time: dayjs(dateString).tz("GMT").format("YYYY-MM-DD HH:mm:ss.SSS Z") });
+                }}
                 placeholder="2024-01-01 22:22"
               />
             </section>
@@ -238,7 +243,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
               <Select
                 defaultValue="Scheduled"
                 className="w-full"
-                onChange={handleStatus}
+                onChange={(e) => setDataSchedule({ ...dataSchedule, status: e })}
                 options={[
                   { value: "SCHEDULED", label: "Scheduled" },
                   { value: "NOT_SHOW", label: "Not show" },
@@ -247,8 +252,12 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                 ]}
               />
             </section>
-            <Checkbox onChange={handleCheckboxDoctor}>Approved by Doctor</Checkbox>
-            <Checkbox onChange={handleCheckboxAdmin}>Approved by Admin</Checkbox>
+            <Checkbox onChange={(e) => setDataSchedule({ ...dataSchedule, is_doctor_approved: e.target.checked })}>
+              Approved by Doctor
+            </Checkbox>
+            <Checkbox onChange={(e) => setDataSchedule({ ...dataSchedule, is_admin_approved: e.target.checked })}>
+              Approved by Admin
+            </Checkbox>
           </section>
         </Modal>
       </section>
@@ -275,7 +284,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                     toggleAddButton(index);
                     if (selected) {
                       console.log("TRIGGER");
-                      handleAddMutation(doctor);
+                      handleAddTime(doctor);
                     }
                   }}
                 />
