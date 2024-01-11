@@ -77,8 +77,12 @@ export default function DashboardMenu({ children, items }: Props) {
         </Layout.Sider>
       </Layout>
 
-      <section className={cn(`animate fixed top-0 w-full ml-[3.1rem] px-shorter py-2 bg-hover`, { "xl:ml-[15rem]": !collapsed })}>
-        <p>{ROLES.find((e) => e.id === session?.user.role_id)?.label}</p>
+      <section
+        className={cn(`animate fixed top-0 w-full ml-[3.1rem] px-shorter h-14 flex items-center bg-hover`, {
+          "xl:ml-[15rem]": !collapsed,
+        })}
+      >
+        <p className="font-semibold">{ROLES.find((e) => e.id === session?.user.role_id)?.label}</p>
       </section>
 
       <article className={cn("animate min-h-screen p-shorter bg-cream ml-[3.1rem]", { "xl:ml-[15rem]": !collapsed })}>
