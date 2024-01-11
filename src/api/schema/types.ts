@@ -101,7 +101,7 @@ export type Medicine = {
   name: string;
   article_number: string;
   currency: string;
-  price: string;
+  price: number;
   in_stock: number;
   manufacturer: string;
   expiry_date: Date;

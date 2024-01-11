@@ -48,8 +48,8 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
         revalidateVisit={revalidateVisit}
         showModal={modalTreatment}
         closeModal={() => setModalTreatment(false)}
-        data={data}
         session={session}
+        data={data}
         isEdit={isEditTreatmentByDoctor}
         selectedTreatment={selectedTreatment}
       />
@@ -122,7 +122,14 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
               <b>Treatments</b>
               <section className="flex gap-2">
                 {allowedToAddTreatment.includes(session.user.role_id) ? (
-                  <Button size="small" rounded="md" onClick={() => setModalTreatment(true)}>
+                  <Button
+                    size="small"
+                    rounded="md"
+                    onClick={() => {
+                      setModalTreatment(true);
+                      if (isEditTreatmentByDoctor) setIsEditTreatmentByDoctor(false);
+                    }}
+                  >
                     Add
                   </Button>
                 ) : null}

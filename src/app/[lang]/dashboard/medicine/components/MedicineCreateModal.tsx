@@ -1,5 +1,6 @@
 import { type MedicineCreateInput } from "@/api/routers/medicine";
 import { schema } from "@/api/schema/schemas";
+import { type Medicine } from "@/api/schema/types";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import InputSelect from "@/components/InputSelect";
@@ -7,18 +8,22 @@ import { Modal } from "@/components/Modal";
 import { toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
 import { CURRENCIES } from "@/lib/constants";
+import { getInputDate } from "@/lib/functions";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Session } from "next-auth";
+import { useEffect } from "react";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
 type Props = {
   showModal: boolean;
   closeModal: () => void;
   session: Session;
+  isEdit: boolean;
+  selectedMedicine: Medicine | null;
 };
 
-export default function MedicineCreateModal({ showModal, closeModal, session }: Props) {
+export default function MedicineCreateModal({ showModal, closeModal, session, isEdit, selectedMedicine }: Props) {
   const { t } = useStore();
   const utils = api.useUtils();
   const {
@@ -26,20 +31,40 @@ export default function MedicineCreateModal({ showModal, closeModal, session }: 
     handleSubmit,
     formState: { errors },
     control,
+    reset,
+    watch,
   } = useForm<MedicineCreateInput>({
     resolver: zodResolver(schema.medicine.create),
-    defaultValues: { body: { currency: "IDR", hospital_id: session.user.hospital_id } },
   });
 
-  const onSubmit: SubmitHandler<MedicineCreateInput> = (data) => mutate(data);
+  const onSubmit: SubmitHandler<MedicineCreateInput> = (data) =>
+    isEdit ? updateMedicine({ medicineId: selectedMedicine?.id ?? 0, body: data.body }) : createMedicine(data);
 
-  const { mutate, isLoading: loading } = api.medicine.create.useMutation({
+  const { mutate: createMedicine, isLoading: loading } = api.medicine.create.useMutation({
     onSuccess: async () => {
       closeModal();
       await utils.medicine.list.invalidate();
       toastSuccess({ t, description: "Medicine has been created" });
     },
   });
+
+  const { mutate: updateMedicine, isLoading: loadingUpdate } = api.medicine.update.useMutation({
+    onSuccess: async () => {
+      closeModal();
+      await utils.medicine.list.invalidate();
+      toastSuccess({ t, description: "Medicine has been created" });
+    },
+  });
+
+  useEffect(() => {
+    if (isEdit && selectedMedicine) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, ...rest } = selectedMedicine;
+      reset({ body: { ...rest, expiry_date: getInputDate(rest.expiry_date) } });
+    } else reset({ body: { currency: "IDR", hospital_id: session.user.hospital_id, in_stock: 0, price: 0 } });
+  }, [selectedMedicine, isEdit, showModal]);
+
+  console.log(schema.medicine.create.safeParse(watch()));
 
   return (
     <Modal show={showModal} closeModal={closeModal}>
@@ -71,8 +96,8 @@ export default function MedicineCreateModal({ showModal, closeModal, session }: 
             <Input error={errors?.body?.expiry_date?.message} {...register("body.expiry_date")} type="date" />
           </section>
           <Input error={errors?.body?.manufacturer?.message} {...register("body.manufacturer")} placeholder="Manufacturer" />
-          <Button loading={loading} type="submit">
-            Create Medicine
+          <Button loading={loading || loadingUpdate} type="submit">
+            {isEdit ? "Update" : "Create"} Medicine
           </Button>
         </form>
       </Modal.Body>

@@ -116,10 +116,11 @@ export class schema {
         hospital_id: z.number(),
         article_number: z.string().min(1, stringMessage("Article number", 1)),
         currency: z.string(),
-        price: z.number().min(1, numberMessage("price", 1)),
-        in_stock: z.number().min(1, numberMessage("In stock", 1)),
+        price: z.number().min(1, numberMessage("Price", 1)),
+        in_stock: z.number().nullable(),
         manufacturer: z.string().min(1, stringMessage("Manufacturer", 1)),
         expiry_date: z.string().min(1, "Select expiry date"),
+        is_patient_discharged: z.boolean().default(false),
       }),
     });
     static update = z.object({
@@ -145,7 +146,7 @@ export class schema {
         visit_id: z.number(),
         medical_treatment: z.string().min(4, stringMessage("Medical treatment", 4)),
         currency: z.string().min(1, "Pick a currency"),
-        price: z.number().min(1),
+        price: z.number().min(1, numberMessage("Price", 1)),
       }),
     });
     static updateByDoctor = z.object({

@@ -1,25 +1,30 @@
 import { type MedicineListOuput } from "@/api/routers/medicine";
 import { type VisitListInput } from "@/api/routers/visit";
+import { type Medicine } from "@/api/schema/types";
 import Button from "@/components/Button";
 import FilterIcon from "@/components/FilterIcon";
+import Iconify from "@/components/Iconify";
 import Input from "@/components/Input";
 import { useStore } from "@/global/store";
-import { PAGINATION_LIMIT } from "@/lib/constants";
+import { ICONS, PAGINATION_LIMIT } from "@/lib/constants";
 import { cn, createUrl, formatCurrency, formatDate } from "@/lib/functions";
+import { COLORS } from "@/styles/theme";
 import { type SearchParams } from "@/types";
 import { type IconifyIcon } from "@iconify/react/dist/iconify.js";
 import { Table } from "antd";
 import { type FilterDropdownProps } from "antd/es/table/interface";
 import { useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 type Props = {
   data?: MedicineListOuput;
   loading: boolean;
   query: VisitListInput;
   searchParams: SearchParams;
+  handleEdit: (data: Medicine) => void;
 };
 
-export default function MedicineTable({ data, loading, query, searchParams }: Props) {
+export default function MedicineTable({ data, loading, query, searchParams, handleEdit }: Props) {
   const { lang } = useStore();
   const router = useRouter();
   const newSearchParams = useSearchParams();
@@ -116,6 +121,16 @@ export default function MedicineTable({ data, loading, query, searchParams }: Pr
         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} visits`,
       }}
       columns={[
+        {
+          title: "Action",
+          key: "id",
+          width: 1,
+          render: (_, e) => (
+            <section className="flex justify-center items-center">
+              <Iconify icon={ICONS.edit} color={COLORS.blue} onClick={() => handleEdit(e)} />
+            </section>
+          ),
+        },
         {
           title: "Name",
           key: "name",

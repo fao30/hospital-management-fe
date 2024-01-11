@@ -18,65 +18,73 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 type Props = {
   showModal: boolean;
   closeModal: () => void;
-  data: VisitDetailOutput;
   revalidateVisit: () => Promise<void>;
-  session: Session | null;
+  session: Session;
   isEdit: boolean;
   selectedTreatment: Treatment | null;
+  data: VisitDetailOutput;
 };
 
 export default function TreatmentCreateModal({
   showModal,
   closeModal,
-  data,
   revalidateVisit,
   session,
   selectedTreatment,
   isEdit,
+  data,
 }: Props) {
   const { t } = useStore();
-  const { visit } = data;
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TreatmentCreateInput>({ resolver: zodResolver(schema.treatment.create) });
+    watch,
+  } = useForm<TreatmentCreateInput>({
+    resolver: zodResolver(schema.treatment.create),
+    defaultValues: { body: { doctor_id: session.user.id } },
+  });
 
-  const onSubmit: SubmitHandler<TreatmentCreateInput> = (data) =>
+  const onSubmit: SubmitHandler<TreatmentCreateInput> = (data) => {
     isEdit
-      ? updateTreatment({ treatmentId: selectedTreatment?.id ?? 0, body: { medical_treatment: data.body.medical_treatment } })
+      ? updateTreatmentByDoctor({ treatmentId: selectedTreatment?.id ?? 0, body: { medical_treatment: data.body.medical_treatment } })
       : createTreatment(data);
+  };
 
   const { mutate: createTreatment, isLoading: loading } = api.treatment.create.useMutation({
     onSuccess: async () => {
       closeModal();
-      await revalidateVisit();
       toastSuccess({ t, description: "Treatment has been created" });
+      await revalidateVisit();
     },
   });
 
-  const { mutate: updateTreatment, isLoading: loadingUpdate } = api.treatment.updateByDoctor.useMutation({
+  const { mutate: updateTreatmentByDoctor, isLoading: loadingUpdate } = api.treatment.updateByDoctor.useMutation({
     onSuccess: async () => {
       closeModal();
-      await revalidateVisit();
       toastSuccess({ t, description: "Treatment has been updated" });
+      await revalidateVisit();
     },
   });
 
   useEffect(() => {
-    if (selectedTreatment)
+    if (selectedTreatment && isEdit) {
       reset({
         body: {
-          doctor_id: session?.user.id,
-          visit_id: visit?.id,
-          currency: null,
-          price: null,
-          medical_treatment: isEdit ? selectedTreatment.medical_treatment : "",
+          doctor_id: selectedTreatment.creator_id,
+          visit_id: selectedTreatment.visit_id,
+          currency: selectedTreatment.currency,
+          price: selectedTreatment.price,
+          medical_treatment: selectedTreatment.medical_treatment,
         },
       });
-  }, [selectedTreatment, isEdit]);
+    } else
+      reset({ body: { medical_treatment: "", doctor_id: session.user.id, visit_id: data.visit.id, currency: null, price: null } });
+  }, [selectedTreatment, isEdit, showModal]);
+
+  console.log(schema.treatment.create.safeParse(watch()));
 
   return (
     <Modal show={showModal} closeModal={closeModal}>

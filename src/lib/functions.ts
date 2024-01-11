@@ -21,7 +21,7 @@ export const getNewDate = (dateString?: string): Date => {
 
 // Date to YYYY-MM-DD
 export const getInputDate = (date?: Date): string => {
-  const dateString = date ?? getNewDate();
+  const dateString = date ? getNewDate(date.toString()) : getNewDate();
   const year = dateString.getFullYear();
   const month = String(dateString.getMonth() + 1).padStart(2, "0");
   const day = String(dateString.getDate()).padStart(2, "0");
