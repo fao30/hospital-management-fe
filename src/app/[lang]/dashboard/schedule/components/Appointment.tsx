@@ -4,13 +4,14 @@ import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDebounce } from "@uidotdev/usehooks";
 import { Button, Checkbox, DatePicker, Empty, Modal, Select, Spin, TimePicker, Tooltip, type DatePickerProps } from "antd";
-import { type CheckboxChangeEvent } from "antd/es/checkbox";
 import dayjs, { type Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 
 dayjs.extend(customParseFormat);
+dayjs.extend(timezone);
 dayjs.extend(utc);
 
 type TDataScheduleStatus = "SCHEDULED" | "CANCELLED" | "NOT_SHOW" | "DONE";
@@ -283,7 +284,6 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                   onClick={() => {
                     toggleAddButton(index);
                     if (selected) {
-                      console.log("TRIGGER");
                       handleAddTime(doctor);
                     }
                   }}
