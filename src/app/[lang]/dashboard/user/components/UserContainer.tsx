@@ -36,7 +36,7 @@ export default function UserContainer({ searchParams, lang, session, t }: Props)
             rounded="md"
             disabled={data?.count === data?.hospital?.max_users || loading}
           >
-            Add User
+            Create User
           </Button>
         </section>
         <UserTable loading={loading} data={data} searchParams={searchParams} lang={lang} query={query} />

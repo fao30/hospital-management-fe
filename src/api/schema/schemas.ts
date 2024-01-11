@@ -86,8 +86,8 @@ export class schema {
         height: z.number().min(1),
         temperature: z.number().min(1),
         blood_presure: z.number().min(1),
-        diagnosis: z.string(),
-        case_notes: z.string(),
+        diagnosis: z.string().min(1),
+        case_notes: z.string().min(1),
         is_patient_discharged: z.boolean().default(false),
         date_start: schema.date,
         date_end: schema.date.optional(),
@@ -106,15 +106,16 @@ export class schema {
   };
 
   static medicine = class {
+    static list = z.object({ ...schema.pagination });
     static create = z.object({
       body: z.object({
         hospital_id: z.number(),
-        article_number: z.string(),
+        article_number: z.string().min(1),
         currency: z.string(),
-        price: z.string(),
+        price: z.number().min(1),
         in_stock: z.number(),
-        manufacturer: z.string(),
-        expiry_date: z.string(),
+        manufacturer: z.string().min(1),
+        expiry_date: z.string().min(1, "Select expiry date"),
       }),
     });
     static update = z.object({

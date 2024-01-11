@@ -51,7 +51,6 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
 
   const watchedData = { roleId: watch("body.role_id") };
   const isPatient = watchedData.roleId === 5;
-  console.log(schema.user.register.safeParse(watch()));
 
   return (
     <Modal show={showModal} closeModal={closeModal}>

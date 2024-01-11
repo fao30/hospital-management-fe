@@ -1,6 +1,7 @@
 "use client";
 
 import { type VisitDetailOutput } from "@/api/routers/visit";
+import { type RoleId } from "@/api/schema/schemas";
 import { type Treatment } from "@/api/schema/types";
 import Button from "@/components/Button";
 import Iconify from "@/components/Iconify";
@@ -17,7 +18,7 @@ import { Fragment, useState } from "react";
 import TreatmentCreateModal from "./TreatmentCreateModal";
 import TreatmentEditModal from "./TreatmentEditModal";
 
-type Props = { data: VisitDetailOutput; revalidateVisit: () => Promise<void>; session: Session | null };
+type Props = { data: VisitDetailOutput; revalidateVisit: () => Promise<void>; session: Session };
 
 export default function VisitDetail({ data, revalidateVisit, session }: Props) {
   const { visit } = data;
@@ -37,7 +38,9 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
     },
   });
 
-  console.log(visit.due_amount);
+  const allowedToAddTreatment: RoleId[] = [1, 4];
+  const allowedToEditPaidAmount: RoleId[] = [1, 2, 3];
+  const allowedToEditTreatment: RoleId[] = [1, 2, 3, 4];
 
   return (
     <Fragment>
@@ -118,7 +121,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
             <section className="flex justify-between items-end mb-2">
               <b>Treatments</b>
               <section className="flex gap-2">
-                {session?.user?.role_id === 1 || session?.user?.role_id === 4 ? (
+                {allowedToAddTreatment.includes(session.user.role_id) ? (
                   <Button size="small" rounded="md" onClick={() => setModalTreatment(true)}>
                     Add
                   </Button>
@@ -132,10 +135,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                   <section className="flex gap-2 items-center">
                     <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
 
-                    {session?.user?.role_id === 1 ||
-                    session?.user?.role_id === 2 ||
-                    session?.user?.role_id === 3 ||
-                    session?.user?.role_id === 4 ? (
+                    {allowedToEditTreatment.includes(session.user.role_id) ? (
                       <Iconify
                         onClick={() => {
                           if (session?.user?.role_id === 4) {
@@ -180,8 +180,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                     ) : (
                       <b>{formatCurrency({ amount: visit?.paid_amount, currency: visit?.currency })}</b>
                     )}
-                    {(session?.user?.role_id === 1 || session?.user?.role_id === 2 || session?.user?.role_id === 3) &&
-                    !isEditPaidAmount ? (
+                    {allowedToEditPaidAmount.includes(session.user.role_id) && !isEditPaidAmount ? (
                       <Iconify
                         onClick={() => {
                           setIsEditPaidAmount(true);
@@ -191,7 +190,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                         color={COLORS.blue}
                       />
                     ) : (
-                      (session?.user?.role_id === 1 || session?.user?.role_id === 2 || session?.user?.role_id === 3) && (
+                      allowedToEditPaidAmount.includes(session.user.role_id) && (
                         <button type="submit">
                           <Iconify color={COLORS.blue} icon="mdi:check" />
                         </button>

@@ -29,6 +29,7 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
     setValue,
     formState: { errors },
     reset,
+    watch,
   } = useForm<VisitCreateInput>({
     resolver: zodResolver(schema.visit.create),
     defaultValues: { body: { hospital_id: session?.user.hospital_id, paid_amount: null, due_amount: null, payment_status_id: null } },
@@ -70,6 +71,8 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
   useEffect(() => {
     if (session) setValue("body.hospital_id", session.user.hospital_id);
   }, [session]);
+
+  console.log(schema.visit.create.safeParse(watch()));
 
   return (
     <Modal show={showModal} closeModal={closeModal}>

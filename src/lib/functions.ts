@@ -49,8 +49,8 @@ export const formatDate = ({
 }): string => {
   return (date ? getNewDate(date.toString()) : getNewDate()).toLocaleDateString(lang ?? "en-US", {
     year: "numeric",
-    month: style === "long" ? "long" : "numeric",
-    day: "numeric",
+    month: style === "long" ? "long" : "short",
+    day: "2-digit",
     ...(withTime ? { hour: "2-digit", minute: "2-digit" } : undefined),
   });
 };

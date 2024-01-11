@@ -98,6 +98,7 @@ export type MedicinesTreatment = {
 
 export type Medicine = {
   id: number;
+  name: string;
   article_number: string;
   currency: string;
   price: string;

@@ -15,5 +15,5 @@ export default async function VisitDetailPage({ params }: Props) {
     revalidatePath(`/${params.lang}/dashboard/visit`);
   };
 
-  return <VisitDetail data={data} revalidateVisit={revalidateVisit} session={session} />;
+  if (session) return <VisitDetail data={data} revalidateVisit={revalidateVisit} session={session} />;
 }

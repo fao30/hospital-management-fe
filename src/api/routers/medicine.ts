@@ -1,14 +1,14 @@
 import { createTRPCRouter, protectedProcedure } from "@/api/trpc";
 import { type RouterInputs, type RouterOutputs } from "@/types";
 import { schema } from "@schema/schemas";
-import { type DateTime, type Medicine } from "@schema/types";
+import { type DateTime, type Medicine, type PaginationResponse } from "@schema/types";
 import { z } from "zod";
 import { getData, postData, putData } from "./shared";
 
 export const medicine = createTRPCRouter({
-  list: protectedProcedure.query(async () => {
+  list: protectedProcedure.input(schema.medicine.list).query(async () => {
     const data = await getData({ endpoint: "/medicines" });
-    return data as { medicines: Medicine[] };
+    return data as { medicines: Medicine[] } & PaginationResponse;
   }),
 
   detail: protectedProcedure.input(z.object({ medicineId: z.number() })).query(async ({ input }) => {
@@ -34,3 +34,4 @@ export type MedicineCreateOutput = RouterOutputs["medicine"]["create"];
 // inputs
 export type MedicineCreateInput = RouterInputs["medicine"]["create"];
 export type MedicineUpdateInput = RouterInputs["medicine"]["update"];
+export type MedicineListInput = RouterInputs["medicine"]["list"];

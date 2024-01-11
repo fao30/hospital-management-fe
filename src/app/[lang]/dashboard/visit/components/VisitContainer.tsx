@@ -22,7 +22,7 @@ export default function VisitContainer({ searchParams }: Props) {
       <article className="flex flex-col gap-6">
         <section className="flex justify-end">
           <Button onClick={() => setShowModal(true)} size="small" rounded="md">
-            Add Visit
+            Create Visit
           </Button>
         </section>
         <VisitTable data={data} loading={loading} query={query} searchParams={searchParams} />
