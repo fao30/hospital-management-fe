@@ -1,7 +1,6 @@
 "use client";
 
 import { ROLES } from "@/api/schema/constants";
-import { useStore } from "@/global/store";
 import { ICONS } from "@/lib/constants";
 import { cn, getSelectedMenu } from "@/lib/functions";
 import { COLORS } from "@/styles/theme";
@@ -9,6 +8,7 @@ import { type Lang } from "@/types";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import { type ItemType, type MenuItemType } from "antd/es/menu/hooks/useItems";
+import { type Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
@@ -18,10 +18,10 @@ type Props = {
   children: React.ReactNode;
   items: ItemType<MenuItemType>[];
   lang: Lang;
+  session: Session;
 };
 
-export default function DashboardMenu({ children, items }: Props) {
-  const { session } = useStore();
+export default function DashboardMenu({ children, items, session }: Props) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(true);
   const [selectedMenu, setSelectedMenu] = useState(getSelectedMenu(pathname));

@@ -24,6 +24,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
   const { lang, t } = useStore();
   const [modalTreatment, setModalTreatment] = useState(false);
   const [modalTreatmentEdit, setModalTreatmentEdit] = useState(false);
+  const [isEditTeatmentDoctor, setIsEditTreatmentDoctor] = useState(false);
   const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
   const [isEditPaidAmount, setIsEditPaidAmount] = useState<boolean>(false);
   const [paidAmount, setPaidAmount] = useState<number>(0);
@@ -44,6 +45,8 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
         closeModal={() => setModalTreatment(false)}
         data={data}
         session={session}
+        isEdit={isEditTeatmentDoctor}
+        selectedTreatment={selectedTreatment}
       />
       <TreatmentEditModal
         visit={data}
@@ -127,10 +130,18 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                   <section className="flex gap-2 items-center">
                     <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
 
-                    {session?.user?.role_id === 1 || session?.user?.role_id === 2 || session?.user?.role_id === 3 ? (
+                    {session?.user?.role_id === 1 ||
+                    session?.user?.role_id === 2 ||
+                    session?.user?.role_id === 3 ||
+                    session?.user?.role_id === 4 ? (
                       <Iconify
                         onClick={() => {
-                          setModalTreatmentEdit(true);
+                          if (session?.user?.role_id === 4) {
+                            setModalTreatment(true);
+                            setIsEditTreatmentDoctor(true);
+                          } else {
+                            setModalTreatmentEdit(true);
+                          }
                           setSelectedTreatment(e);
                         }}
                         icon={ICONS.edit}

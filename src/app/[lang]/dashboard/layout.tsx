@@ -76,7 +76,7 @@ export default async function DashboardLayout({ params, children }: Props) {
   });
 
   return (
-    <DashboardMenu items={filteredItems} lang={lang}>
+    <DashboardMenu items={filteredItems} lang={lang} session={session}>
       {children}
       <Socket></Socket>
     </DashboardMenu>

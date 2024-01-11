@@ -22,7 +22,11 @@ export const treatment = createTRPCRouter({
   }),
 
   update: protectedProcedure.input(schema.treatment.update).mutation(async ({ input }) => {
-    console.log(">", input);
+    const data = await putData({ endpoint: `/treatments/${input.treatmentId}`, body: input.body });
+    return data as { message: string };
+  }),
+
+  updateByDoctor: protectedProcedure.input(schema.treatment.updateByDoctor).mutation(async ({ input }) => {
     const data = await putData({ endpoint: `/treatments/${input.treatmentId}`, body: input.body });
     return data as { message: string };
   }),
