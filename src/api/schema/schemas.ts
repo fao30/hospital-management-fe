@@ -25,21 +25,36 @@ export class schema {
   static user = class {
     static list = z.object({ ...schema.pagination, role_id: z.number().optional() });
     static register = z.object({
-      body: z.object({
-        first_name: z.string().min(1, "Required"),
-        last_name: z.string().min(1, "Required"),
-        date_of_birth: schema.date,
-        email: schema.email,
-        password: z.string().min(6),
-        phone_number: schema.phoneNumber,
-        gender: schema.gender,
-        country_id: z.number(),
-        role_id: z.number(),
-        hospital_id: z.number(),
-        id_number: z.string().min(1, "Provide a ID Number"),
-        // make it false after dev for verification proccess
-        is_active: z.boolean().default(true),
-      }),
+      body: z
+        .object({
+          first_name: z.string().min(1, "Required"),
+          last_name: z.string().min(1, "Required"),
+          date_of_birth: schema.date,
+          email: z.string().optional(),
+          password: z.string().optional(),
+          phone_number: schema.phoneNumber,
+          gender: schema.gender,
+          country_id: z.number(),
+          role_id: z.number(),
+          hospital_id: z.number(),
+          id_number: z.string().min(1, "Provide a ID Number"),
+          // make it false after dev for verification proccess
+          is_active: z.boolean().default(true),
+        })
+        .refine(
+          ({ role_id, password }) => {
+            if (role_id !== 5 && !password) return false;
+            return true;
+          },
+          { message: "Password is required", path: ["password"] },
+        )
+        .refine(
+          ({ role_id, email }) => {
+            if (role_id !== 5 && !email) return false;
+            return true;
+          },
+          { message: "Email is required", path: ["email"] },
+        ),
     });
   };
 

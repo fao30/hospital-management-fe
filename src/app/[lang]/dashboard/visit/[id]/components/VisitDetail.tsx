@@ -4,10 +4,13 @@ import { type VisitDetailOutput } from "@/api/routers/visit";
 import { type Treatment } from "@/api/schema/types";
 import Button from "@/components/Button";
 import Iconify from "@/components/Iconify";
+import Input from "@/components/Input";
+import { toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
 import { ICONS } from "@/lib/constants";
 import { formatCurrency, formatDate, getCelius, getUserAge, localizePhoneNumber } from "@/lib/functions";
 import { COLORS } from "@/styles/theme";
+import { api } from "@/trpc/react";
 import { type Session } from "next-auth";
 import Link from "next/link";
 import { Fragment, useState } from "react";
@@ -18,10 +21,20 @@ type Props = { data: VisitDetailOutput; revalidateVisit: () => Promise<void>; se
 
 export default function VisitDetail({ data, revalidateVisit, session }: Props) {
   const { visit } = data;
-  const { lang } = useStore();
+  const { lang, t } = useStore();
   const [modalTreatment, setModalTreatment] = useState(false);
   const [modalTreatmentEdit, setModalTreatmentEdit] = useState(false);
   const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
+  const [isEditPaidAmount, setIsEditPaidAmount] = useState<boolean>(false);
+  const [paidAmount, setPaidAmount] = useState<number>(0);
+
+  const { mutate: updatePaidAmount } = api.visit.updatePaidAmount.useMutation({
+    onSuccess: async () => {
+      await revalidateVisit();
+      setIsEditPaidAmount(false);
+      toastSuccess({ t, description: "Paid Amount updated" });
+    },
+  });
 
   return (
     <Fragment>
@@ -33,6 +46,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
         session={session}
       />
       <TreatmentEditModal
+        visit={data}
         revalidateVisit={revalidateVisit}
         data={selectedTreatment}
         showModal={modalTreatmentEdit}
@@ -113,14 +127,16 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                   <section className="flex gap-2 items-center">
                     <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
 
-                    <Iconify
-                      onClick={() => {
-                        setModalTreatmentEdit(true);
-                        setSelectedTreatment(e);
-                      }}
-                      icon={ICONS.edit}
-                      color={COLORS.blue}
-                    />
+                    {session?.user?.role_id === 1 || session?.user?.role_id === 2 || session?.user?.role_id === 3 ? (
+                      <Iconify
+                        onClick={() => {
+                          setModalTreatmentEdit(true);
+                          setSelectedTreatment(e);
+                        }}
+                        icon={ICONS.edit}
+                        color={COLORS.blue}
+                      />
+                    ) : null}
                   </section>
                 </Fragment>
               </section>
@@ -133,7 +149,38 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
                 </section>
                 <section className="flex justify-between">
                   <p>Paid Amount</p>
-                  <b>{formatCurrency({ amount: visit?.paid_amount, currency: visit?.currency })}</b>
+
+                  <section className="flex gap-2 items-center">
+                    {isEditPaidAmount ? (
+                      <Input
+                        max={visit.due_amount}
+                        value={paidAmount}
+                        onChange={(e) => setPaidAmount(+e.target.value)}
+                        type="number"
+                      />
+                    ) : (
+                      <b>{formatCurrency({ amount: visit?.paid_amount, currency: visit?.currency })}</b>
+                    )}
+                    {(session?.user?.role_id === 1 || session?.user?.role_id === 2 || session?.user?.role_id === 3) &&
+                    !isEditPaidAmount ? (
+                      <Iconify
+                        onClick={() => {
+                          setIsEditPaidAmount(true);
+                          setPaidAmount(visit?.paid_amount ?? 0);
+                        }}
+                        icon={ICONS.edit}
+                        color={COLORS.blue}
+                      />
+                    ) : (
+                      (session?.user?.role_id === 1 || session?.user?.role_id === 2 || session?.user?.role_id === 3) && (
+                        <Iconify
+                          color={COLORS.blue}
+                          icon="mdi:check"
+                          onClick={() => updatePaidAmount({ visitId: visit.id, body: { paid_amount: paidAmount } })}
+                        />
+                      )
+                    )}
+                  </section>
                 </section>
               </Fragment>
             ) : null}

@@ -29,6 +29,9 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
     handleSubmit,
     formState: { errors },
     control,
+    watch,
+    setValue,
+    unregister,
   } = useForm<UserRegisterInput>({
     resolver: zodResolver(schema.user.register),
     defaultValues: {
@@ -46,6 +49,10 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
     },
   });
 
+  const watchedData = { roleId: watch("body.role_id") };
+  const isPatient = watchedData.roleId === 5;
+  console.log(schema.user.register.safeParse(watch()));
+
   return (
     <Modal show={showModal} closeModal={closeModal}>
       <Modal.Body>
@@ -61,10 +68,6 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
               placeholder="First Name"
               {...register("body.date_of_birth")}
             />
-            <Input error={errors.body?.email?.message} placeholder="Email" {...register("body.email")} />
-          </section>
-          <section className="grid grid-cols-2 gap-4">
-            <Input error={errors.body?.password?.message} type="password" placeholder="Password" {...register("body.password")} />
             <section className="grid grid-cols-2 h-10">
               {GENDERS.map((option, index) => {
                 return (
@@ -91,6 +94,12 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
               })}
             </section>
           </section>
+          {isPatient ? null : (
+            <section className="grid grid-cols-2 gap-4">
+              <Input error={errors.body?.email?.message} placeholder="Email" {...register("body.email")} />
+              <Input error={errors.body?.password?.message} type="password" placeholder="Password" {...register("body.password")} />
+            </section>
+          )}
           <section className="grid grid-cols-2 gap-4">
             <Input error={errors.body?.phone_number?.message} placeholder="Phone Number" {...register("body.phone_number")} />
             <Controller
@@ -102,6 +111,13 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
                   error={errors.body?.role_id?.message}
                   {...field}
                   options={ROLES.map((role) => ({ value: role.id, label: role.label }))}
+                  onChange={(e) => {
+                    if (e === 5) {
+                      unregister("body.email");
+                      unregister("body.password");
+                    }
+                    setValue("body.role_id", e as number);
+                  }}
                 />
               )}
             />

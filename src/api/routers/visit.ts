@@ -53,6 +53,14 @@ export const visit = createTRPCRouter({
     const data = await putData({ endpoint: `/visits/${input.visitId}`, body: input.body });
     return data as { message: string };
   }),
+
+  updatePaidAmount: protectedProcedure
+    .input(z.object({ visitId: z.number(), body: z.object({ paid_amount: z.number().nonnegative() }) }))
+    .mutation(async ({ input }) => await putData({ endpoint: `/visits/${input.visitId}`, body: input.body })),
+
+  updateDueAmount: protectedProcedure
+    .input(z.object({ visitId: z.number(), body: z.object({ due_amount: z.number().nonnegative() }) }))
+    .mutation(async ({ input }) => await putData({ endpoint: `/visits/${input.visitId}`, body: input.body })),
 });
 
 // outputs
