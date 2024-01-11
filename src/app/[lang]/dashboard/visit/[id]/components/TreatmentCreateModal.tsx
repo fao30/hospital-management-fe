@@ -82,7 +82,7 @@ export default function TreatmentCreateModal({
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-96">
           <InputTextarea className="h-16" placeholder="Medical Treatment" {...register("body.medical_treatment")} />
           <Button loading={loading || loadingUpdate} type="submit">
-            Create Treatment
+            {isEdit ? "Update" : "Create"} Treatment
           </Button>
         </form>
       </Modal.Body>

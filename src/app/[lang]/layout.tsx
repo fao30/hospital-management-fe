@@ -49,6 +49,8 @@ export default async function RootLayout({ children, params }: Props) {
     });
   }
 
+  console.log(session);
+
   return (
     <html lang={params.lang} className={`${lato.variable} ${montserrat.variable}`}>
       <body>

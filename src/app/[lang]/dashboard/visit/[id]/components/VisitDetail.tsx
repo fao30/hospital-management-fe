@@ -116,7 +116,7 @@ export default function VisitDetail({ data, revalidateVisit, session }: Props) {
             <section className="flex justify-between items-end mb-2">
               <b>Treatments</b>
               <section className="flex gap-2">
-                {session?.user?.id === 1 || session?.user?.id === 4 ? (
+                {session?.user?.role_id === 1 || session?.user?.role_id === 4 ? (
                   <Button size="small" rounded="md" onClick={() => setModalTreatment(true)}>
                     Add
                   </Button>
