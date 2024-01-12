@@ -37,7 +37,7 @@ export default function MedicineCreateModal({ showModal, closeModal, session, is
   });
 
   const onSubmit: SubmitHandler<MedicineCreateInput> = (data) =>
-    isEdit ? updateMedicine({ medicineId: selectedMedicine?.id ?? 0, body: data.body }) : createMedicine(data);
+    isEdit && selectedMedicine?.id ? updateMedicine({ medicineId: selectedMedicine.id, body: data.body }) : createMedicine(data);
 
   const { mutate: createMedicine, isLoading: loading } = api.medicine.create.useMutation({
     onSuccess: async () => {

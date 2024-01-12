@@ -47,8 +47,8 @@ export default function TreatmentCreateModal({
   });
 
   const onSubmit: SubmitHandler<TreatmentCreateInput> = (data) => {
-    isEdit
-      ? updateTreatmentByDoctor({ treatmentId: selectedTreatment?.id ?? 0, body: { medical_treatment: data.body.medical_treatment } })
+    isEdit && selectedTreatment?.id
+      ? updateTreatmentByDoctor({ treatmentId: selectedTreatment.id, body: { medical_treatment: data.body.medical_treatment } })
       : createTreatment(data);
   };
 
