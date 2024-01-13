@@ -1,8 +1,10 @@
 "use client";
 
 import { type ScheduleListInput } from "@/api/routers/schedule";
+import { useDictionary } from "@/lib/dictionary";
 import { getInputDate } from "@/lib/functions";
 import { api } from "@/trpc/react";
+import { Lang, SearchParams } from "@/types";
 import { Calendar } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -35,10 +37,6 @@ export default function SchedulePage() {
     });
     setIsEdit(false);
   };
-
-  useEffect(() => {
-    onSelect(dayjs(getInputDate()));
-  }, []);
 
   return (
     <Fragment>

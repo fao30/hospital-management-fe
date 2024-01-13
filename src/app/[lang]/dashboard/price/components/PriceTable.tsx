@@ -29,74 +29,58 @@ export default function PriceTable({ data, loading, query, searchParams, handleE
   };
 
   return (
-    <>
-      <section className="grid gap-5">
-        {data?.list_prices?.map((price) => {
-          return (
-            <section key={price.id}>
-              <p>{price?.treatment_name}</p>
-              <p>
-                {price?.currency} {price?.price}
-              </p>
-            </section>
-          );
-        })}
-      </section>
-
-      <Table
-        scroll={{ x: "max-content" }}
-        loading={loading}
-        rowKey="id"
-        dataSource={data?.list_prices}
-        onChange={(pagination) => {
-          if (pagination.current === 1) {
-            newParams.delete("page");
-          } else newParams.set("page", String(pagination.current));
+    <Table
+      scroll={{ x: "max-content" }}
+      loading={loading}
+      rowKey="id"
+      dataSource={data?.list_prices}
+      onChange={(pagination) => {
+        if (pagination.current === 1) {
+          newParams.delete("page");
+        } else newParams.set("page", String(pagination.current));
+        redirectTable(newParams);
+      }}
+      pagination={{
+        current: query?.page,
+        pageSize: query?.limit,
+        total: data?.count,
+        showSizeChanger: true,
+        pageSizeOptions: [String(PAGINATION_LIMIT), "75", "100"],
+        onChange: (_, limit) => {
+          if (limit === PAGINATION_LIMIT) {
+            newParams.delete("limit");
+          } else newParams.set("limit", String(limit));
           redirectTable(newParams);
-        }}
-        pagination={{
-          current: query?.page,
-          pageSize: query?.limit,
-          total: data?.count,
-          showSizeChanger: true,
-          pageSizeOptions: [String(PAGINATION_LIMIT), "75", "100"],
-          onChange: (_, limit) => {
-            if (limit === PAGINATION_LIMIT) {
-              newParams.delete("limit");
-            } else newParams.set("limit", String(limit));
-            redirectTable(newParams);
-          },
-          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} prices`,
-        }}
-        columns={[
-          {
-            title: "Action",
-            key: "id",
-            dataIndex: "id",
-            width: 1,
-            // render: (_, e) => (
-            //   <section className="flex justify-center items-center">
-            //     <Iconify width={20} icon={ICONS.edit} color={COLORS.blue} onClick={() => handleEdit(e)} />
-            //   </section>
-            // ),
-          },
-          {
-            title: "Treatment Name",
-            key: "treatment_name",
-            dataIndex: "treatment_name",
-          },
-          {
-            title: "Currency",
-            key: "currency",
-            dataIndex: "currency",
-          },
-          {
-            title: "Price",
-            key: "price",
-            dataIndex: "price",
-          },
-        ]}
-      />
-    </>
+        },
+        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} prices`,
+      }}
+      columns={[
+        {
+          title: "Action",
+          key: "id",
+          width: 1,
+          render: (_, e) => (
+            <section className="flex justify-center items-center">
+              <Iconify width={20} icon={ICONS.edit} color={COLORS.blue} onClick={() => handleEdit(e)} />
+            </section>
+          ),
+        },
+        {
+          title: "Treatment Name",
+          key: "treatment_name",
+          dataIndex: "treatment_name",
+        },
+        {
+          title: "Currency",
+          key: "currency",
+          dataIndex: "currency",
+        },
+        {
+          title: "Price",
+          key: "price",
+          dataIndex: "price",
+        },
+      ]}
+    />
   );
 }
