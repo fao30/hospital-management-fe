@@ -1,6 +1,6 @@
 import { type PriceCreateInput } from "@/api/routers/price";
 import { schema } from "@/api/schema/schemas";
-import { type Price } from "@/api/schema/types";
+import { type List_Price } from "@/api/schema/types";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import InputSelect from "@/components/InputSelect";
@@ -18,7 +18,7 @@ type Props = {
   closeModal: () => void;
   session: Session;
   isEdit: boolean;
-  selectedPrice: Price | null;
+  selectedPrice: List_Price | null;
 };
 
 export default function PriceCreateModal({ showModal, closeModal, session, isEdit, selectedPrice }: Props) {
@@ -50,7 +50,7 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
     },
   });
 
-//   console.log(schema.price.create.safeParse(watch()));
+  //   console.log(schema.price.create.safeParse(watch()));
 
   return (
     <Modal show={showModal} closeModal={closeModal}>

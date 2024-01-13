@@ -1,12 +1,12 @@
 import { createTRPCRouter, protectedProcedure } from "@/api/trpc";
 import { type RouterInputs, type RouterOutputs } from "@/types";
 import { schema } from "@schema/schemas";
-import { type DateTime, type PaginationResponse, type Price } from "../schema/types";
+import { type DateTime, type List_Price, type PaginationResponse } from "../schema/types";
 import { getData, postData } from "./shared";
 
 export const price = createTRPCRouter({
   list: protectedProcedure.input(schema.price.list).query(async ({ input }) => {
-    type Response = { list_prices: Price[] } & PaginationResponse;
+    type Response = { list_prices: List_Price[] } & PaginationResponse;
     const data = (await getData({ endpoint: "/list-prices", params: input })) as Response;
 
     return data;
@@ -14,7 +14,7 @@ export const price = createTRPCRouter({
 
   create: protectedProcedure.input(schema.price.create).mutation(async ({ input }) => {
     const data = await postData({ endpoint: "/list-prices", body: input.body });
-    return data as Price & DateTime;
+    return data as List_Price & DateTime;
   }),
 });
 

@@ -139,7 +139,7 @@ export type Schedule = {
   admin_id: number;
 } & CreatorModifier;
 
-export type Price = {
+export type List_Price = {
   id: number;
   hospital_id: null;
   treatment_name: string;

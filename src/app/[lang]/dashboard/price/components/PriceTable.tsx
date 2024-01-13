@@ -1,5 +1,5 @@
 import { type PriceListInput, type PriceListOutput } from "@/api/routers/price";
-import { type Price } from "@/api/schema/types";
+import { type List_Price } from "@/api/schema/types";
 import Iconify from "@/components/Iconify";
 import Input from "@/components/Input";
 import { useStore } from "@/global/store";
@@ -9,14 +9,13 @@ import { COLORS } from "@/styles/theme";
 import { type SearchParams } from "@/types";
 import { Table } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 type Props = {
   data?: PriceListOutput;
   loading: boolean;
   query: PriceListInput;
   searchParams: SearchParams;
-  handleEdit: (data: Price) => void;
+  handleEdit: (data: List_Price) => void;
 };
 
 export default function PriceTable({ data, loading, query, searchParams, handleEdit }: Props) {
