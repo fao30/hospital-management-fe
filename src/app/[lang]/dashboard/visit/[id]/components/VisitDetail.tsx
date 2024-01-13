@@ -15,6 +15,7 @@ import { Skeleton } from "antd";
 import { type Session } from "next-auth";
 import Link from "next/link";
 import { Fragment, useState } from "react";
+import MedicineCreateModal from "./MedicineCreateModal";
 import TreatmentCreateModal from "./TreatmentCreateModal";
 import TreatmentEditModal from "./TreatmentEditModal";
 
@@ -24,8 +25,10 @@ export default function VisitDetail({ session, id }: Props) {
   const { data } = api.visit.detail.useQuery({ visitId: parseInt(id) });
   const { lang, t } = useStore();
   const utils = api.useUtils();
-  const [modalTreatment, setModalTreatment] = useState(false);
+  const [modalTreatmentCreate, setModalTreatmentCreate] = useState(false);
   const [modalTreatmentEdit, setModalTreatmentEdit] = useState(false);
+  const [modalMedicineCreate, setModalMedicineCreate] = useState(false);
+
   const [isEditTreatmentByDoctor, setIsEditTreatmentByDoctor] = useState(false);
   const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
   const [isEditPaidAmount, setIsEditPaidAmount] = useState<boolean>(false);
@@ -60,8 +63,8 @@ export default function VisitDetail({ session, id }: Props) {
     <Fragment>
       <TreatmentCreateModal
         revalidateData={revalidateData}
-        showModal={modalTreatment}
-        closeModal={() => setModalTreatment(false)}
+        showModal={modalTreatmentCreate}
+        closeModal={() => setModalTreatmentCreate(false)}
         session={session}
         data={data}
         isEdit={isEditTreatmentByDoctor}
@@ -74,6 +77,14 @@ export default function VisitDetail({ session, id }: Props) {
         showModal={modalTreatmentEdit}
         closeModal={() => setModalTreatmentEdit(false)}
       />
+      {selectedTreatment ? (
+        <MedicineCreateModal
+          showModal={modalMedicineCreate}
+          revalidateData={revalidateData}
+          data={{ treatment_id: selectedTreatment.id, visit_id: visit.id }}
+          closeModal={() => setModalMedicineCreate(false)}
+        />
+      ) : null}
       <article className="flex items-center justify-center">
         <section className="w-[36rem] flex flex-col gap-6 bg-gray/10 p-6 rounded-xl">
           <section className="flex justify-start items-start w-full">
@@ -140,7 +151,7 @@ export default function VisitDetail({ session, id }: Props) {
                     size="small"
                     rounded="md"
                     onClick={() => {
-                      setModalTreatment(true);
+                      setModalTreatmentCreate(true);
                       if (isEditTreatmentByDoctor) setIsEditTreatmentByDoctor(false);
                     }}
                   >
@@ -149,35 +160,49 @@ export default function VisitDetail({ session, id }: Props) {
                 ) : null}
               </section>
             </section>
+            {/* TREATMENTS */}
             {visit?.Treatments?.map((e) => (
-              <section className="flex flex-col">
-                <section key={e?.id} className="flex justify-between items-center">
+              <section key={e?.id} className="flex flex-col">
+                <section className="flex justify-between items-center">
                   <Fragment>
-                    <p>{e.medical_treatment}</p>
-                    <section className="flex gap-2 items-center">
-                      <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
-
-                      {allowedToEditTreatment.includes(session.user.role_id) ? (
+                    <section className="flex gap-1.5 items-center">
+                      <section className="p-0.5 bg-dark text-white aspect-square">
                         <Iconify
                           onClick={() => {
-                            if (session?.user?.role_id === 4) {
-                              setModalTreatment(true);
-                              setIsEditTreatmentByDoctor(true);
-                            } else {
-                              setModalTreatmentEdit(true);
-                            }
                             setSelectedTreatment(e);
+                            setModalMedicineCreate(true);
                           }}
-                          icon={ICONS.edit}
-                          color={COLORS.blue}
+                          icon={ICONS.add}
                         />
+                      </section>
+
+                      {allowedToEditTreatment.includes(session.user.role_id) ? (
+                        <section className="p-0.5 bg-dark text-white aspect-square">
+                          <Iconify
+                            onClick={() => {
+                              if (session?.user?.role_id === 4) {
+                                setModalTreatmentCreate(true);
+                                setIsEditTreatmentByDoctor(true);
+                              } else {
+                                setModalTreatmentEdit(true);
+                              }
+                              setSelectedTreatment(e);
+                            }}
+                            icon={ICONS.edit}
+                          />
+                        </section>
                       ) : null}
+
+                      <p>{e.medical_treatment}</p>
+                    </section>
+                    <section className="flex gap-2 items-center">
+                      <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
                     </section>
                   </Fragment>
                 </section>
                 {e.Medicines_Treatments.map((medicine) => {
                   return (
-                    <section className="pl-4 flex justify-between">
+                    <section key={medicine.id} className="pl-16 flex justify-between">
                       <p>
                         {medicine.quantity}x {medicine.Medicine.name}
                       </p>

@@ -85,6 +85,7 @@ export default function TreatmentEditModal({ showModal, closeModal, data, revali
       <Modal.Body>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-96">
           <InputTextarea
+            disabled
             error={errors?.body?.medical_treatment?.message}
             className="h-16"
             placeholder="Medical Treatment"
