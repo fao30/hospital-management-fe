@@ -25,6 +25,11 @@ export const medicine = createTRPCRouter({
     const data = await putData({ endpoint: `/medicines/${input.medicineId}`, body: input.body });
     return data as { message: string };
   }),
+
+  search: protectedProcedure.input(z.object({ key_words: z.string() })).query(async ({ input }) => {
+    const data = await getData({ endpoint: "/search/medicines" });
+    return data as { search: Medicine[] };
+  }),
 });
 
 // outputs

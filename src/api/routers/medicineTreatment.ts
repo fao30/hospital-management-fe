@@ -28,9 +28,9 @@ export const medicineTreatment = createTRPCRouter({
 });
 
 // outputs
-export type MedicineTreatmentListOuput = RouterOutputs["medicine"]["list"];
-export type MedicineTreatmentCreateOutput = RouterOutputs["medicine"]["create"];
+export type MedicineTreatmentListOuput = RouterOutputs["medicineTreatment"]["list"];
+export type MedicineTreatmentCreateOutput = RouterOutputs["medicineTreatment"]["create"];
 
 // inputs
-export type MedicineTreatmentCreateInput = RouterInputs["medicine"]["create"];
-export type MedicineTreatmentUpdateInput = RouterInputs["medicine"]["update"];
+export type MedicineTreatmentCreateInput = RouterInputs["medicineTreatment"]["create"];
+export type MedicineTreatmentUpdateInput = RouterInputs["medicineTreatment"]["update"];
