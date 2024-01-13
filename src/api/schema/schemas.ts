@@ -204,10 +204,10 @@ export class schema {
 
     static create = z.object({
       body: z.object({
-        hospital_id: z.number(),
-        treatment_name: z.string(),
-        currency: z.string(),
+        hospital_id: z.number().optional(),
+        treatment_name: z.string().min(1),
         price: z.number(),
+        currency: z.string(),
       }),
     });
   };

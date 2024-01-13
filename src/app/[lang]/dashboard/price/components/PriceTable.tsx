@@ -29,8 +29,23 @@ export default function PriceTable({ data, loading, query, searchParams, handleE
     router.push(createUrl(`/${lang}/dashboard/price`, newParams));
   };
 
+  // console.log(">>", data?.list_prices);
+
   return (
     <>
+      <section className="grid gap-5">
+        {data?.list_prices?.map((price) => {
+          return (
+            <section>
+              <p>{price?.treatment_name}</p>
+              <p>
+                {price?.currency} {price?.price}
+              </p>
+            </section>
+          );
+        })}
+      </section>
+
       <Table
         scroll={{ x: "max-content" }}
         loading={loading}
