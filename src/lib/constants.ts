@@ -6,7 +6,7 @@ export const PAGINATION_LIMIT = 50;
 
 export const MENU_ICON_SIZE = 25;
 
-export const MENU_ITEMS = ["/", "/medicine", "/visit", "/schedule", "/user", "/medicine"] as const;
+export const MENU_ITEMS = ["/", "/medicine", "/visit", "/schedule", "/user", "/medicine", "/price"] as const;
 
 export const MENU_ITEMS_TO_REMOVE: Record<RoleId, MenuItemKey[]> = {
   1: [],
@@ -88,4 +88,5 @@ export const ICONS = {
   detail: "carbon:folder-details-reference",
   medicine: "icon-park-outline:medicine-chest",
   edit: "uil:edit",
+  price: "solar:tag-price-outline",
 };

@@ -6,8 +6,8 @@ import { api } from "@/trpc/react";
 import { Calendar } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { Fragment, useEffect, useState } from "react";
 import Appointment from "./components/Appointment";
 
@@ -26,18 +26,18 @@ export default function SchedulePage() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const onSelect = (newValue: Dayjs) => {
-    const gmtTime = dayjs(newValue)
+    const gmtTime = dayjs(newValue);
     setQuery({
       ...query,
       date_time: newValue.format("YYYY-MM-DD"),
       from_date_time: gmtTime.format("YYYY-MM-DD HH:mm:ss.SSS Z"),
-      to_date_time: gmtTime.add(24, 'hours').format("YYYY-MM-DD HH:mm:ss.SSS Z")
+      to_date_time: gmtTime.add(24, "hours").format("YYYY-MM-DD HH:mm:ss.SSS Z"),
     });
     setIsEdit(false);
   };
 
   useEffect(() => {
-    onSelect(dayjs(getInputDate()))
+    onSelect(dayjs(getInputDate()));
   }, []);
 
   return (
@@ -47,7 +47,8 @@ export default function SchedulePage() {
         date_picked={dayjs(query?.date_time).format("YYYY-MM-DD HH:mm:ss.SSS Z")}
         data={data}
         isEdit={isEdit}
-        setIsEdit={setIsEdit} />
+        setIsEdit={setIsEdit}
+      />
     </Fragment>
   );
 }

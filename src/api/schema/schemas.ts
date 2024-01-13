@@ -196,6 +196,21 @@ export class schema {
       body: this.create.shape.body,
     });
   };
+
+  static price = class {
+    static list = z.object({
+      ...schema.pagination,
+    });
+
+    static create = z.object({
+      body: z.object({
+        hospital_id: z.number(),
+        treatment_name: z.string(),
+        currency: z.string(),
+        price: z.number(),
+      }),
+    });
+  };
 }
 
 // type infereces from zod (enums, etc)

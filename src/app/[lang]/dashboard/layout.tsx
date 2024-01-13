@@ -68,6 +68,16 @@ export default async function DashboardLayout({ params, children }: Props) {
       ),
       icon: <Iconify icon={ICONS.visitor} width={MENU_ICON_SIZE} />,
     },
+    {
+      title: "",
+      key: "/price",
+      label: (
+        <DashboardNavigator href="/price" lang={lang}>
+          Price List
+        </DashboardNavigator>
+      ),
+      icon: <Iconify icon={ICONS.price} width={MENU_ICON_SIZE} />,
+    },
   ];
 
   const filteredItems = items.filter((item) => {

@@ -139,6 +139,14 @@ export type Schedule = {
   admin_id: number;
 } & CreatorModifier;
 
+export type Price = {
+  id: number;
+  hospital_id: null;
+  treatment_name: string;
+  currency: string;
+  price: number;
+};
+
 export type DateTime = { updatedAt: Date; createdDate: Date };
 export type PaginationResponse = { count: number; totalPage: number };
 export type CreatorModifier = { creator_id: number; modifier_id: number };
