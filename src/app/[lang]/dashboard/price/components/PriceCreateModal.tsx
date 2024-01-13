@@ -33,6 +33,7 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
     watch,
   } = useForm<PriceCreateInput>({
     resolver: zodResolver(schema.price.create),
+    defaultValues: { body: { hospital_id: session.user.hospital_id, currency: "IDR", price: 0 } },
   });
   const watchAllFields = watch();
   //   console.log(watchAllFields);

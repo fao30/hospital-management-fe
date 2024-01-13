@@ -4,6 +4,7 @@ import { getServerAuthSession } from "@/api/auth";
 import { env } from "@/env";
 import HigherOrderComponent from "@/global/HigherOrderComponent";
 import { useDictionary } from "@/lib/dictionary";
+import { timestamp } from "@/lib/functions";
 import { theme } from "@/styles/theme";
 import { TRPCReactProvider } from "@/trpc/react";
 import { type Lang } from "@/types";
@@ -49,7 +50,7 @@ export default async function RootLayout({ children, params }: Props) {
     });
   }
 
-  console.log(session);
+  if (session) console.log(`${timestamp.success} SESSION: `, session.user);
 
   return (
     <html lang={params.lang} className={`${lato.variable} ${montserrat.variable}`}>

@@ -1,8 +1,7 @@
 "use client";
 
-import { type PriceListInput } from "@/api/routers/price";
 import { schema } from "@/api/schema/schemas";
-import { type Price } from "@/api/schema/types";
+import { type List_Price } from "@/api/schema/types";
 import Button from "@/components/Button";
 import { api } from "@/trpc/react";
 import { type SearchParams } from "@/types";
@@ -14,16 +13,13 @@ import PriceTable from "./PriceTable";
 type Props = { searchParams: SearchParams; session: Session };
 
 export default function PriceContainer({ searchParams, session }: Props) {
-  const [selectedPrice, setSelectedPrice] = useState<Price | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<List_Price | null>(null);
   const [isEdit, setIsEdit] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const [query, setQuery] = useState({
-    page: 0,
-    limit: 50,
-  });
+  const query = schema.price.list.parse(searchParams);
 
-  const { data, isLoading: loading } = api.price.list.useQuery(query);
+  const { data, isLoading: loading } = api.price.list.useQuery({ ...query, page: query.page - 1 });
 
   const handleEdit = () => {
     console.log("");

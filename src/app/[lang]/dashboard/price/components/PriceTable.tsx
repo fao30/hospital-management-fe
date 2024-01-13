@@ -28,14 +28,12 @@ export default function PriceTable({ data, loading, query, searchParams, handleE
     router.push(createUrl(`/${lang}/dashboard/price`, newParams));
   };
 
-  // console.log(">>", data?.list_prices);
-
   return (
     <>
       <section className="grid gap-5">
         {data?.list_prices?.map((price) => {
           return (
-            <section>
+            <section key={price.id}>
               <p>{price?.treatment_name}</p>
               <p>
                 {price?.currency} {price?.price}
@@ -48,6 +46,7 @@ export default function PriceTable({ data, loading, query, searchParams, handleE
       <Table
         scroll={{ x: "max-content" }}
         loading={loading}
+        rowKey="id"
         dataSource={data?.list_prices}
         onChange={(pagination) => {
           if (pagination.current === 1) {
@@ -67,18 +66,19 @@ export default function PriceTable({ data, loading, query, searchParams, handleE
             } else newParams.set("limit", String(limit));
             redirectTable(newParams);
           },
-          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} visits`,
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} prices`,
         }}
         columns={[
           {
             title: "Action",
             key: "id",
+            dataIndex: "id",
             width: 1,
-            render: (_, e) => (
-              <section className="flex justify-center items-center">
-                <Iconify width={20} icon={ICONS.edit} color={COLORS.blue} onClick={() => handleEdit(e)} />
-              </section>
-            ),
+            // render: (_, e) => (
+            //   <section className="flex justify-center items-center">
+            //     <Iconify width={20} icon={ICONS.edit} color={COLORS.blue} onClick={() => handleEdit(e)} />
+            //   </section>
+            // ),
           },
           {
             title: "Treatment Name",

@@ -1,5 +1,5 @@
 import { PAGINATION_LIMIT } from "@/lib/constants";
-import { z } from "zod";
+import { number, z } from "zod";
 
 const stringMessage = (field: string, min: number) => `${field} must contain at least ${min} character(s)`;
 const numberMessage = (field: string, min: number) => `${field} must be greater than or equal to ${min}`;
@@ -204,9 +204,9 @@ export class schema {
 
     static create = z.object({
       body: z.object({
-        hospital_id: z.number().optional(),
-        treatment_name: z.string().min(1),
-        price: z.number(),
+        hospital_id: z.number(),
+        treatment_name: z.string().min(1, stringMessage("Treatment name", 1)),
+        price: z.number().min(1, numberMessage("Price", 1)),
         currency: z.string(),
       }),
     });

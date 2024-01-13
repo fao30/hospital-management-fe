@@ -12,6 +12,7 @@ export type User = {
   is_active: boolean;
   is_on_duty: boolean;
   socket_id: string;
+  address: string;
 
   // relations
   country_id: number;
@@ -44,6 +45,7 @@ export type Visit = {
   gender: Gender;
   is_patient_discharged: boolean;
   has_insurance: boolean;
+  discount: number;
 
   // relations
   payment_status_id: number;
@@ -106,6 +108,8 @@ export type Medicine = {
   in_stock: number;
   manufacturer: string;
   expiry_date: Date;
+  batch: number;
+  cost: number;
 
   // relations
   hospital_id: number;
