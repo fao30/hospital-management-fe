@@ -3,7 +3,7 @@ import { schema } from "@/api/schema/schemas";
 import Button from "@/components/Button";
 import InputSelect from "@/components/InputSelect";
 import { Modal } from "@/components/Modal";
-import { toastError } from "@/components/Toast";
+import { toastError, toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
 import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
@@ -54,6 +54,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
       setIsEdit(false);
       setTimeValue(null);
       setShowModal(false);
+      toastSuccess({ t, description: "Appointment successfully assigned" });
       reset();
     },
     onError: () => {
@@ -228,7 +229,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
               render={({ field }) => <Checkbox {...field}>Approved by Admin</Checkbox>}
             />
             <Button loading={loading} type="submit">
-              Create Price
+              Create Appointment
             </Button>
           </form>
         </Modal>
