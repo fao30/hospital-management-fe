@@ -1,7 +1,7 @@
 "use client";
 
 import { type RoleId } from "@/api/schema/schemas";
-import { type Treatment } from "@/api/schema/types";
+import { type MedicinesTreatment, type Treatment } from "@/api/schema/types";
 import Button from "@/components/Button";
 import Iconify from "@/components/Iconify";
 import Input from "@/components/Input";
@@ -25,13 +25,20 @@ export default function VisitDetail({ session, id }: Props) {
   const { data } = api.visit.detail.useQuery({ visitId: parseInt(id) });
   const { lang, t } = useStore();
   const utils = api.useUtils();
+
+  const [selectedMedicineTreatmentName, setSelectedMedicineTreatmentName] = useState("");
+
   const [modalTreatmentCreate, setModalTreatmentCreate] = useState(false);
   const [modalTreatmentEdit, setModalTreatmentEdit] = useState(false);
   const [modalMedicineCreate, setModalMedicineCreate] = useState(false);
 
   const [isEditTreatmentByDoctor, setIsEditTreatmentByDoctor] = useState(false);
-  const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
   const [isEditPaidAmount, setIsEditPaidAmount] = useState<boolean>(false);
+  const [isEditMedicineTreatment, setIsEditMedicineTreatment] = useState<boolean>(false);
+
+  const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
+  const [selectedMedicineTreatment, setSelectedMedicineTreatment] = useState<MedicinesTreatment | null>(null);
+
   const [paidAmount, setPaidAmount] = useState<number>(0);
 
   const revalidateData = async () => await utils.visit.detail.invalidate({ visitId: parseInt(id) });
@@ -47,6 +54,8 @@ export default function VisitDetail({ session, id }: Props) {
   const allowedToAddTreatment: RoleId[] = [1, 4];
   const allowedToEditPaidAmount: RoleId[] = [1, 2, 3];
   const allowedToEditTreatment: RoleId[] = [1, 2, 3, 4];
+  const allowedToAddMedicine: RoleId[] = [4];
+  const allowedToEditMedicine: RoleId[] = [1, 2, 3];
 
   if (!data)
     return (
@@ -79,6 +88,18 @@ export default function VisitDetail({ session, id }: Props) {
       />
       {selectedTreatment ? (
         <MedicineCreateModal
+          selectedMedicineTreatmentName={selectedMedicineTreatmentName}
+          selectedMedicineTreatment={
+            selectedMedicineTreatment
+              ? {
+                  quantity: selectedMedicineTreatment?.quantity,
+                  medicines_treatment: selectedMedicineTreatment?.medicines_treatment,
+                  medicine_id: selectedMedicineTreatment?.medicine_id,
+                  id: selectedMedicineTreatment?.id,
+                }
+              : undefined
+          }
+          isEdit={isEditMedicineTreatment}
           showModal={modalMedicineCreate}
           revalidateData={revalidateData}
           data={{ treatment_id: selectedTreatment.id, visit_id: visit.id }}
@@ -161,105 +182,129 @@ export default function VisitDetail({ session, id }: Props) {
               </section>
             </section>
             {/* TREATMENTS */}
-            {visit?.Treatments?.map((e) => (
-              <section key={e?.id} className="flex flex-col">
-                <section className="flex justify-between items-center">
-                  <Fragment>
-                    <section className="flex gap-1.5 items-center">
-                      <section className="p-0.5 bg-dark text-white aspect-square">
+            <section className="flex flex-col gap-2">
+              {visit?.Treatments?.map((e) => (
+                <section key={e?.id} className="flex flex-col">
+                  <section className="flex justify-between items-center">
+                    <Fragment>
+                      <section className="flex gap-1.5 items-center">
+                        {allowedToAddMedicine.includes(session.user.role_id) ? (
+                          <section className="p-0.5 bg-dark text-white aspect-square">
+                            <Iconify
+                              onClick={() => {
+                                setSelectedTreatment(e);
+                                setModalMedicineCreate(true);
+                              }}
+                              icon={ICONS.add}
+                            />
+                          </section>
+                        ) : null}
+                        {allowedToEditTreatment.includes(session.user.role_id) ? (
+                          <section className="p-0.5 bg-dark text-white aspect-square">
+                            <Iconify
+                              onClick={() => {
+                                if (session?.user?.role_id === 4) {
+                                  setModalTreatmentCreate(true);
+                                  setIsEditTreatmentByDoctor(true);
+                                } else {
+                                  setModalTreatmentEdit(true);
+                                }
+                                setSelectedTreatment(e);
+                              }}
+                              icon={ICONS.edit}
+                            />
+                          </section>
+                        ) : null}
+
+                        <p>{e.medical_treatment}</p>
+                      </section>
+                      <section className="flex gap-2 items-center">
+                        <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
+                      </section>
+                    </Fragment>
+                  </section>
+                  {e.Medicines_Treatments.map((medicine) => {
+                    return (
+                      <section key={medicine.id} className="pl-16 flex justify-between">
+                        <section className="flex gap-2 items-center">
+                          {allowedToEditMedicine.includes(session.user.role_id) ? (
+                            <section className="p-0.5 bg-dark text-white aspect-square">
+                              <Iconify
+                                onClick={() => {
+                                  setIsEditMedicineTreatment(true);
+                                  setSelectedMedicineTreatment(medicine);
+                                  setModalMedicineCreate(true);
+                                  setSelectedTreatment(e);
+                                  setSelectedMedicineTreatmentName(medicine.Medicine.name);
+                                }}
+                                icon={ICONS.edit}
+                              />
+                            </section>
+                          ) : null}
+                          <p>
+                            {medicine.quantity}x {medicine.Medicine.name}
+                          </p>
+                        </section>
+                        <p>
+                          {formatCurrency({
+                            amount: medicine.quantity * medicine.Medicine.price,
+                            currency: medicine.Medicine.currency,
+                          })}
+                        </p>
+                      </section>
+                    );
+                  })}
+                </section>
+              ))}
+            </section>
+            <section className="flex flex-col gap-2">
+              {visit?.currency ? (
+                <Fragment>
+                  <section className="flex justify-between">
+                    <p>Due Amount</p>
+                    <b>{formatCurrency({ amount: visit?.due_amount, currency: visit?.currency })}</b>
+                  </section>
+                  <section className="flex justify-between">
+                    <p>Paid Amount</p>
+
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        updatePaidAmount({ visitId: visit.id, body: { paid_amount: paidAmount } });
+                      }}
+                      className="flex gap-2 items-center"
+                    >
+                      {isEditPaidAmount ? (
+                        <Input
+                          max={visit.due_amount}
+                          value={paidAmount}
+                          onChange={(e) => setPaidAmount(+e.target.value)}
+                          type="number"
+                        />
+                      ) : (
+                        <b>{formatCurrency({ amount: visit?.paid_amount, currency: visit?.currency })}</b>
+                      )}
+                      {allowedToEditPaidAmount.includes(session.user.role_id) && !isEditPaidAmount ? (
                         <Iconify
                           onClick={() => {
-                            setSelectedTreatment(e);
-                            setModalMedicineCreate(true);
+                            setIsEditPaidAmount(true);
+                            setPaidAmount(visit?.paid_amount ?? 0);
                           }}
-                          icon={ICONS.add}
+                          icon={ICONS.edit}
+                          color={COLORS.blue}
                         />
-                      </section>
-
-                      {allowedToEditTreatment.includes(session.user.role_id) ? (
-                        <section className="p-0.5 bg-dark text-white aspect-square">
-                          <Iconify
-                            onClick={() => {
-                              if (session?.user?.role_id === 4) {
-                                setModalTreatmentCreate(true);
-                                setIsEditTreatmentByDoctor(true);
-                              } else {
-                                setModalTreatmentEdit(true);
-                              }
-                              setSelectedTreatment(e);
-                            }}
-                            icon={ICONS.edit}
-                          />
-                        </section>
-                      ) : null}
-
-                      <p>{e.medical_treatment}</p>
-                    </section>
-                    <section className="flex gap-2 items-center">
-                      <p>{e?.currency && e?.price ? formatCurrency({ amount: e.price, currency: e.currency }) : "Unassigned"}</p>
-                    </section>
-                  </Fragment>
-                </section>
-                {e.Medicines_Treatments.map((medicine) => {
-                  return (
-                    <section key={medicine.id} className="pl-16 flex justify-between">
-                      <p>
-                        {medicine.quantity}x {medicine.Medicine.name}
-                      </p>
-                      <p>
-                        {formatCurrency({ amount: medicine.quantity * medicine.Medicine.price, currency: medicine.Medicine.currency })}
-                      </p>
-                    </section>
-                  );
-                })}
-              </section>
-            ))}
-            {visit?.currency ? (
-              <Fragment>
-                <section className="flex justify-between">
-                  <p>Due Amount</p>
-                  <b>{formatCurrency({ amount: visit?.due_amount, currency: visit?.currency })}</b>
-                </section>
-                <section className="flex justify-between">
-                  <p>Paid Amount</p>
-
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      updatePaidAmount({ visitId: visit.id, body: { paid_amount: paidAmount } });
-                    }}
-                    className="flex gap-2 items-center"
-                  >
-                    {isEditPaidAmount ? (
-                      <Input
-                        max={visit.due_amount}
-                        value={paidAmount}
-                        onChange={(e) => setPaidAmount(+e.target.value)}
-                        type="number"
-                      />
-                    ) : (
-                      <b>{formatCurrency({ amount: visit?.paid_amount, currency: visit?.currency })}</b>
-                    )}
-                    {allowedToEditPaidAmount.includes(session.user.role_id) && !isEditPaidAmount ? (
-                      <Iconify
-                        onClick={() => {
-                          setIsEditPaidAmount(true);
-                          setPaidAmount(visit?.paid_amount ?? 0);
-                        }}
-                        icon={ICONS.edit}
-                        color={COLORS.blue}
-                      />
-                    ) : (
-                      allowedToEditPaidAmount.includes(session.user.role_id) && (
-                        <button type="submit">
-                          <Iconify color={COLORS.blue} icon="mdi:check" />
-                        </button>
-                      )
-                    )}
-                  </form>
-                </section>
-              </Fragment>
-            ) : null}
+                      ) : (
+                        allowedToEditPaidAmount.includes(session.user.role_id) && (
+                          <button type="submit">
+                            <Iconify color={COLORS.blue} icon="mdi:check" />
+                          </button>
+                        )
+                      )}
+                    </form>
+                  </section>
+                </Fragment>
+              ) : null}
+            </section>
           </section>
         </section>
       </article>

@@ -5,7 +5,7 @@ import Input from "@/components/Input";
 import InputSelect from "@/components/InputSelect";
 import InputTextarea from "@/components/InputTextarea";
 import { Modal } from "@/components/Modal";
-import { toastSuccess } from "@/components/Toast";
+import { toastSuccess, toastWarning } from "@/components/Toast";
 import { useStore } from "@/global/store";
 import { formatDate } from "@/lib/functions";
 import { api } from "@/trpc/react";
@@ -20,28 +20,54 @@ type Props = {
   closeModal: () => void;
   revalidateData: () => Promise<void>;
   data: { treatment_id: number; visit_id: number };
+  selectedMedicineTreatment?: { quantity: number; medicines_treatment: string; medicine_id: number; id: number };
+  isEdit: boolean;
+  selectedMedicineTreatmentName?: string;
 };
 
-export default function MedicineCreateModal({ showModal, closeModal, revalidateData, data }: Props) {
+export default function MedicineCreateModal({
+  showModal,
+  closeModal,
+  revalidateData,
+  data,
+  isEdit,
+  selectedMedicineTreatment,
+  selectedMedicineTreatmentName,
+}: Props) {
   const { t } = useStore();
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<MedicineTreatmentCreateInput>({
     resolver: zodResolver(schema.medicineTreatment.create),
   });
 
-  const onSubmit: SubmitHandler<MedicineTreatmentCreateInput> = (data) => createMedicine(data);
+  const onSubmit: SubmitHandler<MedicineTreatmentCreateInput> = (data) => {
+    if (isEdit && selectedMedicineTreatment) {
+      return update({ medicineTreatmentId: selectedMedicineTreatment.id, body: data.body });
+    } else {
+      create(data);
+    }
+  };
 
-  const { mutate: createMedicine, isLoading: loading } = api.medicineTreatment.create.useMutation({
+  const { mutate: create, isLoading: loading } = api.medicineTreatment.create.useMutation({
     onSuccess: async () => {
       closeModal();
       toastSuccess({ t, description: "Medicine has been added" });
       await revalidateData();
     },
+  });
+
+  const { mutate: update, isLoading: loadingUpdate } = api.medicineTreatment.update.useMutation({
+    onSuccess: async () => {
+      closeModal();
+      toastSuccess({ t, description: "Medicine has been updated" });
+      await revalidateData();
+    },
+    onError: () => toastWarning({ t, description: "Quantity exceeds the stock" }),
   });
 
   const [search, setSearch] = useState("");
@@ -53,49 +79,59 @@ export default function MedicineCreateModal({ showModal, closeModal, revalidateD
   );
 
   useEffect(() => {
-    if (data && showModal) reset({ body: data });
-  }, [showModal, data]);
+    if (data && showModal && isEdit && selectedMedicineTreatment) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, ...rest } = selectedMedicineTreatment;
+      reset({ body: { ...data, ...rest } });
+    } else if (showModal && data) reset({ body: data });
+  }, [showModal, data, isEdit, selectedMedicineTreatment]);
 
   return (
     <Modal show={showModal} closeModal={closeModal}>
       <Modal.Body>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-96">
           <InputTextarea
+            disabled={isEdit}
             error={errors?.body?.medicines_treatment?.message}
             className="h-16"
             placeholder="Medical Treatment"
             {...register("body.medicines_treatment")}
           />
-          <Controller
-            control={control}
-            name="body.medicine_id"
-            render={({ field }) => (
-              <InputSelect
-                options={medicines?.search.map((e) => ({
-                  value: e.id,
-                  label: `${e.name} (BATCH ${e.batch}) ${formatDate({ date: e.expiry_date, style: "short" })}`,
-                }))}
-                error={errors.body?.medicine_id?.message}
-                onSearch={(v) => setSearch(v)}
-                {...field}
-                showSearch={true}
-                placeholder="Medicine"
-                notFoundContent={
-                  loadingSearch ? (
-                    <section className="flex justify-center items-center py-4">
-                      <Spin size="small" />
-                    </section>
-                  ) : (
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                  )
-                }
-              />
-            )}
-          />
+          {isEdit ? (
+            <Input disabled value={selectedMedicineTreatmentName} />
+          ) : (
+            <Controller
+              control={control}
+              name="body.medicine_id"
+              render={({ field }) => (
+                <InputSelect
+                  disabled={isEdit}
+                  options={medicines?.search.map((e) => ({
+                    value: e.id,
+                    label: `${e.name} [${e.in_stock}] [${formatDate({ date: e.expiry_date, style: "very-short" })}]`,
+                  }))}
+                  error={errors.body?.medicine_id?.message}
+                  onSearch={(v) => setSearch(v)}
+                  {...field}
+                  showSearch={true}
+                  placeholder="Medicine"
+                  notFoundContent={
+                    loadingSearch ? (
+                      <section className="flex justify-center items-center py-4">
+                        <Spin size="small" />
+                      </section>
+                    ) : (
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    )
+                  }
+                />
+              )}
+            />
+          )}
           <Input placeholder="Quantity" {...register("body.quantity", { setValueAs: (v) => +v })} type="number" />
 
-          <Button loading={loading} type="submit">
-            Add Medicine
+          <Button loading={loading || loadingUpdate} type="submit">
+            {isEdit ? "Update" : "Add"} Medicine
           </Button>
         </form>
       </Modal.Body>
