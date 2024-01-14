@@ -6,7 +6,7 @@ import Button from "@/components/Button";
 import { api } from "@/trpc/react";
 import { type SearchParams } from "@/types";
 import { type Session } from "next-auth";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PriceCreateModal from "./PriceCreateModal";
 import PriceTable from "./PriceTable";
 
@@ -21,8 +21,10 @@ export default function PriceContainer({ searchParams, session }: Props) {
 
   const { data, isLoading: loading } = api.price.list.useQuery({ ...query, page: query.page - 1 });
 
-  const handleEdit = () => {
-    console.log("");
+  const handleEdit = (data: List_Price) => {
+    setSelectedPrice(data);
+    setIsEdit(true);
+    setShowModal(true);
   };
 
   return (
@@ -36,7 +38,14 @@ export default function PriceContainer({ searchParams, session }: Props) {
       />
       <article className="flex flex-col gap-6">
         <section className="flex justify-end">
-          <Button onClick={() => setShowModal(true)} size="small" rounded="md">
+          <Button
+            onClick={() => {
+              setShowModal(true);
+              if (isEdit) setIsEdit(false);
+            }}
+            size="small"
+            rounded="md"
+          >
             Create Price
           </Button>
         </section>

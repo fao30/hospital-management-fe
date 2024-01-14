@@ -204,8 +204,18 @@ export class schema {
     static create = z.object({
       body: z.object({
         hospital_id: z.number(),
-        treatment_name: z.string().min(1, stringMessage("Treatment name", 1)),
-        price: z.number().min(1, numberMessage("Price", 1)),
+        treatment_name: z.string().min(1),
+        price: z.number().min(1),
+        currency: z.string(),
+      }),
+    });
+
+    static update = z.object({
+      list_price_id: z.number(),
+      body: z.object({
+        hospital_id: z.number(),
+        treatment_name: z.string().min(1),
+        price: z.number().min(1),
         currency: z.string(),
       }),
     });

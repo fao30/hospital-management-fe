@@ -5,12 +5,13 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import InputSelect from "@/components/InputSelect";
 import { Modal } from "@/components/Modal";
-import { toastSuccess } from "@/components/Toast";
+import { toastError, toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
 import { CURRENCIES } from "@/lib/constants";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Session } from "next-auth";
+import { useEffect } from "react";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
 type Props = {
@@ -30,18 +31,15 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
     formState: { errors },
     control,
     reset,
-    watch,
   } = useForm<PriceCreateInput>({
     resolver: zodResolver(schema.price.create),
     defaultValues: { body: { hospital_id: +session.user.hospital_id, currency: "IDR", price: 0 } },
   });
-  const watchAllFields = watch();
-  //   console.log(watchAllFields);
+  // const watchAllFields = watch();
+  // console.log(watchAllFields);
 
-  const onSubmit: SubmitHandler<PriceCreateInput> = (data) => {
-    console.log("TRIGER ONSUBMIT");
-    createPrice(data);
-  };
+  const onSubmit: SubmitHandler<PriceCreateInput> = (data) =>
+    isEdit && selectedPrice?.id ? updatePrice({ list_price_id: selectedPrice?.id, body: data.body }) : createPrice(data);
 
   const { mutate: createPrice, isLoading: loading } = api.price.create.useMutation({
     onSuccess: async () => {
@@ -49,9 +47,38 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
       await utils.price.list.invalidate();
       toastSuccess({ t, description: "Price has been created" });
     },
+    onError: () => {
+      toastError({ t, description: "Server Error" });
+    },
   });
 
-  console.log(schema.price.create.safeParse(watch()));
+  const { mutate: updatePrice, isLoading: loadingUpdate } = api.price.update.useMutation({
+    onSuccess: async () => {
+      closeModal();
+      await utils.medicine.list.invalidate();
+      toastSuccess({ t, description: "Price has been updated" });
+    },
+    onError: () => {
+      toastError({ t, description: "Server Error" });
+    },
+  });
+
+  // console.log(schema.price.create.safeParse(watch()));
+
+  useEffect(() => {
+    if (isEdit && selectedPrice && showModal) {
+      reset({
+        body: {
+          currency: selectedPrice?.currency,
+          hospital_id: session?.user?.hospital_id,
+          price: selectedPrice?.price,
+          treatment_name: selectedPrice?.treatment_name,
+        },
+      });
+    } else {
+      reset({ body: { hospital_id: session.user.hospital_id, currency: "IDR" } });
+    }
+  }, [selectedPrice, isEdit, showModal]);
 
   return (
     <Modal show={showModal} closeModal={closeModal}>
@@ -69,8 +96,8 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
             name="body.currency"
             render={({ field }) => <InputSelect {...field} options={CURRENCIES} placeholder="Select Currency" />}
           />
-          <Button loading={loading} type="submit">
-            Create Price
+          <Button loading={loading || loadingUpdate} type="submit">
+            {isEdit ? "Update" : "Create"} Price
           </Button>
         </form>
       </Modal.Body>
