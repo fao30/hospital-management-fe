@@ -5,14 +5,17 @@ import { type VisitDetailOutput } from "@/api/routers/visit";
 import { schema } from "@/api/schema/schemas";
 import { type Treatment } from "@/api/schema/types";
 import Button from "@/components/Button";
-import InputTextarea from "@/components/InputTextarea";
+import Input from "@/components/Input";
 import { Modal } from "@/components/Modal";
 import { toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
+import { cn } from "@/lib/functions";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDebounce } from "@uidotdev/usehooks";
+import { AutoComplete, Empty, Spin } from "antd";
 import { type Session } from "next-auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 type Props = {
@@ -35,12 +38,17 @@ export default function TreatmentCreateModal({
   data,
 }: Props) {
   const { t } = useStore();
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
+
+  const { data: treatments } = api.price.search.useQuery({ key_words: debouncedSearch }, { enabled: !!debouncedSearch });
 
   const {
-    register,
     handleSubmit,
     reset,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<TreatmentCreateInput>({
     resolver: zodResolver(schema.treatment.create),
     defaultValues: { body: { doctor_id: session.user.id } },
@@ -87,12 +95,33 @@ export default function TreatmentCreateModal({
     <Modal show={showModal} closeModal={closeModal}>
       <Modal.Body>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-96">
-          <InputTextarea
-            error={errors?.body?.medical_treatment?.message}
-            className="h-16"
-            placeholder="Medical Treatment"
-            {...register("body.medical_treatment")}
-          />
+          <section className="flex flex-col">
+            <AutoComplete
+              placeholder="Treatment"
+              onChange={(e: string, item) => {
+                const data = structuredClone(item) as { currency: string; price: number; label: string };
+                if (data) {
+                  setValue("body.medical_treatment", data.label);
+                  setValue("body.price", data.price);
+                  setValue("body.currency", data.currency);
+                } else setValue("body.medical_treatment", e);
+              }}
+              onSearch={(v) => setSearch(v)}
+              options={treatments?.search.map((e) => ({
+                currency: e.currency,
+                price: e.price,
+                value: e.treatment_name,
+                label: e.treatment_name,
+              }))}
+            />
+            {errors.body?.medical_treatment?.message ? (
+              <small className={cn("text-briquette text-xs mt-2")}>{errors.body?.medical_treatment?.message}</small>
+            ) : null}
+          </section>
+          <section className="grid grid-cols-2 gap-4">
+            <Input disabled value={watch("body.price") ?? "Price will be assigned"} />
+            <Input disabled value={watch("body.currency") ?? "Currency will be assigned"} />
+          </section>
           <Button loading={loading || loadingUpdate} type="submit">
             {isEdit ? "Update" : "Create"} Treatment
           </Button>

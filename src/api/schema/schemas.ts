@@ -134,7 +134,7 @@ export class schema {
       body: z.object({
         doctor_id: z.number(),
         visit_id: z.number(),
-        medical_treatment: z.string().min(4, stringMessage("Medical treatment", 4)),
+        medical_treatment: z.string().min(1, stringMessage("Medical treatment", 1)),
         currency: z.string().nullable(),
         price: z.number().nullable(),
       }),
@@ -144,14 +144,14 @@ export class schema {
       body: z.object({
         doctor_id: z.number(),
         visit_id: z.number(),
-        medical_treatment: z.string().min(4, stringMessage("Medical treatment", 4)),
+        medical_treatment: z.string().min(1, stringMessage("Medical treatment", 1)),
         currency: z.string().min(1, "Pick a currency"),
         price: z.number().min(1, numberMessage("Price", 1)),
       }),
     });
     static updateByDoctor = z.object({
       treatmentId: z.number(),
-      body: z.object({ medical_treatment: z.string().min(4, stringMessage("Medical treatment", 4)) }),
+      body: z.object({ medical_treatment: z.string().min(1, stringMessage("Medical treatment", 1)) }),
     });
   };
 
