@@ -55,7 +55,7 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
   const { mutate: updatePrice, isLoading: loadingUpdate } = api.price.update.useMutation({
     onSuccess: async () => {
       closeModal();
-      await utils.medicine.list.invalidate();
+      await utils.price.list.invalidate();
       toastSuccess({ t, description: "Price has been updated" });
     },
     onError: () => {
