@@ -33,7 +33,7 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
     reset,
   } = useForm<PriceCreateInput>({
     resolver: zodResolver(schema.price.create),
-    defaultValues: { body: { hospital_id: +session.user.hospital_id, currency: "IDR", price: 0 } },
+    defaultValues: { body: { hospital_id: +session.user.hospital_id, currency: "MYR", price: 0 } },
   });
   // const watchAllFields = watch();
   // console.log(watchAllFields);
@@ -76,7 +76,7 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
         },
       });
     } else {
-      reset({ body: { hospital_id: session.user.hospital_id, currency: "IDR" } });
+      reset({ body: { hospital_id: session.user.hospital_id, currency: "MYR" } });
     }
   }, [selectedPrice, isEdit, showModal]);
 

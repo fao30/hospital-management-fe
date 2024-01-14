@@ -12,7 +12,6 @@ import { Modal } from "@/components/Modal";
 import { toastSuccess } from "@/components/Toast";
 import { useStore } from "@/global/store";
 import { CURRENCIES } from "@/lib/constants";
-import { accumulateValue } from "@/lib/functions";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -26,7 +25,7 @@ type Props = {
   visit: VisitDetailOutput;
 };
 
-export default function TreatmentEditModal({ showModal, closeModal, data, revalidateData, visit }: Props) {
+export default function TreatmentEditModal({ showModal, closeModal, data, revalidateData }: Props) {
   const { t } = useStore();
 
   const {
@@ -34,7 +33,6 @@ export default function TreatmentEditModal({ showModal, closeModal, data, revali
     handleSubmit,
     control,
     reset,
-    getValues,
     formState: { errors },
   } = useForm<TreatmentUpdateInput>({
     resolver: zodResolver(schema.treatment.update),
@@ -44,21 +42,6 @@ export default function TreatmentEditModal({ showModal, closeModal, data, revali
   const onSubmit: SubmitHandler<TreatmentUpdateInput> = (data) => mutate(data);
 
   const { mutate, isLoading: loading } = api.treatment.update.useMutation({
-    onSuccess: async () => {
-      updateDueAmount({
-        visitId: visit?.visit?.id,
-        body: {
-          due_amount:
-            accumulateValue(
-              visit.visit.Treatments.filter((e) => e.id !== data?.id),
-              "price",
-            ) + getValues("body.price"),
-        },
-      });
-    },
-  });
-
-  const { mutate: updateDueAmount } = api.visit.updateDueAmount.useMutation({
     onSuccess: async () => {
       closeModal();
       await revalidateData();
@@ -73,7 +56,7 @@ export default function TreatmentEditModal({ showModal, closeModal, data, revali
           doctor_id: data.doctor_id,
           visit_id: data.visit_id,
           medical_treatment: data.medical_treatment ?? "",
-          currency: data.currency ?? "IDR",
+          currency: data.currency ?? "MYR",
           price: data.price ?? 0,
         },
         treatmentId: data.id,
