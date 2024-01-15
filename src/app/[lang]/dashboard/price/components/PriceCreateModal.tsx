@@ -41,7 +41,7 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
   const onSubmit: SubmitHandler<PriceCreateInput> = (data) =>
     isEdit && selectedPrice?.id ? updatePrice({ list_price_id: selectedPrice?.id, body: data.body }) : createPrice(data);
 
-  const { mutate: createPrice, isLoading: loading } = api.price.create.useMutation({
+  const { mutate: createPrice, isPending: loading } = api.price.create.useMutation({
     onSuccess: async () => {
       closeModal();
       await utils.price.list.invalidate();
@@ -52,7 +52,7 @@ export default function PriceCreateModal({ showModal, closeModal, session, isEdi
     },
   });
 
-  const { mutate: updatePrice, isLoading: loadingUpdate } = api.price.update.useMutation({
+  const { mutate: updatePrice, isPending: loadingUpdate } = api.price.update.useMutation({
     onSuccess: async () => {
       closeModal();
       await utils.price.list.invalidate();

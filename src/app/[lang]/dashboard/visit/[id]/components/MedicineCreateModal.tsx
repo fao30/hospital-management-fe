@@ -53,7 +53,7 @@ export default function MedicineCreateModal({
     }
   };
 
-  const { mutate: create, isLoading: loading } = api.medicineTreatment.create.useMutation({
+  const { mutate: create, isPending: loading } = api.medicineTreatment.create.useMutation({
     onSuccess: async () => {
       closeModal();
       toastSuccess({ t, description: "Medicine has been added" });
@@ -61,7 +61,7 @@ export default function MedicineCreateModal({
     },
   });
 
-  const { mutate: update, isLoading: loadingUpdate } = api.medicineTreatment.update.useMutation({
+  const { mutate: update, isPending: loadingUpdate } = api.medicineTreatment.update.useMutation({
     onSuccess: async () => {
       closeModal();
       toastSuccess({ t, description: "Medicine has been updated" });

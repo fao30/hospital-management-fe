@@ -48,7 +48,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
   });
   // console.log(schema.schedule.create.safeParse(watch()));
 
-  const { mutate: createSchedule, isLoading: loading } = api.schedule.create.useMutation({
+  const { mutate: createSchedule, isPending: loading } = api.schedule.create.useMutation({
     onSuccess: async () => {
       await utils.schedule.invalidate();
       setIsEdit(false);

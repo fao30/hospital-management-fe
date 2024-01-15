@@ -13,7 +13,7 @@ import { cn } from "@/lib/functions";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@uidotdev/usehooks";
-import { AutoComplete } from "antd";
+import { AutoComplete, Empty, Spin } from "antd";
 import { type Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
@@ -41,7 +41,10 @@ export default function TreatmentCreateModal({
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
 
-  const { data: treatments } = api.price.search.useQuery({ key_words: debouncedSearch }, { enabled: !!debouncedSearch });
+  const { data: treatments, isFetching: loadingSearch } = api.price.search.useQuery(
+    { key_words: debouncedSearch },
+    { enabled: !!debouncedSearch },
+  );
 
   const {
     handleSubmit,
@@ -60,7 +63,7 @@ export default function TreatmentCreateModal({
       : createTreatment(data);
   };
 
-  const { mutate: createTreatment, isLoading: loading } = api.treatment.create.useMutation({
+  const { mutate: createTreatment, isPending: loading } = api.treatment.create.useMutation({
     onSuccess: async () => {
       closeModal();
       toastSuccess({ t, description: "Treatment has been created" });
@@ -68,7 +71,7 @@ export default function TreatmentCreateModal({
     },
   });
 
-  const { mutate: updateTreatmentByDoctor, isLoading: loadingUpdate } = api.treatment.updateByDoctor.useMutation({
+  const { mutate: updateTreatmentByDoctor, isPending: loadingUpdate } = api.treatment.updateByDoctor.useMutation({
     onSuccess: async () => {
       closeModal();
       toastSuccess({ t, description: "Treatment has been updated" });
@@ -97,6 +100,15 @@ export default function TreatmentCreateModal({
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-96">
           <section className="flex flex-col">
             <AutoComplete
+              notFoundContent={
+                loadingSearch ? (
+                  <section className="flex justify-center items-center py-4">
+                    <Spin size="small" />
+                  </section>
+                ) : (
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                )
+              }
               placeholder="Treatment"
               onChange={(e: string, item) => {
                 const data = structuredClone(item) as { currency: string; price: number; label: string };

@@ -30,7 +30,7 @@ export default function LoginForm({ searchParams, lang, t }: Props) {
 
   const onSubmit: SubmitHandler<Login> = (data) => logIn(data);
 
-  const { mutate: logIn, isLoading: loading } = useMutation({
+  const { mutate: logIn, isPending: loading } = useMutation({
     mutationFn: async (data: Login) => {
       const res = await signIn("credentials", {
         email: data.email,

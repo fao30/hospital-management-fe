@@ -39,7 +39,7 @@ export default function MedicineCreateModal({ showModal, closeModal, session, is
   const onSubmit: SubmitHandler<MedicineCreateInput> = (data) =>
     isEdit && selectedMedicine?.id ? updateMedicine({ medicineId: selectedMedicine.id, body: data.body }) : createMedicine(data);
 
-  const { mutate: createMedicine, isLoading: loading } = api.medicine.create.useMutation({
+  const { mutate: createMedicine, isPending: loading } = api.medicine.create.useMutation({
     onSuccess: async () => {
       closeModal();
       await utils.medicine.list.invalidate();
@@ -47,7 +47,7 @@ export default function MedicineCreateModal({ showModal, closeModal, session, is
     },
   });
 
-  const { mutate: updateMedicine, isLoading: loadingUpdate } = api.medicine.update.useMutation({
+  const { mutate: updateMedicine, isPending: loadingUpdate } = api.medicine.update.useMutation({
     onSuccess: async () => {
       closeModal();
       await utils.medicine.list.invalidate();

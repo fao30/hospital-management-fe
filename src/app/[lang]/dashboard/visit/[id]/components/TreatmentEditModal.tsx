@@ -41,7 +41,7 @@ export default function TreatmentEditModal({ showModal, closeModal, data, revali
 
   const onSubmit: SubmitHandler<TreatmentUpdateInput> = (data) => mutate(data);
 
-  const { mutate, isLoading: loading } = api.treatment.update.useMutation({
+  const { mutate, isPending: loading } = api.treatment.update.useMutation({
     onSuccess: async () => {
       closeModal();
       await revalidateData();

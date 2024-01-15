@@ -41,7 +41,7 @@ export default function UserRegisterModal({ showModal, closeModal, session, t }:
 
   const onSubmit: SubmitHandler<UserRegisterInput> = (data) => mutate(data);
 
-  const { mutate, isLoading: loading } = api.user.register.useMutation({
+  const { mutate, isPending: loading } = api.user.register.useMutation({
     onSuccess: async () => {
       toastSuccess({ t, description: "User has been created" });
       await utils.user.invalidate();

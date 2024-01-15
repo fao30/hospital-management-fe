@@ -36,7 +36,7 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
 
   const onSubmit: SubmitHandler<VisitCreateInput> = (data) => mutate(data);
 
-  const { mutate, isLoading: loading } = api.visit.create.useMutation({
+  const { mutate, isPending: loading } = api.visit.create.useMutation({
     onSuccess: async () => {
       reset();
       closeModal();
