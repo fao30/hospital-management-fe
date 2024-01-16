@@ -88,7 +88,7 @@ export default async function DashboardLayout({ params, children }: Props) {
   return (
     <DashboardMenu items={filteredItems} lang={lang} session={session}>
       {children}
-      <Socket></Socket>
+      <Socket session_data={session}></Socket>
     </DashboardMenu>
   );
 }
