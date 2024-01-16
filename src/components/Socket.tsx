@@ -1,16 +1,16 @@
 "use client";
 
+import { type ScheduleListOuputItem } from "@/api/routers/schedule";
+import { useStore } from "@/global/store";
+import { type Session } from "next-auth";
 import { Fragment, useEffect } from "react";
 import io from "socket.io-client";
 import { toastSuccess } from "./Toast";
-import { useStore } from "@/global/store";
-import { type DefaultSession } from "next-auth";
-import { type ScheduleListOuputItem } from "@/api/routers/schedule";
 
+type Props = { session: Session };
 
-export default function Socket({ session_data }: { session_data: DefaultSession }) {
+export default function Socket({ session }: Props) {
   const { t } = useStore();
-
 
   useEffect(() => {
     const socket = io("wss://fao-med.faotech.dev", {
@@ -23,8 +23,8 @@ export default function Socket({ session_data }: { session_data: DefaultSession 
       console.log("CONNECT WEBSOCKET!!");
     });
 
-    socket.on('schedule', (data: ScheduleListOuputItem) => {
-      if (data?.schedule?.doctor_id === session_data?.user?.id) {
+    socket.on("schedule", (data: { schedule: ScheduleListOuputItem }) => {
+      if (data?.schedule?.doctor_id === session?.user?.id) {
         toastSuccess({ t, description: "ADA APPOINTMENT UNTUK MU DOKTER" });
       }
     });
