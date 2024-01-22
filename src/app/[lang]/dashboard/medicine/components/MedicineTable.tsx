@@ -13,7 +13,7 @@ import { type SearchParams } from "@/types";
 import { type IconifyIcon } from "@iconify/react/dist/iconify.js";
 import { Table } from "antd";
 import { type FilterDropdownProps } from "antd/es/table/interface";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -27,8 +27,7 @@ type Props = {
 export default function MedicineTable({ data, loading, query, searchParams, handleEdit }: Props) {
   const { lang } = useStore();
   const router = useRouter();
-  const newSearchParams = useSearchParams();
-  const newParams = new URLSearchParams(newSearchParams.toString());
+  const newParams = new URLSearchParams(searchParams);
 
   const redirectTable = (newParams: URLSearchParams) => {
     router.push(createUrl(`/${lang}/dashboard/medicine`, newParams));

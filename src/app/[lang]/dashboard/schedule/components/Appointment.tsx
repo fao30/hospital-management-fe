@@ -9,7 +9,7 @@ import { api } from "@/trpc/react";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@uidotdev/usehooks";
-import { Button as ButtonAntd, Checkbox, DatePicker, Empty, Select, Spin, TimePicker, Tooltip } from "antd";
+import { Button as ButtonAntd, Checkbox, DatePicker, Empty, Select, TimePicker, Tooltip } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import timezone from "dayjs/plugin/timezone";
@@ -141,15 +141,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                   {...field}
                   error={errors?.body?.doctor_id?.message}
                   onSearch={(e) => setDoctorSearch(e)}
-                  notFoundContent={
-                    loadingDoctors ? (
-                      <section className="flex justify-center items-center py-4">
-                        <Spin size="small" />
-                      </section>
-                    ) : (
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    )
-                  }
+                  loading={loadingDoctors}
                   showSearch={true}
                   placeholder="Search Doctor"
                   options={doctors?.search.map((doctor) => ({
@@ -168,15 +160,7 @@ export default function Appointment({ date_picked, data, isEdit, setIsEdit }: Pr
                     {...field}
                     error={errors?.body?.patient_id?.message}
                     onSearch={(e) => setPatientSearch(e)}
-                    notFoundContent={
-                      loadingPatients ? (
-                        <section className="flex justify-center items-center py-4">
-                          <Spin size="small" />
-                        </section>
-                      ) : (
-                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                      )
-                    }
+                    loading={loadingPatients}
                     showSearch={true}
                     placeholder="Seach Patient"
                     options={patients?.search.map((patient) => ({

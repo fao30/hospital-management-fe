@@ -1,14 +1,13 @@
 import { type PriceListInput, type PriceListOutput } from "@/api/routers/price";
 import { type List_Price } from "@/api/schema/types";
 import Iconify from "@/components/Iconify";
-import Input from "@/components/Input";
 import { useStore } from "@/global/store";
 import { ICONS, PAGINATION_LIMIT } from "@/lib/constants";
-import { cn, createUrl, formatDate, localizePhoneNumber } from "@/lib/functions";
+import { createUrl } from "@/lib/functions";
 import { COLORS } from "@/styles/theme";
 import { type SearchParams } from "@/types";
 import { Table } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type Props = {
   data?: PriceListOutput;
@@ -21,8 +20,7 @@ type Props = {
 export default function PriceTable({ data, loading, query, searchParams, handleEdit }: Props) {
   const { lang } = useStore();
   const router = useRouter();
-  const newSearchParams = useSearchParams();
-  const newParams = new URLSearchParams(newSearchParams.toString());
+  const newParams = new URLSearchParams(searchParams);
 
   const redirectTable = (newParams: URLSearchParams) => {
     router.push(createUrl(`/${lang}/dashboard/price`, newParams));

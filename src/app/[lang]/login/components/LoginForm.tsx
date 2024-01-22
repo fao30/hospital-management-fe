@@ -41,7 +41,7 @@ export default function LoginForm({ searchParams, lang, t }: Props) {
       if (!res?.error) {
         socket.emit("add-socket-id", data.email);
         toastSuccess({ t, description: t.Login.success });
-        router.push(`/${lang}${searchParams.callbackUrl ? (searchParams.callbackUrl as string) : "/dashboard"}`);
+        router.push(`/${lang}${searchParams.callbackUrl ? searchParams.callbackUrl : "/dashboard"}`);
       } else toastError({ t, description: t.Login.failed });
     },
   });

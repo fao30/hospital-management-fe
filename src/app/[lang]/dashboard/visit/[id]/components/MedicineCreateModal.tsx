@@ -11,7 +11,6 @@ import { formatDate } from "@/lib/functions";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@uidotdev/usehooks";
-import { Empty, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
@@ -115,15 +114,7 @@ export default function MedicineCreateModal({
                   {...field}
                   showSearch={true}
                   placeholder="Medicine"
-                  notFoundContent={
-                    loadingSearch ? (
-                      <section className="flex justify-center items-center py-4">
-                        <Spin size="small" />
-                      </section>
-                    ) : (
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    )
-                  }
+                  loading={loadingSearch}
                 />
               )}
             />

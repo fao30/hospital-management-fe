@@ -10,7 +10,6 @@ import { useStore } from "@/global/store";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@uidotdev/usehooks";
-import { Empty, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
@@ -83,15 +82,7 @@ export default function VisitCreateModal({ showModal, closeModal }: Props) {
                 {...field}
                 error={errors.body?.patient_id?.message}
                 onSearch={(v) => setPatientSearch(v)}
-                notFoundContent={
-                  loadingPatient ? (
-                    <section className="flex justify-center items-center py-4">
-                      <Spin size="small" />
-                    </section>
-                  ) : (
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                  )
-                }
+                loading={loadingPatient}
                 showSearch={true}
                 placeholder="Patient"
                 options={patients?.search.map((e) => ({
