@@ -2,6 +2,7 @@ import { getServerAuthSession } from "@/api/auth";
 import DashboardMenu from "@/components/DashboardMenu";
 import DashboardNavigator from "@/components/DashboardNavigator";
 import Iconify from "@/components/Iconify";
+import { getCollapsed, handleCollapse } from "@/lib/actions";
 import { ICONS, MENU_ICON_SIZE, MENU_ITEMS_TO_REMOVE } from "@/lib/constants";
 import { type Lang, type MenuItemKey } from "@/types";
 import { redirect } from "next/navigation";
@@ -78,6 +79,16 @@ export default async function DashboardLayout({ params, children }: Props) {
       ),
       icon: <Iconify icon={ICONS.price} width={MENU_ICON_SIZE} />,
     },
+    {
+      title: "",
+      key: "/playground",
+      label: (
+        <DashboardNavigator href="/playground" lang={lang}>
+          Playground
+        </DashboardNavigator>
+      ),
+      icon: <Iconify icon={ICONS.add} width={MENU_ICON_SIZE} />,
+    },
   ];
 
   const filteredItems = items.filter((item) => {
@@ -86,7 +97,7 @@ export default async function DashboardLayout({ params, children }: Props) {
   });
 
   return (
-    <DashboardMenu items={filteredItems} lang={lang} session={session}>
+    <DashboardMenu items={filteredItems} lang={lang} session={session} collapsed={getCollapsed()} handleCollapse={handleCollapse}>
       {children}
       <Socket session={session} />
     </DashboardMenu>

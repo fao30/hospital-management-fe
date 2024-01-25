@@ -15,17 +15,17 @@ import { Fragment, useEffect, useState } from "react";
 import Iconify from "./Iconify";
 
 type Props = {
+  collapsed: boolean;
+  handleCollapse: (boolean: boolean) => void;
   children: React.ReactNode;
   items: ItemType<MenuItemType>[];
   lang: Lang;
   session: Session;
 };
 
-export default function DashboardMenu({ children, items, session }: Props) {
+export default function DashboardMenu({ children, items, session, collapsed, handleCollapse }: Props) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(true);
   const [selectedMenu, setSelectedMenu] = useState(getSelectedMenu(pathname));
-  // const handleCollapse = () => (collapsed ? undefined : setCollapsed(true));
 
   useEffect(() => {
     setSelectedMenu(getSelectedMenu(pathname));
@@ -46,7 +46,7 @@ export default function DashboardMenu({ children, items, session }: Props) {
             <nav className="flex flex-col gap-4">
               <button
                 type="button"
-                onClick={() => setCollapsed(!collapsed)}
+                onClick={() => handleCollapse(!collapsed)}
                 className="gap-2 flex items-center w-full justify-center h-14 text-cream"
               >
                 {!collapsed ? (

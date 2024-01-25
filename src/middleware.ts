@@ -28,6 +28,10 @@ export const middleware = (request: NextRequest) => {
   const locale = getLocaleFromPathname(pathname) ?? storedLocale ?? getLocale(request);
   const response = NextResponse.next();
   if (locale !== storedLocale) response.cookies.set("locale", locale, { httpOnly: true, sameSite: "lax" });
+
+  const collapsed = request.cookies.get("collapsed")?.value;
+  if (!collapsed) response.cookies.set("collapsed", "true");
+
   const pathnameMissing = internationalization.locales.every(
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   );
