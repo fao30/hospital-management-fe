@@ -1,12 +1,13 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "organizeImports": { "enabled": true },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
+      "a11y": { "useKeyWithClickEvents": "off" },
       "complexity": { "noStaticOnlyClass": "off" },
-      "nursery": { "useImportType": "warn" },
+      "nursery": { "useImportType": "warn", "useGroupedTypeImport": "warn" },
       "correctness": { "noUnusedVariables": "warn", "noUnusedLabels": "warn", "useExhaustiveDependencies": "off" }
     }
   },
