@@ -1,6 +1,6 @@
 import { env } from "@/env";
-import { schema, type RoleId } from "@schema/schemas";
-import { getServerSession, type DefaultSession, type NextAuthOptions } from "next-auth";
+import { type RoleId, schema } from "@schema/schemas";
+import { type DefaultSession, type NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 declare module "next-auth" {
@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
         const validation = schema.login.safeParse(credentials);
 
         if (validation.success) {
-          const res = await fetch(env.NEXT_PUBLIC_API + "/login", {
+          const res = await fetch(`${env.NEXT_PUBLIC_API}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(validation.data),

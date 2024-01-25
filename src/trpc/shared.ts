@@ -11,7 +11,7 @@ function getBaseUrl() {
 }
 
 export function getUrl() {
-  return getBaseUrl() + "/api/trpc";
+  return `${getBaseUrl()}/api/trpc`;
 }
 
 export const ERROR_MESSAGES: Record<TRPC_ERROR_CODE_KEY, string> = {

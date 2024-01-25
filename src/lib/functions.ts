@@ -1,5 +1,5 @@
 import { type Lang, type MenuItemKey } from "@/types";
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { type Session } from "next-auth";
 import { type ReadonlyURLSearchParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
@@ -117,15 +117,16 @@ const powOf2: Record<PowOf2, number> = {
 export const isFileSizeAllowed = (maxFileSize: FileSize, fileSize: number): boolean => {
   const fileSizeRegex = /^(\d+)(B|KB|MB|GB)$/;
   const match = maxFileSize.match(fileSizeRegex);
-  const size = parseInt(match![1]!, 10);
-  const unit = match![2] as SizeUnit;
+  // biome-ignore lint/style/noNonNullAssertion: <explanation>
+  const size = parseInt(match?.[1]!, 10);
+  const unit = match?.[2] as SizeUnit;
 
   const maxSize = powOf2[size as PowOf2] * bytesInUnit[unit as SizeUnit];
   if (fileSize < maxSize) return true;
   return false;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const checkValidation = <T>(zodSchema: z.ZodType<T, any, any>, input: unknown) => {
   const validation = zodSchema.safeParse(input);
 
@@ -185,12 +186,10 @@ export const getSelectedMenu = (pathname: string): MenuItemKey[] => {
     const result = parts.map((_, index) => `/${parts.slice(0, index + 1).join("/")}`);
     if (result.length > 0) {
       return result as MenuItemKey[];
-    } else {
-      return ["/"];
     }
-  } else {
-    return [];
+    return ["/"];
   }
+  return [];
 };
 
 export const localizePhoneNumber = (phoneNumber: string): string => `+${phoneNumber}`;
