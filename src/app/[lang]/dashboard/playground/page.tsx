@@ -1,4 +1,4 @@
-import { cn, formatDate } from "@/lib/functions";
+import { cn } from "@/lib/functions";
 import dayjs from "dayjs";
 
 const SCHEDULE_RANGE = [
@@ -17,13 +17,6 @@ const SCHEDULE_RANGE = [
   { label: "20:00", value: "20:00" },
   { label: "", value: "21:00" },
   { label: "22:00", value: "22:00" },
-];
-
-const SCHEDULES = [
-  { day: "", date: dayjs().toDate() },
-  { day: "", date: dayjs().add(1).toDate() },
-  { day: "", date: dayjs().toDate() },
-  { day: "", date: dayjs().toDate() },
 ];
 
 export default function PlaygroundPage() {
