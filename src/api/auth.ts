@@ -50,7 +50,6 @@ export const authOptions: NextAuthOptions = {
           });
           if (!res.ok) return null;
 
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return await res.json();
         }
 

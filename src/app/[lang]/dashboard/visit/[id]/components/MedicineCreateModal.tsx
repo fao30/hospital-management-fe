@@ -1,4 +1,4 @@
-import { type MedicineTreatmentCreateInput } from "@/api/routers/medicineTreatment";
+import type { MedicineTreatmentCreateInput } from "@/api/routers/medicineTreatment";
 import { schema } from "@/api/schema/schemas";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -12,7 +12,7 @@ import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@uidotdev/usehooks";
 import React, { useEffect, useState } from "react";
-import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 
 type Props = {
   showModal: boolean;
@@ -47,9 +47,8 @@ export default function MedicineCreateModal({
   const onSubmit: SubmitHandler<MedicineTreatmentCreateInput> = (data) => {
     if (isEdit && selectedMedicineTreatment) {
       return update({ medicineTreatmentId: selectedMedicineTreatment.id, body: data.body });
-    } else {
-      create(data);
     }
+    create(data);
   };
 
   const { mutate: create, isPending: loading } = api.medicineTreatment.create.useMutation({
@@ -79,7 +78,7 @@ export default function MedicineCreateModal({
 
   useEffect(() => {
     if (data && showModal && isEdit && selectedMedicineTreatment) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // biome-ignore lint/correctness/noUnusedVariables: <explanation>
       const { id, ...rest } = selectedMedicineTreatment;
       reset({ body: { ...data, ...rest } });
     } else if (showModal && data) reset({ body: data });

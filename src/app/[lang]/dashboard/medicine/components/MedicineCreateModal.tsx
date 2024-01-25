@@ -1,6 +1,6 @@
-import { type MedicineCreateInput } from "@/api/routers/medicine";
+import type { MedicineCreateInput } from "@/api/routers/medicine";
 import { schema } from "@/api/schema/schemas";
-import { type Medicine } from "@/api/schema/types";
+import type { Medicine } from "@/api/schema/types";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import InputSelect from "@/components/InputSelect";
@@ -11,9 +11,9 @@ import { CURRENCIES } from "@/lib/constants";
 import { getInputDate } from "@/lib/functions";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type Session } from "next-auth";
+import type { Session } from "next-auth";
 import { useEffect } from "react";
-import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 
 type Props = {
   showModal: boolean;
@@ -57,7 +57,7 @@ export default function MedicineCreateModal({ showModal, closeModal, session, is
 
   useEffect(() => {
     if (isEdit && selectedMedicine && showModal) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // biome-ignore lint/correctness/noUnusedVariables: <explanation>
       const { id, ...rest } = selectedMedicine;
       reset({ body: { ...rest, expiry_date: getInputDate(rest.expiry_date) } });
     } else if (showModal) reset({ body: { currency: "MYR", hospital_id: session.user.hospital_id, in_stock: 0, price: 0 } });

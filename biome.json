@@ -6,7 +6,8 @@
     "rules": {
       "recommended": true,
       "complexity": { "noStaticOnlyClass": "off" },
-      "nursery": { "useImportType": "warn" }
+      "nursery": { "useImportType": "warn" },
+      "correctness": { "noUnusedVariables": "warn", "noUnusedLabels": "warn", "useExhaustiveDependencies": "off" }
     }
   },
   "formatter": {
