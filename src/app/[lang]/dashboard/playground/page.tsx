@@ -47,8 +47,8 @@ export default function PlaygroundPage() {
       </section>
 
       <section className="p-4 grid grid-cols-10 gap-4">
-        <p>Hari</p>
-        <p>Tanggal</p>
+        <p>Day</p>
+        <p>Date</p>
         <section className="col-span-8">
           <section className="grid grid-cols-15">
             {SCHEDULE_RANGE.map((e, index) => (
@@ -78,7 +78,7 @@ export default function PlaygroundPage() {
         .map((_, i) => (
           <section className="p-4 grid grid-cols-10 gap-4">
             <p>{dayjs().add(i, "day").format("dddd")}</p>
-            <p>{formatDate({ date: dayjs().add(i, "day").toDate(), style: "short" })}</p>
+            <p>{dayjs().add(i, "day").format("DD.MM.YYYY")}</p>
           </section>
         ))}
     </article>
