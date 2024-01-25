@@ -61,6 +61,9 @@ export default withTV({
         longer9: "24vw",
         longer10: "26vw",
       },
+      gridTemplateColumns: {
+        "15": "repeat(15, minmax(0, 1fr))",
+      },
       borderWidth: {
         0.5: "0.5px",
         1: "1px",
